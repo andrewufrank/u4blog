@@ -20,6 +20,8 @@ dependencies:
 - base >= 4.7 && < 5
 - pandoc
 - pandoc-citeproc
+- pandoc-types
+- bibtex
 - uniformBase
 - uniform-json
 - uniform-fileio
@@ -29,6 +31,9 @@ dependencies:
 - lens 
 - aeson 
 - lens-aeson
+- parsec
+- containers
+- process
 # - uniform
 
 library:

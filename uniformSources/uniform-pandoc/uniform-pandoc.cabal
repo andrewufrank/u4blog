@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 3fb9937ecc3926822c929686c2c5e6bfcc35d205a83253f5d27d594215735d5e
+-- hash: 32323f4ece468d1502093fb5a92f8e2f9288b7df1bfc3c43e6202b137c542633
 
 name:           uniform-pandoc
 version:        0.0.2.1
@@ -37,12 +37,17 @@ library
   build-depends:
       aeson
     , base >=4.7 && <5
+    , bibtex
+    , containers
     , doclayout
     , doctemplates
     , lens
     , lens-aeson
     , pandoc
     , pandoc-citeproc
+    , pandoc-types
+    , parsec
+    , process
     , uniform-error
     , uniform-fileio
     , uniform-json
@@ -68,12 +73,17 @@ test-suite pandoctest
     , ReplaceUmlaut
     , aeson
     , base >=4.7 && <5
+    , bibtex
+    , containers
     , doclayout
     , doctemplates
     , lens
     , lens-aeson
     , pandoc
     , pandoc-citeproc
+    , pandoc-types
+    , parsec
+    , process
     , uniform
     , uniform-error
     , uniform-fileio
