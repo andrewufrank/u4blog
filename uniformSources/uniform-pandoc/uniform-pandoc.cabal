@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.34.2.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: d971cb7798db9d84b2167e5c9a75fc8cd7bbc852481210be8cdfce62fc6d2818
+-- hash: 3fb9937ecc3926822c929686c2c5e6bfcc35d205a83253f5d27d594215735d5e
 
 name:           uniform-pandoc
 version:        0.0.2.1
@@ -35,8 +35,18 @@ library
   hs-source-dirs:
       ./.
   build-depends:
-      base >=4.7 && <5
+      aeson
+    , base >=4.7 && <5
+    , doclayout
+    , doctemplates
+    , lens
+    , lens-aeson
     , pandoc
+    , pandoc-citeproc
+    , uniform-error
+    , uniform-fileio
+    , uniform-json
+    , uniformBase
   default-language: Haskell2010
 
 test-suite pandoctest
@@ -56,7 +66,17 @@ test-suite pandoctest
   build-depends:
       HTF
     , ReplaceUmlaut
+    , aeson
     , base >=4.7 && <5
+    , doclayout
+    , doctemplates
+    , lens
+    , lens-aeson
     , pandoc
+    , pandoc-citeproc
     , uniform
+    , uniform-error
+    , uniform-fileio
+    , uniform-json
+    , uniformBase
   default-language: Haskell2010

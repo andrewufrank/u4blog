@@ -43,10 +43,10 @@ where
 --                                                 -- , setExtension
 --                                                 )
 -- import           Uniform.Json
--- import           Uniform.Yaml
+import           Uniform.Yaml
 -- -- import Uniform.DocRep
 -- -- import Uniform.ProcessPDF 
--- import UniformAll  
+import UniformBase  
 
 import qualified Text.Pandoc                   as Pandoc
 import           Text.Pandoc        

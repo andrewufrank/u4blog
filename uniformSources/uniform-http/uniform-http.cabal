@@ -1,74 +1,64 @@
-name: uniform-http
-version: 0.0.2.6.1
-cabal-version: >=1.22
-build-type: Simple
-license: GPL
-license-file: GPL_3
-maintainer: Andrew U. Frank <andrewufrank@gmail.com>
-author: Andrew Frank
-category: Data, Text, Uniform
-synopsis: uniform text based operations to call http
-description: http using text
-    0.0.2.3 added HttpVarParams
-    0.0.2.4 change structure to export as Http
-    0.0.2.6 add back callHTTP8get
+cabal-version: 1.12
 
-source-repository head
-    type: git
-    location: https://github.com/andrewufrank/uniform-http.git
+-- This file has been generated from package.yaml by hpack version 0.34.2.
+--
+-- see: https://github.com/sol/hpack
+
+name:           uniform-http
+version:        0.0.2.7
+synopsis:       uniform text based operations to call http
+description:    http using text
+                  0.0.2.3 added HttpVarParams
+                  0.0.2.4 change structure to export as Http
+                  0.0.2.6 add back callHTTP8get
+category:       Data, Text, Uniform
+author:         Andrew Frank
+maintainer:     Andrew U. Frank <andrewufrank@gmail.com>
+license:        GPL
+license-file:   GPL_3
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
 
 library
-    build-depends: base
-            , bytestring
-            -- ,text
---            , HTTP
-            -- , HTF 
-            , http-conduit
-            , http-client
-            , network-uri
-            -- , modern-uri  -- consider change TODO
---            , uri-encode
+  exposed-modules:
+      Main
+  other-modules:
+      Paths_uniform_http
+  hs-source-dirs:
+      src
+  build-depends:
+      base
+    , bytestring
+    , http-client
+    , http-conduit
+    , network-uri
+    , uniform-algebras
+    , uniform-error
+    , uniform-json
+    , uniform-strings
+  default-language: Haskell2010
 
--- mine
-            , uniform-strings
-            , uniform-error
-            , uniform-algebras
-            , uniform-json
-
-
-    exposed-modules:
-            Uniform.Http
-            -- the next two must not be imported
-            -- except for testing here
-             Uniform.HttpCall
-             Uniform.HttpURI
-    exposed: True
-    buildable: True
-    default-language: Haskell2010
-    hs-source-dirs: .
-    other-modules:
-
-Test-Suite httpTestAuto
-    type:       exitcode-stdio-1.0
-    main-is:    Testing.hs
-    build-depends: base, HTF
-        -- , uniform-fileio
-        , uniform-strings
-        , uniform-error
-        , uniform-http
-        , uniform-json
-        -- , aeson
---        -- needed because the two files
-
-            , uniform-algebras
-            , network-uri
--- for tests
-            , HTF
-            , test-invariant
-    default-language: Haskell2010
-    hs-source-dirs: tests
-    other-modules:
-                 Uniform.HttpCall_test
-                 Uniform.HttpURI_test
---             Uniform.HttpCall
---             Uniform.HttpURI
+test-suite http-test
+  type: exitcode-stdio-1.0
+  main-is: Testing.hs
+  other-modules:
+      Uniform.HttpCall_test
+      Uniform.HttpURI_test
+      Paths_uniform_http
+  hs-source-dirs:
+      tests
+  build-depends:
+      HTF
+    , base
+    , bytestring
+    , http-client
+    , http-conduit
+    , network-uri
+    , quickcheck-text
+    , uniform-algebras
+    , uniform-error
+    , uniform-json
+    , uniform-strings
+  default-language: Haskell2010

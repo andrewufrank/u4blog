@@ -19,7 +19,16 @@ extra-source-files:
 dependencies:
 - base >= 4.7 && < 5
 - pandoc
-
+- pandoc-citeproc
+- uniformBase
+- uniform-json
+- uniform-fileio
+- uniform-error
+- doctemplates
+- doclayout
+- lens 
+- aeson 
+- lens-aeson
 # - uniform
 
 library:
