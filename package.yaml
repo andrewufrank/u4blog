@@ -1,0 +1,53 @@
+name:                uniformBase
+version:             0.0.0.2
+github:              "githubuser/uniform"
+license:             BSD3
+license-file:        LICENSE
+author:              Andrew U Frank 
+maintainer:          "example@example.com"
+copyright:           "2021 Author name here"
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+# Metadata used when publishing your package
+synopsis:           a uniform base to build apps on
+category:           Programming
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/githubuser/primo#readme>
+
+_ghc-options:   # &options
+  - -Wno-deprecations
+  - -Wno-missing-signatures
+  
+dependencies:
+- base >= 4.7 && < 5
+- uniform-algebras
+- uniform-strings
+- uniform-fileio
+- uniform-error
+- uniform-time
+- uniform-json
+# - uniform-cmdLineArgs
+
+library:
+  source-dirs: 
+        - src
+        - uniformSources
+ 
+# executables:
+#   startAppTest:
+#     main:                StartAppTest.hs
+#     source-dirs:         
+#       - app
+#       - uniformSources
+#     ghc-options:
+#     - -threaded
+#     - -rtsopts
+#     - -with-rtsopts=-N
+#     dependencies:
+#     - uniformBase
