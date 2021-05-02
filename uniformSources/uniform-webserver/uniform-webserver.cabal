@@ -1,58 +1,53 @@
-name: uniform-webserver
-version: 0.0.10.1
+cabal-version: 1.12
 
-cabal-version: >=1.22
-build-type: Simple
-license: GPL
-license-file: GPL_3
-maintainer: Andrew U. Frank <andrewufrank@gmail.com>
-author: Andrew Frank
-category:Webserver
-synopsis: Webserver
-description: Webserver
+-- This file has been generated from package.yaml by hpack version 0.34.2.
+--
+-- see: https://github.com/sol/hpack
 
-source-repository head
-    type: git
-    location: https://github.com/andrewufrank/uniform-webserver.git
+name:           uniform-webserver
+version:        0.0.10.2
+synopsis:       uniform text based operations to call http
+description:    http using text
+                  0.0.10.2 for cabal
+category:       Data, Text, Uniform
+author:         Andrew Frank
+maintainer:     Andrew U. Frank <andrewufrank@gmail.com>
+license:        GPL
+license-file:   GPL_3
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
 
 library
-    build-depends:
-        base >=4.8 && <= 5
-        -- , monads-tf
-        -- , exceptions
-        -- , safe
-        , uniform-strings
-        -- , HTF
-        , uniform-algebras
-        , uniform-strings
-        , uniform-error 
-        , uniform-fileio
-        , scotty -any,
-        warp -any,
-        wai-middleware-static -any
+  exposed-modules:
+      ExampleMain
+  other-modules:
+      Paths_uniform_webserver
+  hs-source-dirs:
+      src
+  build-depends:
+      base
+    , scotty
+    , uniformBase
+    , wai-middleware-static
+    , warp
+  default-language: Haskell2010
 
-    exposed-modules:
-        Uniform.WebServer
-
-    exposed: True
-    buildable: True
-    default-language: Haskell2010
-    hs-source-dirs: .
-    other-modules:
-
-
-Test-Suite errortest
-    type:       exitcode-stdio-1.0
-    build-depends:  base -any
-        , HTF
-       , uniform-strings
-       , uniform-error
-       , uniform-webserver
---       , data-easy
---       , basics -- must not be included, gives dependency issue
-    main-is: Testing.hs
-    buildable: True
-    default-language: Haskell2010
-    hs-source-dirs: tests
-    other-modules:
-        Uniform.WebServer_test
+test-suite webserver-test
+  type: exitcode-stdio-1.0
+  main-is: Testing.hs
+  other-modules:
+      Uniform.WebServer_test
+      Paths_uniform_webserver
+  hs-source-dirs:
+      tests
+  build-depends:
+      HTF
+    , base
+    , quickcheck-text
+    , scotty
+    , uniformBase
+    , wai-middleware-static
+    , warp
+  default-language: Haskell2010
