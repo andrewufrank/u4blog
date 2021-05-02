@@ -31,8 +31,9 @@ module Uniform.Pandoc
       , extPDF, extMD, extDocRep, extHTML, extTexSnip, extTex 
   , Pandoc(..)
   , DocRep(..)
-  , module Uniform.Error   -- or at least ErrIO
-  , module Uniform.Filenames 
+  , module UniformBase 
+--   , module Uniform.Error   -- or at least ErrIO
+--   , module Uniform.Filenames 
   , write8, read8,setExtension
   , writeTexSnip2
   , panrepFileType
@@ -40,7 +41,7 @@ module Uniform.Pandoc
   , TypedFiles5(..)
   , TypedFiles7(..)
   , read8
-  , module Uniform.Json
+--   , module Uniform.Json
   , module Uniform.ProcessPDF
   , module Uniform.Markdown
   , module Uniform.DocRep
@@ -53,19 +54,20 @@ module Uniform.Pandoc
     , WriterOptions(..)
   )
 where
+import UniformBase hiding (readYaml2value)
 
-import           Uniform.Error
-import           Uniform.Filenames
-import           Uniform.TypedFile              ( TypedFiles7(..)
-                                                , TypedFiles5(..)
-                                                , TypedFile5(..)
-                                                )
-import           Uniform.FileIO                 ( write8
-                                                , read8
-                                                -- , setExtension
-                                                )
-import           Uniform.Json
-import           Uniform.Yaml
+-- import           Uniform.Error
+-- import           Uniform.Filenames
+-- import           Uniform.TypedFile              ( TypedFiles7(..)
+--                                                 , TypedFiles5(..)
+--                                                 , TypedFile5(..)
+--                                                 )
+-- import           Uniform.FileIO                 ( write8
+--                                                 , read8
+--                                                 -- , setExtension
+--                                                 )
+-- import           Uniform.Json
+-- import           Uniform.Yaml
 import Uniform.DocRep
 import Uniform.ProcessPDF 
 import Uniform.HTMLout

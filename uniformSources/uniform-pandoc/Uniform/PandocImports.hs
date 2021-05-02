@@ -43,7 +43,7 @@ where
 --                                                 -- , setExtension
 --                                                 )
 -- import           Uniform.Json
-import           Uniform.Yaml
+-- import           Uniform.Yaml
 -- -- import Uniform.DocRep
 -- -- import Uniform.ProcessPDF 
 import UniformBase  

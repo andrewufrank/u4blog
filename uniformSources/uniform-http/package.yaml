@@ -13,6 +13,7 @@ description: |
     0.0.2.3 added HttpVarParams
     0.0.2.4 change structure to export as Http
     0.0.2.6 add back callHTTP8get
+    0.0.2.7 for cabal 8.10.4 may 2021
 
 # source-repository head
 #     type: git
@@ -23,7 +24,7 @@ extra-source-files:
 - ChangeLog.md
 
 dependencies:
--  base
+- base
 - bytestring
 #             -- ,text
 # --            , HTTP

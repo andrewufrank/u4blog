@@ -9,7 +9,7 @@ category:     Uniformhandling of   some pandoc stuff
 synopsis:   handling of   some pandoc stuff   
 description: | 
   remove particular aspects of abstraction 
-
+  0.0.2.1 for cabal may 2021 8.10.4
 
 
 extra-source-files:
@@ -23,9 +23,9 @@ dependencies:
 - pandoc-types
 - bibtex
 - uniformBase
-- uniform-json
-- uniform-fileio
-- uniform-error
+# - uniform-json
+# - uniform-fileio
+# - uniform-error
 - doctemplates
 - doclayout
 - lens 
@@ -50,6 +50,6 @@ tests:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - uniform 
+    # - uniform 
     - HTF
-    - ReplaceUmlaut 
+    # - ReplaceUmlaut 

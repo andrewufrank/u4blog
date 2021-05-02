@@ -26,9 +26,10 @@ import           Text.CSL.Pandoc                ( processCites' )
 import qualified Text.Pandoc                   as P
 import qualified Text.Pandoc.Definition        as PD
 
-import           Uniform.Error
-import           Uniform.FileIO
+-- import           Uniform.Error
+-- import           Uniform.FileIO
 import           Uniform.PandocImports
+import UniformBase
 
 
 {-

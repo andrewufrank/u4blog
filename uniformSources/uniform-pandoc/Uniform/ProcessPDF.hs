@@ -36,12 +36,13 @@ module Uniform.ProcessPDF
 --   , module Uniform.Json
     )
 where
+import UniformBase 
 
 -- import Uniform.Pandoc 
-import           Uniform.FileIO
+-- import           Uniform.FileIO
 import           Uniform.DocRep
 import           Uniform.PandocImports
-import Uniform.Json
+-- import Uniform.Json
 
 import  qualified System.Process                as Sys
 import qualified System.Exit as Sys 

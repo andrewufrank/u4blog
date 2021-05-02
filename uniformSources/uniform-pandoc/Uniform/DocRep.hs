@@ -46,15 +46,17 @@ module Uniform.DocRep
 where
 
 import GHC.Generics
-import           Uniform.Error
-import           Uniform.Filenames
-import           Uniform.TypedFile  ( TypedFiles7(..)
-                                    , TypedFiles5(..)
-                                    , TypedFile5(..)
-                                    )
-import           Uniform.Json
+import UniformBase
+
+-- import           Uniform.Error
+-- import           Uniform.Filenames
+-- import           Uniform.TypedFile  ( TypedFiles7(..)
+--                                     , TypedFiles5(..)
+--                                     , TypedFile5(..)
+--                                     )
+-- import           Uniform.Json
 import Uniform.PandocImports
-import Uniform.Json 
+-- import Uniform.Json 
 import Uniform.HTMLout
 -- import Uniform.Markdown
 

@@ -41,10 +41,12 @@ module Uniform.HTMLout
 --   , module Uniform.Json
   )
 where
-import           Uniform.Json
+
+import UniformBase 
+-- import           Uniform.Json
 -- import Uniform.Pandoc
 -- import Uniform.DocValue
-import Uniform.FileIO 
+-- import Uniform.FileIO 
 import Uniform.PandocImports 
  
 import           Text.Pandoc                    ( Pandoc(..)

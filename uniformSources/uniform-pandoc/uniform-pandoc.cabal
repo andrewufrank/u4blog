@@ -4,12 +4,13 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 32323f4ece468d1502093fb5a92f8e2f9288b7df1bfc3c43e6202b137c542633
+-- hash: 082f5111fbd731991f10be1afe511e794f00befb7a3aa4901d009d3fb34fa1d9
 
 name:           uniform-pandoc
 version:        0.0.2.1
 synopsis:       handling of   some pandoc stuff
 description:    remove particular aspects of abstraction 
+                0.0.2.1 for cabal may 2021 8.10.4
 category:       Uniformhandling of   some pandoc stuff
 author:         Andrew Frank
 maintainer:     Andrew U. Frank <andrewufrank@gmail.com>
@@ -48,9 +49,6 @@ library
     , pandoc-types
     , parsec
     , process
-    , uniform-error
-    , uniform-fileio
-    , uniform-json
     , uniformBase
   default-language: Haskell2010
 
@@ -70,7 +68,6 @@ test-suite pandoctest
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       HTF
-    , ReplaceUmlaut
     , aeson
     , base >=4.7 && <5
     , bibtex
@@ -84,9 +81,5 @@ test-suite pandoctest
     , pandoc-types
     , parsec
     , process
-    , uniform
-    , uniform-error
-    , uniform-fileio
-    , uniform-json
     , uniformBase
   default-language: Haskell2010
