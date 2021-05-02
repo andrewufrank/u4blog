@@ -18,7 +18,8 @@ module Uniform.Shake.Path
 
 
 import           Development.Shake
-import Uniform.FileIO 
+import UniformBase
+-- import Uniform.FileIO 
 -- import           Development.Shake.FilePath     ( isAbsolute
 --                                                 , isRelative
 --                         -- , isFile, isDir

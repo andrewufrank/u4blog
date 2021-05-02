@@ -19,8 +19,9 @@ module Uniform.Shake (
         , module Uniform.Shake.Path
         , takeBaseName, splitPath 
         , Action
-        , module Uniform.FileIO
-        , module Uniform.Strings
+        -- , module Uniform.FileIO
+        -- , module Uniform.Strings
+        , module UniformBase
     --     , module Path
         -- , module Path.IO
         -- , module Development.Shake.FilePath
@@ -30,7 +31,8 @@ module Uniform.Shake (
         , need, (%>), want, phony
         )      where
 
-import Development.Shake -- (Action, FilePattern, getDirectoryFiles)
+import Development.Shake hiding (Error )
+        -- (Action, FilePattern, getDirectoryFiles, copyFileChanged)
 import Development.Shake.FilePath (takeBaseName, splitPath
                         )
         -- (getDirectoryFiles, Action
@@ -41,10 +43,11 @@ import Development.Shake.FilePath (takeBaseName, splitPath
 -- import  Path hiding ((</>)) 
                 -- (Path(..), File, Dir, Abs, Rel, toFilePath)
 -- import qualified Path.IO
-import Uniform.Error
+import UniformBase
+-- import Uniform.Error
 import Uniform.Shake.Path
-import Uniform.FileIO 
-import Uniform.Strings -- hiding ((</>), (<.>))
+-- import Uniform.FileIO 
+-- import Uniform.Strings -- hiding ((</>), (<.>))
 
 ($-<.>) :: Path a File -> Text ->  Path a File
 f $-<.> e = replaceExtension' e f 
