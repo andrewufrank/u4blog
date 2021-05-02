@@ -1,3 +1,10 @@
 packages: 
     *.cabal
     ../../../uniformBase/uniformBase.cabal
+    ../../../uniformBase/uniformBase.cabal
+    ../../../uniformBase/uniformSources/uniform-algebras/*.cabal
+    ../../../uniformBase/uniformSources/uniform-error/*.cabal
+    ../../../uniformBase/uniformSources/uniform-fileio/*.cabal
+    ../../../uniformBase/uniformSources/uniform-json/*.cabal
+    ../../../uniformBase/uniformSources/uniform-strings/*.cabal
+    ../../../uniformBase/uniformSources/uniform-time/*.cabal
