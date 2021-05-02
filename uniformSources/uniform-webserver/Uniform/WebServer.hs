@@ -25,13 +25,14 @@ module Uniform.WebServer (module Uniform.WebServer
         , Port 
         )  where
 
-import           Uniform.Strings hiding ((</>), (<.>), S)
+import UniformBase hiding ((</>), (<.>), S)
+-- import           Uniform.Strings hiding ((</>), (<.>), S)
 import           Web.Scotty hiding (File)
 import           Network.Wai.Middleware.Static  ( staticPolicy
                                                 , addBase
                                                 )
 import           Network.Wai.Handler.Warp       ( Port ) -- .Warp.Types
-import Uniform.FileIO
+-- import Uniform.FileIO
 
 runScotty :: Port -> Path Abs Dir -> Path Rel File -> ErrIO () 
 -- run scotty at the port for the directory with the given landing page 

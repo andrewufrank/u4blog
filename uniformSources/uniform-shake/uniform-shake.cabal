@@ -4,14 +4,14 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 
-name:           uniform-watch
+name:           uniform-shake
 version:        0.0.1.1
-synopsis:       uniform wrapper for watch
+synopsis:       uniform wrapper for shake
 description:    shake top level functions using Path (not filepath)
                 version 2 to include in uniform ecosystem
                 1.0 used for my homepage - fixes
-                1.1 for cabal 
-category:       Watch, Uniform
+                0.0.1.1 for cabal 
+category:       Build, Uniform
 author:         Andrew Frank
 maintainer:     Andrew U. Frank <andrewufrank@gmail.com>
 license:        GPL
@@ -26,7 +26,7 @@ library
       Uniform.Shake
       Uniform.Shake.Path
   other-modules:
-      Paths_uniform_watch
+      Paths_uniform_shake
   hs-source-dirs:
       ./.
   build-depends:
@@ -40,7 +40,7 @@ test-suite webserver-test
   main-is: Testing.hs
   other-modules:
       Uniform.Shake_test
-      Paths_uniform_watch
+      Paths_uniform_shake
   hs-source-dirs:
       tests
   build-depends:

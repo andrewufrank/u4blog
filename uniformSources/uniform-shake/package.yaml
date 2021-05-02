@@ -1,4 +1,4 @@
-name: uniform-watch
+name: uniform-shake
 version: 0.0.1.1
 # cabal-version: >=1.22
 # build-type: Simple
@@ -6,13 +6,13 @@ license: GPL
 license-file: GPL_3
 maintainer: Andrew U. Frank <andrewufrank@gmail.com>
 author: Andrew Frank
-category: 'Watch, Uniform'
-synopsis: uniform wrapper for watch 
+category: 'Build, Uniform'
+synopsis: uniform wrapper for shake 
 description: |
     shake top level functions using Path (not filepath)
     version 2 to include in uniform ecosystem
     1.0 used for my homepage - fixes
-    1.1 for cabal 
+    0.0.1.1 for cabal 
 
 # source-repository head
 #     type: git

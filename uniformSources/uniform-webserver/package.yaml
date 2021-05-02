@@ -28,8 +28,9 @@ dependencies:
 - uniformBase
 
 library:
-  source-dirs: src
-
+  source-dirs: 
+    - src
+    - .
 
 tests:
   webserver-test:
