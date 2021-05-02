@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------------
 --
--- Module      :   top tests for layout
+-- Module      :  main for watch 
 -----------------------------------------------------------------------------
  
 
@@ -17,16 +17,16 @@
 
     #-}
 
-module Main     where
+module WatchMain     where
 
 
 
-import   Uniform.Error
-import Uniform.Strings
-import Uniform.FileIO 
-import Uniform.Watch_test
+-- import   Uniform.Error
+-- import Uniform.Strings
+-- import Uniform.FileIO 
+-- import Uniform.Watch_test
 import Uniform.Watch
-import Uniform.Convenience.StartApp
+-- import Uniform.Convenience.StartApp
 
 main = startProg
     "WatchMain"

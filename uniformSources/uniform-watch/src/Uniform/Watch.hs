@@ -33,8 +33,9 @@ import qualified Twitch
 --import Control.Concurrent.Spawn
 -- import Control.Concurrent
 import           Control.Concurrent (forkIO, killThread)
-import Uniform.FileIO
-import Uniform.Strings hiding (S, (<.>), (</>))
+-- import Uniform.FileIO
+-- import Uniform.Strings hiding (S, (<.>), (</>))
+import UniformBase hiding (S, (<.>), (</>))
 
 newtype Glob = Glob Text 
     deriving (Show, Read, Eq, Generic)
