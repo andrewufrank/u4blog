@@ -35,10 +35,12 @@ dependencies:
 # --            , uri-encode
 
 # -- mine
-- uniform-strings
-- uniform-error
-- uniform-algebras
-- uniform-json
+# - uniform-strings
+# - uniform-error
+# - uniform-algebras
+# - uniform-json
+- uniformBase
+# - uniform-http
 
 library:
   source-dirs: src
@@ -52,7 +54,10 @@ tests:
     # - uniform-algebras
     - HTF
     - quickcheck-text
-    - uniform-strings
+    # - uniform-strings
+    # - uniform-http
+    - uniformBase
+
 #     exposed-modules:
 #             Uniform.Http
 #             -- the next two must not be imported

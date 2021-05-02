@@ -3,10 +3,8 @@
 -- Module      :  Main
 -- Copyright   :  andrew u frank 2016
 --
--- | test  for fileio
--- copy first a dir with a set of files (produced in makeFilesA)
--- copy, check that correct files (hidden and not hidden)
---
+-- | test  for http
+-- empty so far
 --
 -----------------------------------------------------------------------------
 {-# LANGUAGE
@@ -26,11 +24,12 @@ module Main (main) where
 
 
 --import qualified Data.Text as T (Text)
-import Data.Strings
+-- import Data.Strings
 import System.Exit
-import TestingFileIO
+-- import TestingFileIO
+import UniformBase
 
-programName = "fileio-test-main-0.0.7"
+programName = "uniform-http test"
 
 debug_main  =  True
 
@@ -41,12 +40,13 @@ main = do
     putIOwordsT [ "------------------ ", programName
 --                , toText versionNum
             , " -------------------------"]
-    r1 <- fileioTest
-    putIOwords["main", programName, "returning\n"
-            , unwords' . map show' $ r1
-            , "-------------------------\n\n"]
+    -- r1 <- fileioTest
+    let r1 = [True]
+    -- putIOwords["main", programName, "returning\n"
+    --         , unwords' . map show' $ r1
+    --         , "-------------------------\n\n"]
     let bs = r1
-    putIOwords ["Test Main", show bs]
+    putIOwords ["Test Main", showT bs]
     if (and bs) then exitSuccess else exitFailure
 
 
