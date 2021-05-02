@@ -21,7 +21,7 @@ extra-source-files:
 - ChangeLog.md
 
 dependencies:
--  base
+- base
 - twitch
 - uniformBase
 

@@ -15,7 +15,7 @@
 
 module Uniform.Shake ( 
           module Uniform.Shake
-        , getDirectoryToBake
+        -- , getDirectoryToBake
         , module Uniform.Shake.Path
         , takeBaseName, splitPath 
         , Action
