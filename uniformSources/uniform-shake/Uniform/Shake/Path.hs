@@ -19,6 +19,7 @@ module Uniform.Shake.Path
 
 import           Development.Shake
 import UniformBase
+import Uniform.Json 
 -- import Uniform.FileIO 
 -- import           Development.Shake.FilePath     ( isAbsolute
 --                                                 , isRelative

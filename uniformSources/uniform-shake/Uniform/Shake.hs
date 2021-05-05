@@ -44,6 +44,7 @@ import Development.Shake.FilePath (takeBaseName, splitPath
                 -- (Path(..), File, Dir, Abs, Rel, toFilePath)
 -- import qualified Path.IO
 import UniformBase
+import Control.Exception (throw)  -- to deal with errors in action
 -- import Uniform.Error
 import Uniform.Shake.Path
 -- import Uniform.FileIO 
@@ -137,6 +138,6 @@ getDirectoryToBake :: Text -> Path Abs Dir -> [FilePattern]
 
 getDirectoryToBake exclude d p = do
     res :: [Path Rel File] <- getDirectoryFilesP d p
-    let filtered = filter (not . (isInfixOf' exclude) . toFilePathT  ) res
+    let filtered = filter (not . (isInfixOf' exclude) . s2t .toFilePath ) res
     -- putIOwords [unlines' $ map (s2t . toFilePath) filtered]
     return   filtered
