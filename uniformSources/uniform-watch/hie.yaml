@@ -1,0 +1,7 @@
+cradle:
+  cabal:
+    - path: "src"
+      component: "lib:uniform-watch"
+
+    - path: "tests"
+      component: "uniform-watch:test:webserver-test"

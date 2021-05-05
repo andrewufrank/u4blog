@@ -40,7 +40,7 @@ where
 
 import UniformBase 
 -- import           Uniform.FileIO
--- import           Uniform.Json
+import           Uniform.Json
 -- import           Uniform.TypedFile -- (TypedFiles7(..))
 -- import           Uniform.Yaml
 import           Uniform.DocRep

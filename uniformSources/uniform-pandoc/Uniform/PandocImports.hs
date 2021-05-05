@@ -47,6 +47,8 @@ where
 -- -- import Uniform.DocRep
 -- -- import Uniform.ProcessPDF 
 import UniformBase  
+import Uniform.Json
+import Uniform.Yaml
 
 import qualified Text.Pandoc                   as Pandoc
 import           Text.Pandoc        

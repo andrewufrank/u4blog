@@ -1,0 +1,10 @@
+cradle:
+  cabal:
+    - path: "src"
+      component: "lib:uniform-webserver"
+
+    - path: "./."
+      component: "lib:uniform-webserver"
+
+    - path: "tests"
+      component: "uniform-webserver:test:webserver-test"

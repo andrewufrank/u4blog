@@ -38,7 +38,8 @@ module Uniform.ProcessPDF
 where
 import UniformBase 
 
--- import Uniform.Pandoc 
+-- import Uniform.Pandoc  -- cycle?
+import Uniform.Json
 -- import           Uniform.FileIO
 import           Uniform.DocRep
 import           Uniform.PandocImports

@@ -56,7 +56,7 @@ import UniformBase
 --                                     )
 -- import           Uniform.Json
 import Uniform.PandocImports
--- import Uniform.Json 
+import Uniform.Json 
 import Uniform.HTMLout
 -- import Uniform.Markdown
 
@@ -129,19 +129,19 @@ addRefs :: DocRep -> ErrIO DocRep
 addRefs dr1@(DocRep y1 p1) = do
     -- the biblio entry is the signal that refs need to be processed 
     -- only refs do not work 
-    putIOwords ["docRepAddRefs", showT dr1, "\n"]
+    putIOwords ["addRefs", showT dr1, "\n"]
     let biblio1 = getAtKey y1 "bibliography" :: Maybe Text
     maybe (return dr1) (addRefs2 dr1) biblio1 
 
 addRefs2 dr1@(DocRep y1 p1) biblio1 = do 
-    when False $ putIOwords ["addRefs2", showT dr1, "\n"]   
+    when True $ putIOwords ["addRefs2-1", showT dr1, "\n"]   
     let  
         style1  = getAtKey y1 "style" :: Maybe Text
         refs1   = y1 ^? key "references" :: Maybe Value -- is an array 
         nocite1 = getAtKey y1 "nocite" :: Maybe Text
                      
-    when False $ putIOwordsT
-        [ "docRepAddRefs"
+    when True $ putIOwords
+        [ "addRefs2-2"
         , "\n biblio"
         , showT biblio1 -- is only biblio "resources/BibTexLatex.bib"  
         , "\n style"
@@ -152,19 +152,19 @@ addRefs2 dr1@(DocRep y1 p1) biblio1 = do
         , showT nocite1
         ]
 
-    let loc1  = (Just "en_US.utf8")  -- TODO depends on language
+    let loc1  = (Just "en_US.UTF-8")  -- TODO depends on language
 
-    let refs2 = fromJustNote "refs in docRepAddRefs 443" $ refs1 :: Value
+    let refs2 = fromJustNote "refs in addRefs2 vcbnf refs2" $ refs1 :: Value
     let refs3 = fromJSONValue $ refs2 -- :: Result [Reference]
-    let refs4 = fromJustNote "docRepAddReffs 08werwe" refs3 :: [Reference]
+    let refs4 = fromJustNote "addRefs2 08werwe refs4" refs3 :: [Reference]
 
     let bibliofp =
             t2s  biblio1 :: FilePath
     let stylefp =
-            t2s . fromJustNote "style1 in docRepAddRefs wer23" $ style1 :: FilePath
+            t2s . fromJustNote "style1 in addRefs2 wer23" $ style1 :: FilePath
 --  Raised the exception:
 -- ["runErr2action","Safe.fromJustNote Nothing, style1 in docRepAddRefs wer23\nCallStack (from HasCallStack):\n  fromJustNote, called at ./Uniform/DocRep.hs:165:19 in uniform-pandoc-0.0.2-CQ6TrBvcdAe7Crud3c6Rca:Uniform.DocRep"]
-    when False $ putIOwordsT ["docRepAddRefs", "done"]
+    when True $ putIOwords ["addRefs2-3", "done"]
 
     biblio2 <- callIO $ Pars.readBiblioFile (const True) bibliofp
     style2  <- callIO $ Pars.readCSLFile loc1 stylefp
@@ -172,7 +172,7 @@ addRefs2 dr1@(DocRep y1 p1) biblio1 = do
     let refsSum = refs4 ++ biblio2
     let p2      = processCites style2 refsSum p1
 
-    when False $ putIOwordsT ["docRepAddRefs", "p2\n", showT p2]
+    when True $ putIOwords ["addRefs2-4", "p2\n", showT p2]
 
     return (DocRep y1 p2)
 --------------------------------------------typed file DocRep

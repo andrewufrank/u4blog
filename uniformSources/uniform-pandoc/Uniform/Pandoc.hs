@@ -54,7 +54,7 @@ module Uniform.Pandoc
     , WriterOptions(..)
   )
 where
-import UniformBase hiding (readYaml2value)
+import UniformBase -- hiding (readYaml2value)
 
 -- import           Uniform.Error
 -- import           Uniform.Filenames

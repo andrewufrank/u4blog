@@ -23,7 +23,7 @@ dependencies:
 - pandoc-types
 - bibtex
 - uniformBase
-# - uniform-json
+- uniform-json
 # - uniform-fileio
 # - uniform-error
 - doctemplates

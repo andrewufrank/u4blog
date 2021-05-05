@@ -43,7 +43,7 @@ module Uniform.HTMLout
 where
 
 import UniformBase 
--- import           Uniform.Json
+import           Uniform.Json
 -- import Uniform.Pandoc
 -- import Uniform.DocValue
 -- import Uniform.FileIO 

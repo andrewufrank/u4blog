@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 082f5111fbd731991f10be1afe511e794f00befb7a3aa4901d009d3fb34fa1d9
+-- hash: 7f494137114f04e181e19cfc3bbdc49337d660e09f925922aa538e1a4cd7089d
 
 name:           uniform-pandoc
 version:        0.0.2.1
@@ -49,6 +49,7 @@ library
     , pandoc-types
     , parsec
     , process
+    , uniform-json
     , uniformBase
   default-language: Haskell2010
 
@@ -81,5 +82,6 @@ test-suite pandoctest
     , pandoc-types
     , parsec
     , process
+    , uniform-json
     , uniformBase
   default-language: Haskell2010
