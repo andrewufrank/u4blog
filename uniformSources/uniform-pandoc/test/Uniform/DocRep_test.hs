@@ -19,10 +19,11 @@ module Uniform.DocRep_test where
 import           Test.Framework
 import           Uniform.Pandoc
 import           Uniform.DocRep
-import Uniform.Json 
+import Uniform.Json
+import UniformBase
 import Uniform.Test.TestHarness
 -- import Text.Pandoc 
-import           Uniform.Error           hiding ( (<.>) )  -- (</>)
+-- import           Uniform.Error           hiding ( (<.>) )  -- (</>)
 import Uniform.Markdown_test
 
     
@@ -122,26 +123,26 @@ panrep2texsnipTest drfn  = do
     return res1
 
 
-test_panrep2htmlShort = testVar0FileIO "uniform-DocRep" 
-        shortFile
-        "test_panrep2htmlShort" docRep2htmlTest 
-test_panrep2htmlReg = testVar0FileIO "uniform-DocRep" 
-        regFile
-        "test_panrep2htmlReg" docRep2htmlTest 
-test_panrep2htmlComplex = testVar0FileIO "uniform-DocRep" 
-        complexFile
-        "test_panrep2htmlComplex" docRep2htmlTest 
-test_panrep2htmlWithRef = testVar0FileIO "uniform-DocRep" 
-        withRef
-        "test_panrep2htmlWithRef" docRep2htmlTest 
+-- test_panrep2htmlShort = testVar0FileIO "uniform-DocRep" 
+--         shortFile
+--         "test_panrep2htmlShort" docRep2htmlTest 
+-- test_panrep2htmlReg = testVar0FileIO "uniform-DocRep" 
+--         regFile
+--         "test_panrep2htmlReg" docRep2htmlTest 
+-- test_panrep2htmlComplex = testVar0FileIO "uniform-DocRep" 
+--         complexFile
+--         "test_panrep2htmlComplex" docRep2htmlTest 
+-- test_panrep2htmlWithRef = testVar0FileIO "uniform-DocRep" 
+--         withRef
+--         "test_panrep2htmlWithRef" docRep2htmlTest 
 
 
-docRep2htmlTest :: Path Abs File -> ErrIO HTMLout
-docRep2htmlTest drfp = do 
-    dr1 <- read8 drfp docRepFileType 
-    h1 <- docRep2html dr1
-    write8 drfp htmloutFileType h1
-    return h1 
+-- docRep2htmlTest :: Path Abs File -> ErrIO HTMLout
+-- docRep2htmlTest drfp = do 
+--     dr1 <- read8 drfp docRepFileType 
+--     h1 <- docRep2html dr1
+--     write8 drfp htmloutFileType h1
+--     return h1 
 
 instance ShowTestHarness TexSnip
 instance ShowTestHarness HTMLout

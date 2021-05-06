@@ -24,6 +24,7 @@ dependencies:
 - bibtex
 - uniformBase
 - uniform-json
+
 # - uniform-fileio
 # - uniform-error
 - doctemplates
@@ -50,6 +51,8 @@ tests:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    # - uniform 
     - HTF
+    - uniform-pandoc
+    - uniform-convenience
+    # - uniformBase
     # - ReplaceUmlaut 

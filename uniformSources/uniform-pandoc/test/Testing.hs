@@ -35,7 +35,7 @@ import            Test.Framework
 import    {-@ HTF_TESTS @-}        Uniform.HTMLout_test
         -- braucht files 
 
-import           Uniform.Strings
+import           UniformBase
 
 --import TestingFileIO
 
