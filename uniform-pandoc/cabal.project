@@ -3,9 +3,9 @@ packages:
 
 -- add here the location of uniformBase for local use 
 
-    ../../../u4blog/uniformSources/uniform-json/*.cabal
+    ../../u4blog/uniform-json/*.cabal
 
-    ../../../u4blog/uniformSources/uniform-webserver/*.cabal
-    ../../../u4blog/uniformSources/uniform-watch/*.cabal
-    ../../../u4blog/uniformSources/uniform-json/*.cabal
-    ../../../u2to/uniformSources/uniform-convenience/*.cabal
+    ../../u4blog/uniform-webserver/*.cabal
+    ../../u4blog/uniform-watch/*.cabal
+    ../../u4blog/uniform-json/*.cabal
+    ../../u2to/uniform-convenience/*.cabal
