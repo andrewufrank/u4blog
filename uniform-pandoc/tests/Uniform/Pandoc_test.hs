@@ -18,10 +18,11 @@ module Uniform.Pandoc_test where
 import Test.Framework
 ---- using uniform:
 import Uniform.Pandoc 
-import Uniform.Filenames 
+-- import Uniform.Filenames 
 import Uniform.Test.TestHarness
 import Uniform.Markdown_test 
-import Uniform.Error           hiding (  (<.>)  )  -- (</>)
+-- import Uniform.Error           hiding (  (<.>)  )  -- (</>)
+import UniformBase
 
 tmp1, res4 :: Text 
 tmp1 = "some $words$ are replaced $if(x1)$the text for x1 $x1$ $endif$."

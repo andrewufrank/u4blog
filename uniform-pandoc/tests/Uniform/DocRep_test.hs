@@ -66,7 +66,9 @@ test_readWriteDR = do
     assertEqual target3 res3
 
 -- this is for json (not aeson)
-test_json = assertEqual res1 (encode rec1json)
+test_json :: IO ()
+test_json = assertEqual res1a (encode rec1json) 
+rec1json :: Value
 rec1json = Object
     (fromList
         [ ("date" , String "2000-01-01T00:00:00Z")
@@ -74,8 +76,11 @@ rec1json = Object
         , ("date2", String "2000-01-01T00:00:00Z")
         ]
     )
+-- res1 :: bytestring-0.10.12.0:Data.ByteString.Lazy.Internal.ByteString
+-- result in any order is acceptable 
 res1 =
     "{\"date\":\"2000-01-01T00:00:00Z\",\"title\":\"rec1\",\"date2\":\"2000-01-01T00:00:00Z\"}"
+res1a = "{\"title\":\"rec1\",\"date\":\"2000-01-01T00:00:00Z\",\"date2\":\"2000-01-01T00:00:00Z\"}"
 
 -- for aeson  see https://artyom.me/aeson
 v1 = "Object (fromList [(\"boolean\",Bool True),(\"numbers\",Array [Number 1.0,Number 2.0,Number 3.0])])"
@@ -97,10 +102,10 @@ dr1t = "DocRep {yam = Object (fromList [(\"boolean\",Bool True),(\"numbers\",Arr
 
 -- test_DRencode = assertEqual res2 $ 
 
-test_setText = assertEqual rec2 
+test_setText = assertEqual rec2a 
         $ showT $ putAtKey ("t1"::Text) (22::Integer) val
 rec2 = "Object (fromList [(\"boolean\",Bool True),(\"t1\",Number 22.0),(\"numbers\",Array [Number 1.0,Number 2.0,Number 3.0])])" :: Text
-
+rec2a = "Object (fromList [(\"boolean\",Bool True),(\"numbers\",Array [Number 1.0,Number 2.0,Number 3.0]),(\"t1\",Number 22.0)])"
 test_set2dr1 = assertEqual rec3 $ showT . putAtKey ("a2"::Text) ("testa2"::Text) $ (dr1::DocRep)
 rec3 = "DocRep {yam = Object (fromList [(\"a2\",String \"testa2\"),(\"boolean\",Bool True),(\"numbers\",Array [Number 1.0,Number 2.0,Number 3.0])]), pan = Pandoc (Meta {unMeta = fromList []}) []}"::Text
 
@@ -111,9 +116,9 @@ val3 = [object [
   , object [
   "b4" .= ("b4test"::Text),
   "numbs" .= [66,55,44::Int] ]  ]
-test_merge1 = assertEqual rec4 $ showT $ mergeAll dr3 val3
+test_merge1 = assertEqual rec4a $ showT $ mergeAll dr3 val3
 rec4 = "DocRep {yam = Object (fromList [(\"a2\",String \"testa2\"),(\"boolean\",Bool True),(\"numbs\",Array [Number 66.0,Number 55.0,Number 44.0]),(\"numbers\",Array [Number 4.0,Number 44.0]),(\"boolean2\",Bool False),(\"b4\",String \"b4test\")]), pan = Pandoc (Meta {unMeta = fromList []}) []}"::Text 
-
+rec4a = "DocRep {yam = Object (fromList [(\"a2\",String \"testa2\"),(\"b4\",String \"b4test\"),(\"boolean\",Bool True),(\"boolean2\",Bool False),(\"numbers\",Array [Number 4.0,Number 44.0]),(\"numbs\",Array [Number 66.0,Number 55.0,Number 44.0])]), pan = Pandoc (Meta {unMeta = fromList []}) []}"
 
 
 
@@ -133,8 +138,8 @@ test_panrep2htmlWithRef = testVar0FileIO "uniform-DocRep"
 
 panrep2htmlTest :: Path Abs File -> ErrIO HTMLout
 panrep2htmlTest drfp = do 
-    dr1 <- read8 drfp docRepFileType 
-    h1 <- panrep2html dr1
+    pr1 <- read8 drfp panrepFileType 
+    h1 <- panrep2html pr1
     write8 drfp htmloutFileType h1
     return h1 
 
