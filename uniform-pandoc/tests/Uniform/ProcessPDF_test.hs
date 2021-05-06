@@ -99,4 +99,27 @@ writePDF4 tsfn1  = do
         -- pdf1 <- read8 tsfn1 pdfFileType  -- read8 cannot read pdf
         return . PDFfile $ "ok"
 
+test_panrep2texsnipShort = testVar0FileIO "uniform-DocRep" 
+        shortFile
+        "test_panrep2texsnipShort" panrep2texsnipTest 
+test_panrep2texsnipReg = testVar0FileIO "uniform-DocRep" 
+        regFile
+        "test_panrep2texsnipReg" panrep2texsnipTest 
+test_panrep2texsnipComplex = testVar0FileIO "uniform-DocRep" 
+        complexFile
+        "test_panrep2texsnipComplex" panrep2texsnipTest 
+test_panrep2texsnipWithRef = testVar0FileIO "uniform-DocRep" 
+        withRef
+        "test_panrep2texsnipWithRef" panrep2texsnipTest 
+
+-- withRef = makeAbsFile "/home/frank/Workspace8/uniform/uniform-pandoc/tests/data/withRef.md"
+-- defined in markdown_test.hs
+
+panrep2texsnipTest :: Path Abs File -> ErrIO TexSnip
+panrep2texsnipTest drfn  = do       
+    dr1 :: DocRep <- read8 drfn docRepFileType 
+    res1 :: Text <-  panrep2texsnip  dr1 
+    write8 drfn texSnipFileType (TexSnip (yam dr1) res1)
+    return res1
+    
 instance ShowTestHarness PDFfile

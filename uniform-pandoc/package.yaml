@@ -45,7 +45,7 @@ library:
 tests:
   pandoctest:
     main:                Testing.hs
-    source-dirs:         test
+    source-dirs:         tests
     ghc-options:
     - -threaded
     - -rtsopts
