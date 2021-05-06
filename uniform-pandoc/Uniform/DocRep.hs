@@ -148,7 +148,8 @@ addRefs2 dr1@(DocRep y1 p1) biblio1 = do
         showT nocite1
       ]
 
-  let loc1 = (Just "en_US.UTF-8") -- TODO depends on language
+  let loc1 = (Just "de_AT.UTF-8") -- TODO depends on language
+        -- creates error later...
   let refs2 = fromJustNote "refs in addRefs2 vcbnf refs2" $ refs1 :: Value
   let refs3 = fromJSONValue $ refs2 -- :: Result [Reference]
   let refs4 = fromJustNote "addRefs2 08werwe refs4" refs3 :: [Reference]

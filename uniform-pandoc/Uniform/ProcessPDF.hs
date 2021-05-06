@@ -88,7 +88,7 @@ tex2latex latpar snips =
 
 preamble1 =
     [
-    -- "%%% eval: (setenv \"LANG\" \"en_US.utf8\")",
+    -- "%%% eval: (setenv \"LANG\" \"de_CH.utf8\")",
       "\\documentclass[a4paper,10pt]{scrbook}"
     , "\\usepackage{fontspec}"
     ,
