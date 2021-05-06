@@ -144,15 +144,16 @@ panrep2htmlTest drfp = do
     return h1 
 
 -- test addRefs -------------
-addRefsTest :: Path Abs File -> ErrIO DocRep 
-addRefsTest drfp = do 
+addRefs2Test :: Path Abs File -> ErrIO DocRep 
+addRefs2Test drfp = do 
     dr1 <- read8 drfp docRepFileType 
-    dr2 <- addRefs dr1 
+    dr2 <- addRefs2 dr1 biblio 
     return dr2 
 
+biblio = "resources/BibTexLatex.bib"
 test_addRefsTest =  testVar0FileIO "uniform-DocRep" 
         withRef  -- withRef has only content, no biblio
-        "addRefsTest" panrep2htmlTest 
+        "addRefsTest" addRefs2Test 
 
 
 instance ShowTestHarness TexSnip
