@@ -1,11 +1,13 @@
 --------------------------------------------------------------------------
 --
 -- Module      :  Uniform.PandocImports
-        -- von hier Pandoc spezifisches imortieren
-        -- nich exportieren nach aussen 
+-- read and write pandoc files (intenal rep of pandoc written to disk)
+-- von hier Pandoc spezifisches imortieren
+-- nich exportieren nach aussen
 -------------------------------
 -- {-# LANGUAGE BangPatterns                   #-}
 {-# LANGUAGE ConstraintKinds #-}
+{-# LANGUAGE DeriveGeneric #-}
 -- {-# LANGUAGE DeriveDataTypeable    #-}
 {-# LANGUAGE DoAndIfThenElse #-}
 {-# LANGUAGE FlexibleContexts #-}
@@ -16,90 +18,72 @@
 {-# LANGUAGE TypeFamilies #-}
 -- {-# LANGUAGE TypeSynonymInstances        #-}
 {-# LANGUAGE UndecidableInstances #-}
-{-# LANGUAGE DeriveGeneric #-}
-
 {-# OPTIONS_GHC -Wall -fno-warn-orphans 
             -fno-warn-missing-signatures
             -fno-warn-missing-methods 
             -fno-warn-duplicate-exports 
-            -fno-warn-unused-imports 
-            #-}
+            -fno-warn-unused-imports #-}
 
 module Uniform.PandocImports
-  ( module Uniform.PandocImports
-  , Pandoc (..)
-      
+  ( module Uniform.PandocImports,
+    Pandoc (..),
   )
 where
 
--- import           Uniform.Error
--- import           Uniform.Filenames
--- import           Uniform.TypedFile              ( TypedFiles7(..)
---                                                 , TypedFiles5(..)
---                                                 , TypedFile5(..)
---                                                 )
--- import           Uniform.FileIO                 ( write8
---                                                 , read8
---                                                 -- , setExtension
---                                                 )
--- import           Uniform.Json
--- import           Uniform.Yaml
--- -- import Uniform.DocRep
--- -- import Uniform.ProcessPDF 
-import UniformBase  
-import Uniform.Json
-import Uniform.Yaml
-
-import qualified Text.Pandoc                   as Pandoc
-import           Text.Pandoc        
-            -- ( Pandoc(..)
-            --             , ReaderOptions
-            --             , Meta
-            --             , MetaValue
-            --             , writerHighlightStyle
-            --             , writerExtensions
-            --             , WriterOptions 
-            --             -- , writeMarkdown
-            --             , writeHtml5String
-            --             , writeLaTeX
-            --             , def
-            --             )
-
-import           Text.Pandoc.Shared             ( stringify )
-import           Text.Pandoc.Highlighting       ( tango )
-import qualified Text.Pandoc                   as Pandoc
+import Text.Pandoc
+  ( CiteMethod (Natbib),
+    Meta,
+    MetaValue,
+    Pandoc (..),
+    WriterOptions
+      ( writerCiteMethod,
+        writerExtensions,
+        writerHighlightStyle
+      ),
+    def,
+    writeLaTeX,
+  )
+import qualified Text.Pandoc as Pandoc
 import qualified Text.Pandoc.Extensions as Pandoc
+import Text.Pandoc.Highlighting (tango)
+import Text.Pandoc.Shared (stringify)
+import Uniform.Json (ErrIO, ToJSON (toJSON, toJSONList), Value)
+import Uniform.Yaml (ErrIO, yaml2value, yamlFileType)
+import UniformBase
+
 instance Zeros Pandoc where
   zero = Pandoc zero zero
 
 instance Zeros Text.Pandoc.Meta where
   zero = mempty
 
-
 -- | Handle possible pandoc failure within the PandocIO Monad
 unPandocM :: Pandoc.PandocIO a -> ErrIO a
 unPandocM op1 =
   do
-      res <- callIO $ Pandoc.runIO
-        (do
-             -- liftIO $putStrLn "unPandocM op"
-          a <- op1 --       error "xx"
-          -- liftIO $putStrLn "error xx"
-          -- should be
-          --     result <- P.runIO $ op
-          --     rst1   <- P.handleError result
-          -- and put then in the two parts of ErrIO 
-          return a
-        )
-      either
-        (\e -> do
+    res <-
+      callIO $
+        Pandoc.runIO op1
+    --   ( do
+    --       -- liftIO $putStrLn "unPandocM op"
+    --       a <- op1 --       error "xx"
+    --       -- liftIO $putStrLn "error xx"
+    --       -- should be
+    --       --     result <- P.runIO $ op
+    --       --     rst1   <- P.handleError result
+    --       -- and put then in the two parts of ErrIO
+    --       return a
+    --   )
+    either
+      ( \e -> do
           putIOwords ["unPandocM error", showT e]
           throwError . showT $ e
-        )
-        return res
-    `catchError` (\e -> do
-                   putIOwords ["unPandocM catchError", showT e]
-                   throwError . showT $ e
+      )
+      return
+      res
+    `catchError` ( \e -> do
+                     putIOwords ["unPandocM catchError", showT e]
+                     throwError . showT $ e
                  )
 
 getMeta :: Pandoc -> Pandoc.Meta
@@ -112,73 +96,79 @@ putMeta m1 (Pandoc _ p0) = Pandoc m1 p0
 -- text objects into plain strings along the way.
 flattenMeta :: Pandoc.Meta -> Value
 flattenMeta (Pandoc.Meta meta) = toJSON $ fmap go meta
-    where
-        go :: MetaValue -> Value
-        go (Pandoc.MetaMap     m) = toJSON $ fmap go m
-        go (Pandoc.MetaList    m) = toJSONList $ fmap go m
-        go (Pandoc.MetaBool    m) = toJSON m
-        go (Pandoc.MetaString  m) = toJSON m
-        go (Pandoc.MetaInlines m) = toJSON $ stringify m
-        go (Pandoc.MetaBlocks  m) = toJSON $ stringify m
+  where
+    go :: MetaValue -> Value
+    go (Pandoc.MetaMap m) = toJSON $ fmap go m
+    go (Pandoc.MetaList m) = toJSONList $ fmap go m
+    go (Pandoc.MetaBool m) = toJSON m
+    go (Pandoc.MetaString m) = toJSON m
+    go (Pandoc.MetaInlines m) = toJSON $ stringify m
+    go (Pandoc.MetaBlocks m) = toJSON $ stringify m
 
 readYaml2value :: Path Abs File -> ErrIO Value
-
 -- read a yaml file to a value
 -- error when syntax issue
 readYaml2value fp = do
-    t <- read8 fp yamlFileType
-    return . yaml2value $ t
-
+  t <- read8 fp yamlFileType
+  return . yaml2value $ t
 
 latexOptions :: WriterOptions
-latexOptions = 
-    def { writerHighlightStyle = Just tango
-        , writerCiteMethod = Natbib
-        -- Citeproc                        -- use citeproc to render them
-        --           | Natbib                        -- output natbib cite commands
-        --           | Biblatex                      -- output biblatex cite commands
-        , writerExtensions     =  Pandoc.extensionsFromList
-                        [Pandoc.Ext_raw_tex   --Allow raw TeX (other than math)
-                        -- , Pandoc.Ext_shortcut_reference_links
-                        -- , Pandoc.Ext_spaced_reference_links
-                        -- , Pandoc.Ext_citations           -- <-- this is the important extension for bibTex
-                        ]                     
-        }
--- instance ToJSON Text 
+-- | reasonable extension - crucial!
+latexOptions =
+  def
+    { writerHighlightStyle = Just tango,
+      writerCiteMethod = Natbib,
+      -- Citeproc                        -- use citeproc to render them
+      --           | Natbib                        -- output natbib cite commands
+      --           | Biblatex                      -- output biblatex cite commands
+      writerExtensions =
+        Pandoc.extensionsFromList
+          [ Pandoc.Ext_raw_tex --Allow raw TeX (other than math)
+          -- , Pandoc.Ext_shortcut_reference_links
+          -- , Pandoc.Ext_spaced_reference_links
+          -- , Pandoc.Ext_citations           -- <-- this is the important extension for bibTex
+          ]
+    }
+
+-- instance ToJSON Text
 -- writeLaTeX :: PandocMonad m => WriterOptions -> Pandoc -> m Text
+
 instance TypedFiles7 Text Text where
-    wrap7 = id
-    unwrap7 = id 
+  wrap7 = id
+  unwrap7 = id
 
-writeTexSnip2 ::   Pandoc -> ErrIO Text
--- write a latex file from a pandoc doc 
-writeTexSnip2  pandocRes = do
-    p <- unPandocM $  writeLaTeX latexOptions pandocRes
-    return   p
+writeTexSnip2 :: Pandoc -> ErrIO Text
+-- write a latex file from a pandoc doc
+writeTexSnip2 pandocRes = do
+  p <- unPandocM $ writeLaTeX latexOptions pandocRes
+  return p
 
--------------------- fileType ----------
+-------------------- fileType Panrep ----------
+-- a file containing what pandoc internally works on 
 extPanrep = Extension "panrep"
 
 panrepFileType =
-  TypedFile5 { tpext5 = extPanrep } :: TypedFile5 Text Panrep
+  TypedFile5 {tpext5 = extPanrep} :: TypedFile5 Text Panrep
 
-data Panrep = Panrep {panyam :: Value, panpan :: Pandoc }
-    deriving (Eq, Show, Read )
-instance Zeros Panrep where zero = Panrep zero zero 
+data Panrep = Panrep {panyam :: Value, panpan :: Pandoc}
+  deriving (Eq, Show, Read)
 
-instance TypedFiles7 Text Panrep  where
+instance Zeros Panrep where zero = Panrep zero zero
+
+instance TypedFiles7 Text Panrep where
   -- handling Pandoc and read them into PandocText
-  wrap7 = readNote "wrap7 for pandoc 223d" .t2s
-  unwrap7   = showT
+  wrap7 = readNote "wrap7 for pandoc 223d" . t2s
+  unwrap7 = showT
 
-    -------------------- fileType ----------
-    -- a tex snip is a piece of latex code, but not a full compilable 
-    -- latex which results in a pdf 
+-------------------- fileType ----------
+-- a tex snip is a piece of latex code, but not a full compilable
+-- latex which results in a pdf
 
+extTexSnip :: UniformBase.Extension
 extTexSnip = Extension "texsnip"
 
--- | a wrapper around TexSnip 
-data TexSnip = TexSnip {snipyam :: Value, unTexSnip ::Text}
+-- | a wrapper around TexSnip
+data TexSnip = TexSnip {snipyam :: Value, unTexSnip :: Text}
   deriving (Show, Read, Eq)
 
 -- unTexSnip (TexSnip a) = a   --needed for other ops
@@ -186,13 +176,13 @@ data TexSnip = TexSnip {snipyam :: Value, unTexSnip ::Text}
 instance Zeros TexSnip where
   zero = TexSnip zero zero
 
+texSnipFileType :: TypedFile5 Text TexSnip
 texSnipFileType =
-  TypedFile5 { tpext5 = extTexSnip } :: TypedFile5 Text TexSnip
+  TypedFile5 {tpext5 = extTexSnip} :: TypedFile5 Text TexSnip
 
-instance TypedFiles7 Text TexSnip  where
+instance TypedFiles7 Text TexSnip where
   -- handling TexSnip and read them into TexSnipText
   -- the file on disk is readable for texstudio
-  
-  wrap7 = readNote "wrap7 for TexSnip dwe11d" . t2s
-  unwrap7   = showT
 
+  wrap7 = readNote "wrap7 for TexSnip dwe11d" . t2s
+  unwrap7 = showT

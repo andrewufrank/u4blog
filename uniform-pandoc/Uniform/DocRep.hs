@@ -41,34 +41,40 @@ module Uniform.DocRep
   )
 where
 
--- import           Uniform.Error
--- import           Uniform.Filenames
--- import           Uniform.TypedFile  ( TypedFiles7(..)
---                                     , TypedFiles5(..)
---                                     , TypedFile5(..)
---                                     )
--- import           Uniform.Json
-
--- import Uniform.Markdown
-
-import Control.Lens
+import Control.Lens -- needed for the query expressions
   ( (^?),
   -- , (?~)
   -- , (&)
   -- , at
   )
-import Data.Aeson.Lens
+import Data.Aeson.Lens (key)
 import Data.Aeson.Types
-import GHC.Generics
-import Text.CSL as Pars
-import Text.CSL.Pandoc as Bib
+  ( FromJSON (parseJSON),
+    ToJSON,
+    Value,
+    parseMaybe,
+  )
+import GHC.Generics (Generic)
+import Text.CSL as Pars (Reference, readBiblioFile, readCSLFile)
+import Text.CSL.Pandoc as Bib (processCites)
 import qualified Text.Pandoc as Pandoc
 import Uniform.HTMLout
+  ( HTMLout (HTMLout),
+    html5Options,
+    htmloutFileType,
+    writeHtml5String,
+  )
 import Uniform.Json
-import Uniform.PandocImports
+  ( AtKey (getAtKey, putAtKey),
+    ErrIO,
+    FromJSON (parseJSON),
+    ToJSON,
+    Value,
+    mergeRightPref,
+  )
+import Uniform.PandocImports (Pandoc, Panrep (Panrep), unPandocM)
 import UniformBase
 
--- import Text.JSON
 fromJSONValue :: FromJSON a => Value -> Maybe a
 fromJSONValue = parseMaybe parseJSON
 
@@ -90,7 +96,7 @@ instance FromJSON DocRep
 instance ToJSON DocRep
 
 docRep2panrep :: DocRep -> ErrIO Panrep
--- ^ transform a docrep to a panrep
+-- ^ transform a docrep to a panrep (which is the pandoc rep)
 -- does process the references
 -- and will do index, but this goes to ssg
 docRep2panrep dr1@(DocRep y1 p1) = do
@@ -129,6 +135,8 @@ addRefs dr1@(DocRep y1 p1) = do
   let biblio1 = getAtKey y1 "bibliography" :: Maybe Text
   maybe (return dr1) (addRefs2 dr1) biblio1
 
+addRefs2 :: (MonadIO m, MonadError m, ErrorType m ~ Text) 
+    => DocRep -> Text -> m DocRep
 addRefs2 dr1@(DocRep y1 p1) biblio1 = do
   when True $ putIOwords ["addRefs2-1", showT dr1, "\n"]
   let style1 = getAtKey y1 "style" :: Maybe Text
@@ -149,7 +157,7 @@ addRefs2 dr1@(DocRep y1 p1) biblio1 = do
       ]
 
   let loc1 = (Just "de_AT.UTF-8") -- TODO depends on language
-        -- creates error later...
+  -- creates error later...
   let refs2 = fromJustNote "refs in addRefs2 vcbnf refs2" $ refs1 :: Value
   let refs3 = fromJSONValue $ refs2 -- :: Result [Reference]
   let refs4 = fromJustNote "addRefs2 08werwe refs4" refs3 :: [Reference]
@@ -165,7 +173,7 @@ addRefs2 dr1@(DocRep y1 p1) biblio1 = do
   biblio2 <- callIO $ Pars.readBiblioFile (const True) bibliofp
   when True $ putIOwords ["addRefs2-3-2", "done"]
   style2 <- callIO $ Pars.readCSLFile loc1 stylefp
-
+        -- error with language (de_at)
   when True $ putIOwords ["addRefs2-3-3", "done"]
 
   let refsSum = refs4 ++ biblio2
@@ -177,6 +185,7 @@ addRefs2 dr1@(DocRep y1 p1) biblio1 = do
 
 --------------------------------------------typed file DocRep
 
+extDocRep :: Extension
 extDocRep = Extension "docrep"
 
 -- instance NiceStrings DocRep where

@@ -72,7 +72,7 @@ readMarkdown3 :: Pandoc.ReaderOptions -> MarkdownText -> ErrIO Pandoc
 readMarkdown3 options text1 =
     unPandocM $ Pandoc.readMarkdown options (unwrap7 text1)
 
-    -- | Reasonable options for reading a markdown file
+-- | Reasonable options for reading a markdown file
 markdownOptions :: Pandoc.ReaderOptions
 markdownOptions = Pandoc.def { Pandoc.readerExtensions = exts }
   where
