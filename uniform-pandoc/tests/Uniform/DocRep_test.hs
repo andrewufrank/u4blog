@@ -143,5 +143,17 @@ panrep2htmlTest drfp = do
     write8 drfp htmloutFileType h1
     return h1 
 
+-- test addRefs -------------
+addRefsTest :: Path Abs File -> ErrIO DocRep 
+addRefsTest drfp = do 
+    dr1 <- read8 drfp docRepFileType 
+    dr2 <- addRefs dr1 
+    return dr2 
+
+test_addRefsTest =  testVar0FileIO "uniform-DocRep" 
+        withRef  -- withRef has only content, no biblio
+        "addRefsTest" panrep2htmlTest 
+
+
 instance ShowTestHarness TexSnip
 instance ShowTestHarness HTMLout
