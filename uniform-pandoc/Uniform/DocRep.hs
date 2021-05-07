@@ -110,7 +110,7 @@ panrep2html :: Panrep -> ErrIO HTMLout
 -- needs teh processing of the references with citeproc
 panrep2html pr1@(Panrep y1 p1) = do
   -- dr2 <- addRefs pr1
-  h1 <- unPandocM $ writeHtml5String html5Options (p1)
+  h1 <- unPandocM $ writeHtml5String html5Options p1
   return . HTMLout $ h1
 
 --------------------------------
@@ -135,7 +135,7 @@ addRefs dr1@(DocRep y1 p1) = do
   let biblio1 = getAtKey y1 "bibliography" :: Maybe Text
   maybe (return dr1) (addRefs2 dr1) biblio1
 
-addRefs2 :: (MonadIO m, MonadError m, ErrorType m ~ Text) 
+addRefs2 :: (MonadIO m, MonadError m, ErrorType m ~ Text)
     => DocRep -> Text -> m DocRep
 addRefs2 dr1@(DocRep y1 p1) biblio1 = do
   when True $ putIOwords ["addRefs2-1", showT dr1, "\n"]
@@ -156,10 +156,11 @@ addRefs2 dr1@(DocRep y1 p1) biblio1 = do
         showT nocite1
       ]
 
-  let loc1 = (Just "de") -- TODO depends on language
-  -- creates error later...
-  let refs2 = fromJustNote "refs in addRefs2 vcbnf refs2" $ refs1 :: Value
-  let refs3 = fromJSONValue $ refs2 -- :: Result [Reference]
+  let loc1 = Just "de" -- TODO depends on language
+  -- must be 2 char (all other seems to be difficult with pandoc-citeproc)
+  -- change to new citeproc TODO 
+  let refs2 = fromJustNote "refs in addRefs2 vcbnf refs2" refs1 :: Value
+  let refs3 = fromJSONValue refs2 -- :: Result [Reference]
   let refs4 = fromJustNote "addRefs2 08werwe refs4" refs3 :: [Reference]
 
   let bibliofp =
