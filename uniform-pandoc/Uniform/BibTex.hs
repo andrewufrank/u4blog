@@ -89,7 +89,7 @@ constructNoCite :: [Text] -> P.Meta
 constructNoCite bibids = P.Meta map1
   where
     cits = map (\s -> [fillCitation s]) bibids :: [[PD.Citation]]
-    refs = map (\s -> [PD.Str ("@" <> s)]) (bibids) :: [[PD.Inline]]
+    refs = map (\s -> [PD.Str ("@" <> s)]) bibids :: [[PD.Inline]]
     cites = zipWith PD.Cite cits refs :: [PD.Inline]
     metablocks = PD.MetaBlocks [PD.Plain (intersperse PD.Space cites)]
     map1 = M.insert "nocite" metablocks M.empty

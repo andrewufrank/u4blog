@@ -18,6 +18,7 @@
 {-# LANGUAGE TypeFamilies #-}
 -- {-# LANGUAGE TypeSynonymInstances        #-}
 {-# LANGUAGE UndecidableInstances #-}
+{-# LANGUAGE LiberalTypeSynonyms #-}
 {-# OPTIONS_GHC -Wall -fno-warn-orphans 
             -fno-warn-missing-signatures
             -fno-warn-missing-methods 
@@ -27,6 +28,8 @@
 module Uniform.PandocImports
   ( module Uniform.PandocImports,
     Pandoc (..),
+    -- PandocBlock (..)
+    -- Pandoc.Block
   )
 where
 
@@ -51,6 +54,10 @@ import Uniform.Json (ErrIO, ToJSON (toJSON, toJSONList), Value)
 import Uniform.Yaml (ErrIO, yaml2value, yamlFileType)
 import UniformBase
 
+-- -- type PandocBlock = Pandoc.Block
+-- instance Zeros Pandoc.Block where 
+--         zero = Pandoc.Null
+ 
 instance Zeros Pandoc where
   zero = Pandoc zero zero
 
@@ -92,8 +99,8 @@ getMeta (Pandoc.Pandoc m _) = m
 putMeta :: Pandoc.Meta -> Pandoc -> Pandoc
 putMeta m1 (Pandoc _ p0) = Pandoc m1 p0
 
--- | Flatten a Pandoc 'Meta' into a well-structured JSON object, rendering Pandoc
--- text objects into plain strings along the way.
+-- | Flatten a Pandoc 'Meta' into a well-structured JSON object,  
+-- adapted from https://hackage.haskell.org/package/slick-1.1.1.0/docs/src/Slick.Pandoc.html#flattenMeta
 flattenMeta :: Pandoc.Meta -> Value
 flattenMeta (Pandoc.Meta meta) = toJSON $ fmap go meta
   where

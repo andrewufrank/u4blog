@@ -57,13 +57,14 @@ import qualified Text.Pandoc                   as Pandoc
 
 readMarkdown2docrep :: MarkdownText -> ErrIO DocRep
 -- | read a md file into a DocRep
--- all values from meta are moved to yam (meta is zero to avoid problems)
+-- all values from meta are moved to yam 
+-- (meta is unused to avoid problems)
 -- in a json format
 readMarkdown2docrep md = do
     pd <- readMarkdown2 md
-    let (Pandoc meta1 block1) = pd
+    let (Pandoc meta1 _) = pd
     let meta2                 = flattenMeta meta1
-    return (DocRep meta2 (Pandoc zero block1))
+    return (DocRep meta2 pd)
         -- zero the metadata to detect errors
 
 
