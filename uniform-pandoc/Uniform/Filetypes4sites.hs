@@ -17,7 +17,8 @@
 
 module Uniform.Filetypes4sites where   
 
-import Uniform.PandocImports (Pandoc, Panrep (Panrep), unPandocM)
+import Uniform.PandocImports 
+-- (Pandoc, Panrep (Panrep), unPandocM)
 import Uniform.Json
 
 import UniformBase
@@ -87,3 +88,81 @@ docRepFileType =
 instance TypedFiles7 Text DocRep where
   wrap7 = readNote "DocRep wrap7 sfasdwe" . t2s
   unwrap7 = showT
+
+-------------------- fileType Panrep ----------
+-- a file containing what pandoc internally works on 
+extPanrep = Extension "panrep"
+
+panrepFileType =
+  TypedFile5 {tpext5 = extPanrep} :: TypedFile5 Text Panrep
+
+data Panrep = Panrep {panyam :: Value, panpan :: Pandoc}
+  deriving (Eq, Show, Read)
+
+instance Zeros Panrep where zero = Panrep zero zero
+
+instance TypedFiles7 Text Panrep where
+  -- handling Pandoc and read them into PandocText
+  wrap7 = readNote "wrap7 for pandoc 223d" . t2s
+  unwrap7 = showT
+
+--------------------  TexSnip 
+-- a tex snip is a piece of latex code, but not a full compilable
+-- latex which results in a pdf
+
+extTexSnip :: UniformBase.Extension
+extTexSnip = Extension "texsnip"
+
+-- | a wrapper around TexSnip
+data TexSnip = TexSnip {snipyam :: Value, unTexSnip :: Text}
+  deriving (Show, Read, Eq)
+
+-- unTexSnip (TexSnip a) = a   --needed for other ops
+
+instance Zeros TexSnip where
+  zero = TexSnip zero zero
+
+texSnipFileType :: TypedFile5 Text TexSnip
+texSnipFileType =
+  TypedFile5 {tpext5 = extTexSnip} :: TypedFile5 Text TexSnip
+
+instance TypedFiles7 Text TexSnip where
+  -- handling TexSnip and read them into TexSnipText
+  -- the file on disk is readable for texstudio
+
+  wrap7 = readNote "wrap7 for TexSnip dwe11d" . t2s
+  unwrap7 = showT
+
+----------------  Tex 
+
+extTex = Extension "tex"
+
+texFileType = TypedFile5 {tpext5 = extTex} :: TypedFile5 Text Latex
+
+instance TypedFiles7 Text Latex where
+  wrap7 = Latex
+  unwrap7 = unLatex
+
+newtype Latex = Latex {unLatex :: Text}
+  deriving (Eq, Ord, Read, Show)
+
+-- this is a full file, not just a snippet
+
+instance Zeros Latex where
+  zero = Latex zero
+
+---------------------------------------------- PDF
+
+extPDF = Extension "pdf"
+
+pdfFileType = TypedFile5 {tpext5 = extPDF} :: TypedFile5 Text PDFfile
+
+newtype PDFfile = PDFfile {unpdffile :: Text}
+  deriving (Eq, Ord, Read, Show)
+
+instance Zeros PDFfile where
+  zero = PDFfile zero
+
+instance TypedFiles7 Text PDFfile where
+  wrap7 = PDFfile
+  unwrap7 = unpdffile

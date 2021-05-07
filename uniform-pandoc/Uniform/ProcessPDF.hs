@@ -35,6 +35,8 @@ module Uniform.ProcessPDF
   )
 where
 
+import Uniform.Filetypes4sites
+
 -- import Uniform.Pandoc  -- cycle?
 
 -- import           Uniform.FileIO
@@ -131,21 +133,7 @@ makebiblio style biblio =
 -- %achtung keine blanks in liste!
 -- \bibliography{/home/frank/Workspace8/ssg/docs/site/baked/resources/BibTexLatex.bib}
 
-newtype Latex = Latex {unLatex :: Text}
-  deriving (Eq, Ord, Read, Show)
 
--- this is a full file, not just a snippet
-
-instance Zeros Latex where
-  zero = Latex zero
-
-extTex = Extension "tex"
-
-texFileType = TypedFile5 {tpext5 = extTex} :: TypedFile5 Text Latex
-
-instance TypedFiles7 Text Latex where
-  wrap7 = Latex
-  unwrap7 = unLatex
 
 -- writeTexSnip2text ::   Pandoc -> ErrIO Text
 -- -- write a latex file from a pandoc doc
@@ -253,18 +241,3 @@ callProcessWithCWD cmd args cwd1 = callIO $ do
 --     C.bracket (createProcess c) cleanupProcess
 --               (\(m_in, m_out, m_err, ph) -> action m_in m_out m_err ph)
 
-----------------------------------------------
-
-extPDF = Extension "pdf"
-
-pdfFileType = TypedFile5 {tpext5 = extPDF} :: TypedFile5 Text PDFfile
-
-newtype PDFfile = PDFfile {unpdffile :: Text}
-  deriving (Eq, Ord, Read, Show)
-
-instance Zeros PDFfile where
-  zero = PDFfile zero
-
-instance TypedFiles7 Text PDFfile where
-  wrap7 = PDFfile
-  unwrap7 = unpdffile

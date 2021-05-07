@@ -74,7 +74,7 @@ import Uniform.Json
     Value,
     mergeRightPref,
   )
-import Uniform.PandocImports (Pandoc, Panrep (Panrep), unPandocM)
+import Uniform.PandocImports (Pandoc, unPandocM)
 import UniformBase
 
 fromJSONValue :: FromJSON a => Value -> Maybe a
