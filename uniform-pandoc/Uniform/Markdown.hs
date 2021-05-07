@@ -44,9 +44,11 @@ import UniformBase
 import           Uniform.Json
 -- import           Uniform.TypedFile -- (TypedFiles7(..))
 -- import           Uniform.Yaml
-import           Uniform.DocRep
+-- import           Uniform.DocRep
 import           Uniform.PandocImports
 -- import Uniform.Pandoc as Pandoc
+import Uniform.Filetypes4sites
+
 
 -- import           Data.Aeson         -- for ^?, key
 -- https://williamyaoh.com/posts/2019-10-19-a-cheatsheet-to-json-handling.html
@@ -112,40 +114,7 @@ writeAST3md options dat = do
         return r1
     return . wrap7 $ r
 
--------------------- fileType ----------
--- extCSL = Extension "csl"
--- cslFileType = TypedFile5 {tpext5 = extCSL} :: TypedFile5 Text Style
 
--- instance TypedFiles7 Text Style where 
---     wrap7 = id 
---     unwrap7 = id 
-
----------------------------------
--- extBib = Extension "bib"
--- bibFileType = TypedFile5 {tpext5 = extBib}
-
--- instance TypedFiles7 Text 
------------------------------
-extMD = Extension "md"
-
-newtype MarkdownText = MarkdownText Text
-  deriving (Show, Read, Eq, Ord)
-
--- a wrapper around Markdonw text
-unMT (MarkdownText a) = a   --needed for other ops
-
-instance Zeros MarkdownText where
-    zero = MarkdownText zero
-
-markdownFileType =
-    TypedFile5 { tpext5 = extMD } :: TypedFile5 Text MarkdownText
-
-
-instance TypedFiles7 Text MarkdownText where
-  -- handling Markdown and read them into MarkdownText
-    wrap7 = MarkdownText
-
-    unwrap7 (MarkdownText a) = a
 
 readMd2meta :: Path Abs File -> ErrIO (Pandoc, Value)
 -- ^ read a markdown file to metadata

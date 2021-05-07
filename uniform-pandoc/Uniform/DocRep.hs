@@ -39,7 +39,9 @@ module Uniform.DocRep
     -- , Template
     -- , renderTemplate
   )
+
 where
+import Uniform.Filetypes4sites
 
 import Control.Lens -- needed for the query expressions
   ( (^?),
@@ -78,22 +80,7 @@ import UniformBase
 fromJSONValue :: FromJSON a => Value -> Maybe a
 fromJSONValue = parseMaybe parseJSON
 
--- | a more uniform method to represent a document
--- the yam part contains the json formated yaml metadata
--- which is extensible
--- Attention the Pandoc is Pandoc (Meta (Map Text MetaValue) [Block]
--- means that title etc is duplicated in the Meta part.
--- it would be better to use only the block and all
--- metadata keept in the yam json
--- TODO replace Pandoc with Block in DocRep
-data DocRep = DocRep {yam :: Value, pan :: Pandoc} -- a json value
-  deriving (Show, Read, Eq, Generic)
 
-instance Zeros DocRep where zero = DocRep zero zero
-
-instance FromJSON DocRep
-
-instance ToJSON DocRep
 
 docRep2panrep :: DocRep -> ErrIO Panrep
 -- ^ transform a docrep to a panrep (which is the pandoc rep)
@@ -185,21 +172,7 @@ addRefs2 dr1@(DocRep y1 p1) biblio1 = do
 
   return (DocRep y1 p2)
 
---------------------------------------------typed file DocRep
 
-extDocRep :: Extension
-extDocRep = Extension "docrep"
-
--- instance NiceStrings DocRep where
---   shownice = showNice . unDocRep
-
-docRepFileType :: TypedFile5 Text DocRep
-docRepFileType =
-  TypedFile5 {tpext5 = extDocRep} :: TypedFile5 Text DocRep
-
-instance TypedFiles7 Text DocRep where
-  wrap7 = readNote "DocRep wrap7 sfasdwe" . t2s
-  unwrap7 = showT
 
 mergeAll :: DocRep -> [Value] -> DocRep
 -- ^ merge the values with the values in DocRec -- last winns

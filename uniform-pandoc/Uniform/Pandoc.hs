@@ -73,6 +73,8 @@ import Uniform.ProcessPDF
 import Uniform.HTMLout
 import Uniform.Markdown
 import Uniform.PandocImports
+import Uniform.Filetypes4sites
+
 
 -- import qualified Text.Pandoc                   as Pandoc
 -- import           Text.Pandoc        

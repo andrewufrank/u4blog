@@ -10,6 +10,11 @@ Therefore:
 - details of the conversions are explicitely stated and not controlled values in modules in this package. 
 
 The main functions are:
+- md -> docrep: 
+    readMarkdown2docrep
+
+    -- issue: docrep structure 
+    
     - convTex2pdf, calling 
             - write2pdf (runs lualatex)
     - convPanrep2html, calling 
@@ -19,33 +24,3 @@ The main functions are:
 Common Structures imported in SSG are: 
 import Uniform.PandocImports ( panrepFileType, texSnipFileType )
 import Uniform.PandocImports ( panrepFileType, texSnipFileType )
-
-(applyTemplate3, Pandoc, DocValue, doc HTMLout, htmloutFileType)
-mport Uniform.Pandoc
-    ( Path,
-      Abs,
-      Dir,
-      File,
-      when,
-      toFilePath,
-      makeAbsFile,
-      unExtension,
-      Extension,
-      Filenames3((</>)),
-      s2t,
-      putIOwords,
-      showT,
-      MonadIO(liftIO),
-      errorT,
-      runErr,
-      FileOps(doesFileExist'),
-      extDocRep,
-      extMD,
-      extPanrep,
-      extTexSnip,
-      extTex )
-import Uniform.Pandoc
-    ( DocRep(DocRep),
-      Panrep(Panrep, panyam),
-      docRepFileType,
-      extDocRep )   

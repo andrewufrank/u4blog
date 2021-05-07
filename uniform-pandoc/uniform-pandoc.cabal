@@ -4,13 +4,14 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: f8a76c527798ca62a162f47139c3061969c9b8cc335326d143cf8bba638c7ea2
+-- hash: f53900fe9c3ebbd2349ade01173e8cbd3ae6d28135e0ca1a3ecc7bc7312066c6
 
 name:           uniform-pandoc
-version:        0.0.2.1
+version:        0.0.2.2
 synopsis:       handling of   some pandoc stuff
 description:    remove particular aspects of abstraction 
                 0.0.2.1 for cabal may 2021 8.10.4
+                0.0.2.2 systematic bakeOneX2y function names
 category:       Uniformhandling of   some pandoc stuff
 author:         Andrew Frank
 maintainer:     Andrew U. Frank <andrewufrank@gmail.com>
@@ -26,6 +27,7 @@ library
   exposed-modules:
       Uniform.BibTex
       Uniform.DocRep
+      Uniform.Filetypes4sites
       Uniform.HTMLout
       Uniform.Markdown
       Uniform.Pandoc
