@@ -1,5 +1,5 @@
 name:         uniform-pandoc 
-version:      0.0.2.1
+version:      0.0.2.2
 license:      GPL
 license-file: GPL_3
 maintainer:   Andrew U. Frank <andrewufrank@gmail.com>
@@ -10,6 +10,7 @@ synopsis:   handling of   some pandoc stuff
 description: | 
   remove particular aspects of abstraction 
   0.0.2.1 for cabal may 2021 8.10.4
+  0.0.2.2 systematic bakeOneX2y function names
 
 
 extra-source-files:
