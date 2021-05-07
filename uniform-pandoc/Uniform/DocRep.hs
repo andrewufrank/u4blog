@@ -157,12 +157,13 @@ addRefs2 dr1@(DocRep y1 p1) biblio1 = do
         t2s . fromJustNote "style1 in addRefs2 wer23" $ style1 :: FilePath
   --  Raised the exception:
   -- ["runErr2action","Safe.fromJustNote Nothing, style1 in docRepAddRefs wer23\nCallStack (from HasCallStack):\n  fromJustNote, called at ./Uniform/DocRep.hs:165:19 in uniform-pandoc-0.0.2-CQ6TrBvcdAe7Crud3c6Rca:Uniform.DocRep"]
+  -- because the style was empty
   when True $ putIOwords ["addRefs2-3-1", "done"]
 
   biblio2 <- callIO $ Pars.readBiblioFile (const True) bibliofp
   when True $ putIOwords ["addRefs2-3-2", "done"]
   style2 <- callIO $ Pars.readCSLFile loc1 stylefp
-        -- error with language (de_at)
+        -- error with language (de_at, but de or en works)
   when True $ putIOwords ["addRefs2-3-3", "done"]
 
   let refsSum = refs4 ++ biblio2

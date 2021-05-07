@@ -10,10 +10,21 @@ Therefore:
 - details of the conversions are explicitely stated and not controlled values in modules in this package. 
 
 The main functions are:
-- md -> docrep: 
-    readMarkdown2docrep
+- md -> docrep: bakeOneMD2docrep
+    readMarkdown2docrep (in Markdown.hs)
+    checkDocRep (completes the yaml meta data, 
+        the yaml meta data override what is in pandoc)
+            -- move from ssg
+    addRefs (in DocRep.hs)
 
-    -- issue: docrep structure 
+    - issue: docrep structure potentical conflict between
+        the yaml collected from md and values in pandoc meta
+
+- docrep -> panrep: bakeOneDocrep2panrep
+    docrep2panrep (todo fix docRep)
+    addindex2yam
+
+
     
     - convTex2pdf, calling 
             - write2pdf (runs lualatex)
