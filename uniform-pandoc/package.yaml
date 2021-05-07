@@ -19,7 +19,7 @@ extra-source-files:
 dependencies:
 - base >= 4.7 && < 5
 - pandoc
-- pandoc-citeproc
+- pandoc-citeproc # replace later with citeproc
 - pandoc-types
 - bibtex
 - uniformBase

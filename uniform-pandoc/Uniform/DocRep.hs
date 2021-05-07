@@ -156,7 +156,8 @@ addRefs2 dr1@(DocRep y1 p1) biblio1 = do
         showT nocite1
       ]
 
-  let loc1 = Just "de" -- TODO depends on language
+  let loc1 = Just "en" -- TODO depends on language to be used for 
+        -- for the conventions in the lit list 
   -- must be 2 char (all other seems to be difficult with pandoc-citeproc)
   -- change to new citeproc TODO 
   let refs2 = fromJustNote "refs in addRefs2 vcbnf refs2" refs1 :: Value
