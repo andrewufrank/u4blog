@@ -168,7 +168,7 @@ writePDF2 debug fn fnres refDir = do
       showT refDir
     ]
   let dir1 = getParentDir fnres :: FilePath
-  let out1 = "--output-directory=" <> (dir1)
+  let out1 = "--output-directory=" <> dir1
   putIOwords ["writePDF2text 2 out1", showT out1]
   callProcessWithCWD
     "lualatex"
@@ -208,7 +208,7 @@ callProcessWithCWD cmd args cwd1 = callIO $ do
     Sys.withCreateProcess -- "callProcess"
       (Sys.proc cmd args)
         { Sys.delegate_ctlc = True,
-          Sys.cwd = (Just . toFilePath $ cwd1)
+          Sys.cwd = Just . toFilePath $ cwd1
         }
       $ \_ _ _ p ->
         Sys.waitForProcess p
