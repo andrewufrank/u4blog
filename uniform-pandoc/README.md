@@ -12,16 +12,16 @@ Therefore:
 The main functions are:
 - md -> docrep: bakeOneMD2docrep
     readMarkdown2docrep (in Markdown.hs)
-    checkDocRep (completes the yaml meta data, 
+    checkDocrep (completes the yaml meta data, 
         the yaml meta data override what is in pandoc)
             -- move from ssg
-    addRefs (in DocRep.hs)
+    addRefs (in Docrep.hs)
 
     - issue: docrep structure potentical conflict between
         the yaml collected from md and values in pandoc meta
 
 - docrep -> panrep: bakeOneDocrep2panrep
-    docrep2panrep (todo fix docRep)
+    docrep2panrep (todo fix docrep)
     addindex2yam
 
 
@@ -30,7 +30,7 @@ The main functions are:
             - write2pdf (runs lualatex)
     - convPanrep2html, calling 
             - bakeOneFile2panrep 
-            - docRep2panrep
+            - docrep2panrep
 
 Common Structures imported in SSG are: 
 import Uniform.PandocImports ( panrepFileType, texSnipFileType )

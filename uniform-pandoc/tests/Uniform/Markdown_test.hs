@@ -25,7 +25,7 @@ module Uniform.Markdown_test where
 --
 ---- using uniform:
 import Test.Framework
-import Uniform.DocRep
+import Uniform.Docrep
 --(TypedFiles7(..))
 
 import UniformBase
@@ -56,46 +56,46 @@ test_readWrite = do
   let Right (target3, res3) = res4
   assertEqual target3 res3
 
-test_readDocRepShort =
+test_readDocrepShort =
   testVar0FileIO
-    "uniform-DocRep"
+    "uniform-Docrep"
     shortFile
-    "test_readDocRepShort"
-    readDocRep2
+    "test_readDocrepShort"
+    readDocrep2
 
-test_readDocRepReg =
+test_readDocrepReg =
   testVar0FileIO
-    "uniform-DocRep"
+    "uniform-Docrep"
     regFile
-    "test_readDocRepReg"
-    readDocRep2
+    "test_readDocrepReg"
+    readDocrep2
 
-test_readDocRepComplex =
+test_readDocrepComplex =
   testVar0FileIO
-    "uniform-DocRep"
+    "uniform-Docrep"
     complexFile
-    "test_readDocRepComplex"
-    readDocRep2
+    "test_readDocrepComplex"
+    readDocrep2
 
-test_readDocRepWithRef =
+test_readDocrepWithRef =
   testVar0FileIO
-    "uniform-DocRep"
+    "uniform-Docrep"
     withRef
-    "test_readDocRepWithRef"
-    readDocRep2
+    "test_readDocrepWithRef"
+    readDocrep2
 
 withRef = makeAbsFile "/home/frank/Workspace8/uniform/uniform-pandoc/tests/data/withRef.md"
 
-readDocRep2 mfn = do
+readDocrep2 mfn = do
   text1 <- read8 mfn markdownFileType
-  res1 :: DocRep <- readMarkdown2docrep text1
-  write8 mfn docRepFileType res1
+  res1 :: Docrep <- readMarkdown2docrep text1
+  write8 mfn docrepFileType res1
   return res1
 
 -- test_addRefs = do    -- is visual test
 --     res2 <- runErr $ do
---         dr1 <- read8 withRef docRepFileType
---         res1 <- docRepAddRefs dr1
+--         dr1 <- read8 withRef docrepFileType
+--         res1 <- docrepAddRefs dr1
 --         putIOwords ["test_addRefs", showT res1]
 --         return (res1)
 --     assertEqual (Left "") res2
@@ -104,7 +104,7 @@ readDocRep2 mfn = do
 -- res4text1 = "ttxx   " :: Text
 instance ShowTestHarness Pandoc
 
-instance ShowTestHarness DocRep
+instance ShowTestHarness Docrep
 
 test_readpanrecShort =
   testVar0FileIO
@@ -137,7 +137,7 @@ test_readpanrecwithRef =
 -- testVar0FileIO :: (Zeros b, Eq b, Show b, Read b, ShowTestHarness b)
 -- => Text -> a -> FilePath -> (a-> ErrIO b) -> IO ()
 read2panrep2 mfn = do
-  text1 <- read8 mfn docRepFileType
+  text1 <- read8 mfn docrepFileType
   let res1 = Panrep (yam text1) (pan text1)
   write8 mfn panrepFileType res1
   return res1

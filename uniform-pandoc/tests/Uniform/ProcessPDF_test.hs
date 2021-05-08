@@ -100,16 +100,16 @@ writePDF4 tsfn1  = do
         -- pdf1 <- read8 tsfn1 pdfFileType  -- read8 cannot read pdf
         return . PDFfile $ "ok"
 
--- test_panrep2texsnipShort = testVar0FileIO "uniform-DocRep" 
+-- test_panrep2texsnipShort = testVar0FileIO "uniform-Docrep" 
 --         shortFile
 --         "test_panrep2texsnipShort" panrep2texsnipTest 
--- test_panrep2texsnipReg = testVar0FileIO "uniform-DocRep" 
+-- test_panrep2texsnipReg = testVar0FileIO "uniform-Docrep" 
 --         regFile
 --         "test_panrep2texsnipReg" panrep2texsnipTest 
--- test_panrep2texsnipComplex = testVar0FileIO "uniform-DocRep" 
+-- test_panrep2texsnipComplex = testVar0FileIO "uniform-Docrep" 
 --         complexFile
 --         "test_panrep2texsnipComplex" panrep2texsnipTest 
--- test_panrep2texsnipWithRef = testVar0FileIO "uniform-DocRep" 
+-- test_panrep2texsnipWithRef = testVar0FileIO "uniform-Docrep" 
 --         withRef
 --         "test_panrep2texsnipWithRef" panrep2texsnipTest 
 

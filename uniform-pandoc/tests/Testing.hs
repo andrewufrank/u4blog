@@ -28,7 +28,7 @@ import Test.Framework
 -- import    {-@ HTF_TESTS @-}        Uniform.Pandoc_test
 -- TODO not yet working inut file missing
 -- import    {-@ HTF_TESTS @-}        Uniform.ProcessPDF_test
-import {-@ HTF_TESTS @-} Uniform.DocRep_test
+import {-@ HTF_TESTS @-} Uniform.Docrep_test
 -- import    {-@ HTF_TESTS @-}        Uniform.HTMLout_test
 -- braucht files
 

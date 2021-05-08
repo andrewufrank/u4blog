@@ -28,9 +28,9 @@
 module Uniform.Pandoc
   ( module Uniform.Pandoc 
       , unPandocM
-      , extPDF, extMD, extDocRep, extHTML, extTexSnip, extTex 
+      , extPDF, extMD, extDocrep, extHTML, extTexSnip, extTex 
   , Pandoc(..)
-  , DocRep(..)
+  , Docrep(..)
   , module UniformBase 
 --   , module Uniform.Error   -- or at least ErrIO
 --   , module Uniform.Filenames 
@@ -44,7 +44,7 @@ module Uniform.Pandoc
 --   , module Uniform.Json
   , module Uniform.ProcessPDF
   , module Uniform.Markdown
-  , module Uniform.DocRep
+  , module Uniform.Docrep
 --   , module Uniform.BibTex
   , module Uniform.HTMLout
   , module Uniform.PandocImports
@@ -68,7 +68,7 @@ import UniformBase -- hiding (readYaml2value)
 --                                                 )
 -- import           Uniform.Json
 -- import           Uniform.Yaml
-import Uniform.DocRep
+import Uniform.Docrep
 import Uniform.ProcessPDF 
 import Uniform.HTMLout
 import Uniform.Markdown

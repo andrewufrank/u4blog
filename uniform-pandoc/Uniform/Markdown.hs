@@ -44,7 +44,7 @@ import UniformBase
 import           Uniform.Json
 -- import           Uniform.TypedFile -- (TypedFiles7(..))
 -- import           Uniform.Yaml
--- import           Uniform.DocRep
+-- import           Uniform.Docrep
 import           Uniform.PandocImports
 -- import Uniform.Pandoc as Pandoc
 import Uniform.Filetypes4sites
@@ -55,8 +55,8 @@ import Uniform.Filetypes4sites
 -- https://artyom.me/aeson
 import qualified Text.Pandoc                   as Pandoc
 
-readMarkdown2docrep :: MarkdownText -> ErrIO DocRep
--- | read a md file into a DocRep
+readMarkdown2docrep :: MarkdownText -> ErrIO Docrep
+-- | read a md file into a Docrep
 -- all values from meta are moved to yam 
 -- (meta is unused to avoid problems)
 -- in a json format
@@ -64,7 +64,7 @@ readMarkdown2docrep md = do
     pd <- readMarkdown2 md
     let (Pandoc meta1 _) = pd
     let meta2                 = flattenMeta meta1
-    return (DocRep meta2 pd)
+    return (Docrep meta2 pd)
         -- zero the metadata to detect errors
 
 

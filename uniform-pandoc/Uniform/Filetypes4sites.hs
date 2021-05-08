@@ -1,12 +1,12 @@
+{-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE LiberalTypeSynonyms #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE LiberalTypeSynonyms #-}
-{-# LANGUAGE DeriveAnyClass #-}
 
 ---------------------------------------------------------------------
 --
@@ -17,11 +17,15 @@
 -- MD -> Docrep -> Panrep -> TexSnip -> Tex -> PDF
 --                 Pandrep -> HTML
 -- Each result is written as a typed file with a specific extension
-module Uniform.Filetypes4sites where
+module Uniform.Filetypes4sites
+  ( module Uniform.Filetypes4sites,
+  )
+where
 
 import Uniform.Json (FromJSON, ToJSON, Value)
-import Uniform.PandocImports  
+import Uniform.PandocImports
 import UniformBase
+
 -------------------- fileType ---------- CSL
 -- extCSL = Extension "csl"
 -- cslFileType = TypedFile5 {tpext5 = extCSL} :: TypedFile5 Text Style
@@ -58,7 +62,7 @@ instance TypedFiles7 Text MarkdownText where
   wrap7 = MarkdownText
   unwrap7 (MarkdownText a) = a
 
---------------------------------------------typed file DocRep
+--------------------------------------------typed file Docrep
 
 -- | representation of a document
 -- the yam part contains the json formated yaml metadata
@@ -67,38 +71,37 @@ instance TypedFiles7 Text MarkdownText where
 -- means that title etc is duplicated in the Meta part.
 -- I keep the pandoc structure (Pandoc Meta [Block] - Text.Pandoc.Definition
 -- because it is possible to convert the Meta from Pandoc to JSON
--- with flattenMeta (in PandocImports) 
+-- with flattenMeta (in PandocImports)
 -- but I do not see an easy way to convert back
 
-
--- data DocRep = DocRep {yam :: Value, blocks :: [Block]} -- a json value
-data DocRep = DocRep {yam :: Value, pan :: Pandoc} -- a json value
+-- data Docrep = Docrep {yam :: Value, blocks :: [Block]} -- a json value
+data Docrep = Docrep {yam :: Value, pan :: Pandoc} -- a json value
   deriving (Show, Read, Eq, Generic, Zeros)
 
--- instance Zeros DocRep where zero = DocRep zero zero
+-- instance Zeros Docrep where zero = Docrep zero zero
 
-instance FromJSON DocRep
+instance FromJSON Docrep
 
-instance ToJSON DocRep
+instance ToJSON Docrep
 
-extDocRep :: Extension
-extDocRep = Extension "docrep"
+extDocrep :: Extension
+extDocrep = Extension "docrep"
 
--- instance NiceStrings DocRep where
---   shownice = showNice . unDocRep
+-- instance NiceStrings Docrep where
+--   shownice = showNice . unDocrep
 
-docRepFileType :: TypedFile5 Text DocRep
-docRepFileType =
-  TypedFile5 {tpext5 = extDocRep} :: TypedFile5 Text DocRep
+docrepFileType :: TypedFile5 Text Docrep
+docrepFileType =
+  TypedFile5 {tpext5 = extDocrep} :: TypedFile5 Text Docrep
 
-instance TypedFiles7 Text DocRep where
-  wrap7 = readNote "DocRep wrap7 sfasdwe" . t2s
+instance TypedFiles7 Text Docrep where
+  wrap7 = readNote "Docrep wrap7 sfasdwe" . t2s
   unwrap7 = showT
 
--- readMarkdown, readMd2meta in Uniform.Markdown 
+-- readMarkdown, readMd2meta in Uniform.Markdown
 
-docrep2pandoc :: DocRep -> Pandoc
-docrep2pandoc (DocRep yam1 pan1) = pan1
+docrep2pandoc :: Docrep -> Pandoc
+docrep2pandoc (Docrep yam1 pan1) = pan1
 
 -------------------- fileType Panrep ----------
 -- a file containing what pandoc internally works on

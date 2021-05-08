@@ -1,15 +1,15 @@
 ---------------------------------------------------------------------------
 --
--- Module      :  Uniform.DocRep
+-- Module      :  Uniform.Docrep
 -- the abstract representation of the documents
 -- consists of pandoc for text and
 --              metajson for all other values
 -- the text content is not in the metajson
 -- (but can be put into the json )
 -- metajson is just a wrapped json
--- DocRep replaces DocVal (Value is in json used)
+-- Docrep replaces DocVal (Value is in json used)
 -- metajson replaces metarec
--- DocRep can be read8/write8
+-- Docrep can be read8/write8
 -----------------------------------------------------------------------------
 {-# LANGUAGE ConstraintKinds #-}
 {-# LANGUAGE DeriveGeneric #-}
@@ -31,8 +31,8 @@
             -fno-warn-unused-imports 
             -fno-warn-unused-matches #-}
 
-module Uniform.DocRep
-  ( module Uniform.DocRep,
+module Uniform.Docrep
+  ( module Uniform.Docrep,
     HTMLout,
     htmloutFileType,
     -- , Dtemplate
@@ -79,12 +79,12 @@ import UniformBase
 fromJSONValue :: FromJSON a => Value -> Maybe a
 fromJSONValue = parseMaybe parseJSON
 
-docRep2panrep :: DocRep -> ErrIO Panrep
+docrep2panrep :: Docrep -> ErrIO Panrep
 -- ^ transform a docrep to a panrep (which is the pandoc rep)
 -- does process the references
 -- and will do index, but this goes to ssg
-docRep2panrep dr1@(DocRep y1 p1) = do
-  (DocRep y2 p2) <- addRefs dr1
+docrep2panrep dr1@(Docrep y1 p1) = do
+  (Docrep y2 p2) <- addRefs dr1
   return $ Panrep y2 p2
 
 ------------------------------------
@@ -98,7 +98,7 @@ panrep2html pr1@(Panrep y1 p1) = do
   return . HTMLout $ h1
 
 --------------------------------
-addRefs :: DocRep -> ErrIO DocRep
+addRefs :: Docrep -> ErrIO Docrep
 -- ^ add the references to the pandoc block
 -- the biblio is in the yam (otherwise nothing is done)
 -- ths cls file must be in the yam
@@ -112,7 +112,7 @@ addRefs :: DocRep -> ErrIO DocRep
 --   let result = citeproc procOpts s m $ [cites]
 --   putStrLn . unlines . map (renderPlainStrict) . citations $ result
 
-addRefs dr1@(DocRep y1 p1) = do
+addRefs dr1@(Docrep y1 p1) = do
   -- the biblio entry is the signal that refs need to be processed
   -- only refs do not work
   putIOwords ["addRefs", showT dr1, "\n"]
@@ -121,10 +121,10 @@ addRefs dr1@(DocRep y1 p1) = do
 
 addRefs2 ::
   (MonadIO m, MonadError m, ErrorType m ~ Text) =>
-  DocRep ->
+  Docrep ->
   Text ->
-  m DocRep
-addRefs2 dr1@(DocRep y1 p1) biblio1 = do
+  m Docrep
+addRefs2 dr1@(Docrep y1 p1) biblio1 = do
   when True $ putIOwords ["addRefs2-1", showT dr1, "\n"]
   let style1 = getAtKey y1 "style" :: Maybe Text
       refs1 = y1 ^? key "references" :: Maybe Value -- is an array
@@ -156,7 +156,7 @@ addRefs2 dr1@(DocRep y1 p1) biblio1 = do
   let stylefp =
         t2s . fromJustNote "style1 in addRefs2 wer23" $ style1 :: FilePath
   --  Raised the exception:
-  -- ["runErr2action","Safe.fromJustNote Nothing, style1 in docRepAddRefs wer23\nCallStack (from HasCallStack):\n  fromJustNote, called at ./Uniform/DocRep.hs:165:19 in uniform-pandoc-0.0.2-CQ6TrBvcdAe7Crud3c6Rca:Uniform.DocRep"]
+  -- ["runErr2action","Safe.fromJustNote Nothing, style1 in docrepAddRefs wer23\nCallStack (from HasCallStack):\n  fromJustNote, called at ./Uniform/Docrep.hs:165:19 in uniform-pandoc-0.0.2-CQ6TrBvcdAe7Crud3c6Rca:Uniform.Docrep"]
   -- because the style was empty
   when True $ putIOwords ["addRefs2-3-1", "done"]
 
@@ -171,19 +171,19 @@ addRefs2 dr1@(DocRep y1 p1) biblio1 = do
 
   when True $ putIOwords ["addRefs2-4", "p2\n", showT p2]
 
-  return (DocRep y1 p2)
+  return (Docrep y1 p2)
 
-mergeAll :: DocRep -> [Value] -> DocRep
+mergeAll :: Docrep -> [Value] -> Docrep
 -- ^ merge the values with the values in DocRec -- last winns
 -- issue how to collect all css?
-mergeAll (DocRep y p) vs = DocRep (mergeRightPref $ y : vs) p
+mergeAll (Docrep y p) vs = Docrep (mergeRightPref $ y : vs) p
 
-instance AtKey DocRep Text where
+instance AtKey Docrep Text where
   getAtKey dr k2 = getAtKey (yam dr) k2
 
-  putAtKey k2 txt (DocRep y p) = DocRep (putAtKey k2 txt y) p
+  putAtKey k2 txt (Docrep y p) = Docrep (putAtKey k2 txt y) p
 
--- instance AtKey DocRep Bool where
+-- instance AtKey Docrep Bool where
 --   getAtKey dr k2 = getAtKey (yam dr) k2
 
---   putAtKey k2 b dr = DocRep $ putAtKey k2 b (unDocRep meta2)
+--   putAtKey k2 b dr = Docrep $ putAtKey k2 b (unDocrep meta2)

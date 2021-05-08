@@ -45,7 +45,7 @@ import Uniform.Filetypes4sites
 
 import qualified System.Exit as Sys
 import qualified System.Process as Sys
-import Uniform.DocRep
+import Uniform.Docrep
 import Uniform.Json
 import Uniform.PandocImports
 import UniformBase

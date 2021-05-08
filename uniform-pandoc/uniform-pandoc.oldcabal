@@ -39,7 +39,7 @@ library
         Uniform.Markdown
         Uniform.ProcessPDF
         Uniform.HTMLout
-        Uniform.DocRep
+        Uniform.Docrep
         
     exposed: True
     buildable: True
@@ -71,4 +71,4 @@ Test-Suite pandoctest
         Uniform.BibTex_test
         Uniform.Markdown_test
         Uniform.ProcessPDF_test
-        Uniform.DocRep_test
+        Uniform.Docrep_test
