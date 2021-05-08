@@ -2,14 +2,7 @@
 --
 -- Module      :  Uniform.Docrep
 -- the abstract representation of the documents
--- consists of pandoc for text and
---              metajson for all other values
--- the text content is not in the metajson
--- (but can be put into the json )
--- metajson is just a wrapped json
--- Docrep replaces DocVal (Value is in json used)
--- metajson replaces metarec
--- Docrep can be read8/write8
+-- see Filetypes4sites Docrep
 -----------------------------------------------------------------------------
 {-# LANGUAGE ConstraintKinds #-}
 {-# LANGUAGE DeriveGeneric #-}
@@ -84,7 +77,7 @@ docrep2panrep :: Docrep -> ErrIO Panrep
 -- does process the references
 -- and will do index, but this goes to ssg
 docrep2panrep dr1@(Docrep y1 p1) = do
-  (Docrep y2 p2) <- addRefs dr1
+  (Docrep y2 p2) <- addRefs dr1  -- was already done in bakeOneMD2docrep
   return $ Panrep y2 p2
 
 ------------------------------------
@@ -125,12 +118,13 @@ addRefs2 ::
   Text ->
   m Docrep
 addRefs2 dr1@(Docrep y1 p1) biblio1 = do
-  when True $ putIOwords ["addRefs2-1", showT dr1, "\n"]
+  debugx = False 
+  when debugx $ putIOwords ["addRefs2-1", showT dr1, "\n"]
   let style1 = getAtKey y1 "style" :: Maybe Text
       refs1 = y1 ^? key "references" :: Maybe Value -- is an array
       nocite1 = getAtKey y1 "nocite" :: Maybe Text
 
-  when True $
+  when debugx $
     putIOwords
       [ "addRefs2-2",
         "\n biblio",
@@ -158,18 +152,18 @@ addRefs2 dr1@(Docrep y1 p1) biblio1 = do
   --  Raised the exception:
   -- ["runErr2action","Safe.fromJustNote Nothing, style1 in docrepAddRefs wer23\nCallStack (from HasCallStack):\n  fromJustNote, called at ./Uniform/Docrep.hs:165:19 in uniform-pandoc-0.0.2-CQ6TrBvcdAe7Crud3c6Rca:Uniform.Docrep"]
   -- because the style was empty
-  when True $ putIOwords ["addRefs2-3-1", "done"]
+  when debugx $ putIOwords ["addRefs2-3-1", "done"]
 
   biblio2 <- callIO $ Pars.readBiblioFile (const True) bibliofp
   when True $ putIOwords ["addRefs2-3-2", "done"]
   style2 <- callIO $ Pars.readCSLFile loc1 stylefp
   -- error with language (de_at, but de or en works)
-  when True $ putIOwords ["addRefs2-3-3", "done"]
+  when debugx $ putIOwords ["addRefs2-3-3", "done"]
 
   let refsSum = refs4 ++ biblio2
   let p2 = processCites style2 refsSum p1
 
-  when True $ putIOwords ["addRefs2-4", "p2\n", showT p2]
+  when debugx $ putIOwords ["addRefs2-4", "p2\n", showT p2]
 
   return (Docrep y1 p2)
 
