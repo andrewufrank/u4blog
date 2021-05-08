@@ -25,7 +25,7 @@ The main functions are:
     addindex2yam
 
 
-    
+- panrep ->     
     - convTex2pdf, calling 
             - write2pdf (runs lualatex)
     - convPanrep2html, calling 

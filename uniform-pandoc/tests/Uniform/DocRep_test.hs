@@ -39,6 +39,7 @@ import Uniform.Test.TestHarness
 -- import           Uniform.Error           hiding ( (<.>) )  -- (</>)
 import Uniform.Markdown_test
     ( shortFile, regFile, complexFile, withRef )
+import Uniform.Filetypes4sites
 
     
 test_zero = assertEqual

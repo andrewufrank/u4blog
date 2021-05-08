@@ -10,7 +10,7 @@
 # - ignore: {name: "Redundant if"}
 - ignore: {name: "Eta reduce"}
 - ignore: {name: "Use camelCase"}
-# - ignore: {name: "Redundant bracket"}
+- ignore: {name: "Redundant bracket"}  #caused by htfpp preprocessor
 # - ignore: {name: "Use dropWhile"}
 # - ignore: {name: "Use takeWhile"}
 # - ignore: {name: "Unused LANGUAGE pragma"}
@@ -38,7 +38,7 @@
 # Specify additional command line arguments
 #
 # - arguments: [--color, --cpp-simple, -XQuasiQuotes]
-
+- arguments: [-XNoCPP]
 
 # Control which extensions/flags/modules/functions can be used
 #

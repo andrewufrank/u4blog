@@ -19,6 +19,8 @@ import Test.Framework
 ---- using uniform:
 import Uniform.Pandoc 
 -- import Uniform.Filenames 
+import Uniform.Filetypes4sites
+
 import Uniform.Test.TestHarness
 import Uniform.Markdown_test 
 -- import Uniform.Error           hiding (  (<.>)  )  -- (</>)

@@ -21,6 +21,7 @@ import Uniform.Test.TestHarness
 import Uniform.Pandoc
 import Uniform.ProcessPDF 
 import Uniform.Markdown_test 
+import Uniform.Filetypes4sites
 
 import UniformBase
 

@@ -6,6 +6,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE LiberalTypeSynonyms #-}
+{-# LANGUAGE DeriveAnyClass #-}
 
 ---------------------------------------------------------------------
 --
@@ -72,7 +73,7 @@ instance TypedFiles7 Text MarkdownText where
 
 -- data DocRep = DocRep {yam :: Value, blocks :: [Block]} -- a json value
 data DocRep = DocRep {yam :: Value, pan :: Pandoc} -- a json value
-  deriving (Show, Read, Eq, Generic)
+  deriving (Show, Read, Eq, Generic, Zeros)
 
 -- instance Zeros DocRep where zero = DocRep zero zero
 

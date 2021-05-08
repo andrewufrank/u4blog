@@ -32,6 +32,8 @@ import UniformBase
 import Uniform.Markdown
 import Uniform.Pandoc
 import Uniform.Test.TestHarness
+import Uniform.Filetypes4sites
+
 
 -- all filenames without extension
 shortFile = makeAbsFile "/home/frank/Workspace8/uniform/uniform-pandoc/tests/data/someTextShort"

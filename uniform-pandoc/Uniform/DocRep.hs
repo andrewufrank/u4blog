@@ -39,9 +39,7 @@ module Uniform.DocRep
     -- , Template
     -- , renderTemplate
   )
-
 where
-import Uniform.Filetypes4sites
 
 import Control.Lens -- needed for the query expressions
   ( (^?),
@@ -60,6 +58,7 @@ import GHC.Generics (Generic)
 import Text.CSL as Pars (Reference, readBiblioFile, readCSLFile)
 import Text.CSL.Pandoc as Bib (processCites)
 import qualified Text.Pandoc as Pandoc
+import Uniform.Filetypes4sites
 import Uniform.HTMLout
   ( HTMLout (HTMLout),
     html5Options,
@@ -79,8 +78,6 @@ import UniformBase
 
 fromJSONValue :: FromJSON a => Value -> Maybe a
 fromJSONValue = parseMaybe parseJSON
-
-
 
 docRep2panrep :: DocRep -> ErrIO Panrep
 -- ^ transform a docrep to a panrep (which is the pandoc rep)
@@ -122,8 +119,11 @@ addRefs dr1@(DocRep y1 p1) = do
   let biblio1 = getAtKey y1 "bibliography" :: Maybe Text
   maybe (return dr1) (addRefs2 dr1) biblio1
 
-addRefs2 :: (MonadIO m, MonadError m, ErrorType m ~ Text)
-    => DocRep -> Text -> m DocRep
+addRefs2 ::
+  (MonadIO m, MonadError m, ErrorType m ~ Text) =>
+  DocRep ->
+  Text ->
+  m DocRep
 addRefs2 dr1@(DocRep y1 p1) biblio1 = do
   when True $ putIOwords ["addRefs2-1", showT dr1, "\n"]
   let style1 = getAtKey y1 "style" :: Maybe Text
@@ -143,10 +143,10 @@ addRefs2 dr1@(DocRep y1 p1) biblio1 = do
         showT nocite1
       ]
 
-  let loc1 = Just "en" -- TODO depends on language to be used for 
-        -- for the conventions in the lit list 
+  let loc1 = Just "en" -- TODO depends on language to be used for
+  -- for the conventions in the lit list
   -- must be 2 char (all other seems to be difficult with pandoc-citeproc)
-  -- change to new citeproc TODO 
+  -- change to new citeproc TODO
   let refs2 = fromJustNote "refs in addRefs2 vcbnf refs2" refs1 :: Value
   let refs3 = fromJSONValue refs2 -- :: Result [Reference]
   let refs4 = fromJustNote "addRefs2 08werwe refs4" refs3 :: [Reference]
@@ -163,7 +163,7 @@ addRefs2 dr1@(DocRep y1 p1) biblio1 = do
   biblio2 <- callIO $ Pars.readBiblioFile (const True) bibliofp
   when True $ putIOwords ["addRefs2-3-2", "done"]
   style2 <- callIO $ Pars.readCSLFile loc1 stylefp
-        -- error with language (de_at, but de or en works)
+  -- error with language (de_at, but de or en works)
   when True $ putIOwords ["addRefs2-3-3", "done"]
 
   let refsSum = refs4 ++ biblio2
@@ -172,8 +172,6 @@ addRefs2 dr1@(DocRep y1 p1) biblio1 = do
   when True $ putIOwords ["addRefs2-4", "p2\n", showT p2]
 
   return (DocRep y1 p2)
-
-
 
 mergeAll :: DocRep -> [Value] -> DocRep
 -- ^ merge the values with the values in DocRec -- last winns
