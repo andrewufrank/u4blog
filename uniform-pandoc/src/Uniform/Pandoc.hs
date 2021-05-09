@@ -27,26 +27,7 @@
 
 module Uniform.Pandoc
   ( module Uniform.Pandoc 
-      , unPandocM
-      , extPDF, extMD, extDocrep, extHTML, extTexSnip, extTex 
-  , Pandoc(..)
-  , Docrep(..)
-  , module UniformBase 
---   , module Uniform.Error   -- or at least ErrIO
---   , module Uniform.Filenames 
-  , write8, read8,setExtension
-  , writeTexSnip2
-  , panrepFileType
-  , TypedFile5(..)
-  , TypedFiles5(..)
-  , TypedFiles7(..)
-  , read8
---   , module Uniform.Json
-  , module Uniform.ProcessPDF
-  , module Uniform.Markdown
-  , module Uniform.Docrep
---   , module Uniform.BibTex
-  , module Uniform.HTMLout
+
   , module Uniform.PandocImports
     , ReaderOptions
     , writerExtensions
@@ -68,28 +49,28 @@ import UniformBase -- hiding (readYaml2value)
 --                                                 )
 -- import           Uniform.Json
 -- import           Uniform.Yaml
-import Uniform.Docrep
-import Uniform.ProcessPDF 
-import Uniform.HTMLout
-import Uniform.Markdown
+-- import Uniform.Docrep
+-- import Uniform.ProcessPDF 
+-- import Uniform.HTMLout
+-- import Uniform.Markdown
 import Uniform.PandocImports
-import Uniform.Filetypes4sites
+-- import Uniform.Filetypes4sites
 
 
--- import qualified Text.Pandoc                   as Pandoc
--- import           Text.Pandoc        
---             -- ( Pandoc(..)
---             --             , ReaderOptions
---             --             , Meta
---             --             , MetaValue
---             --             , writerHighlightStyle
---             --             , writerExtensions
---             --             , WriterOptions 
---             --             -- , writeMarkdown
---             --             , writeHtml5String
---             --             , writeLaTeX
---             --             , def
---             --             )
+import qualified Text.Pandoc                   as Pandoc
+import           Text.Pandoc        
+            -- ( Pandoc(..)
+            --             , ReaderOptions
+            --             , Meta
+            --             , MetaValue
+            --             , writerHighlightStyle
+            --             , writerExtensions
+            --             , WriterOptions 
+            --             -- , writeMarkdown
+            --             , writeHtml5String
+            --             , writeLaTeX
+            --             , def
+            --             )
 
 justToKeepWarningAway :: Int 
 justToKeepWarningAway = 0 

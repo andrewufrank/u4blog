@@ -40,7 +40,7 @@ dependencies:
 
 library:
   source-dirs: 
-  - .   
+  - src   
 # the '.' finds the library in their folders with LibName
 
 # tests:
