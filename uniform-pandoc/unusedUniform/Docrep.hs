@@ -77,7 +77,7 @@ docrep2panrep :: Docrep -> ErrIO Panrep
 -- does process the references
 -- and will do index, but this goes to ssg
 docrep2panrep dr1@(Docrep y1 p1) = do
-  (Docrep y2 p2) <- addRefs dr1  -- was already done in bakeOneMD2docrep
+  (Docrep y2 p2) <- addRefs False dr1  -- was already done in bakeOneMD2docrep
   return $ Panrep y2 p2
 
 ------------------------------------
@@ -91,7 +91,7 @@ panrep2html pr1@(Panrep y1 p1) = do
   return . HTMLout $ h1
 
 --------------------------------
-addRefs :: Docrep -> ErrIO Docrep
+addRefs :: Bool -> Docrep -> ErrIO Docrep
 -- ^ add the references to the pandoc block
 -- the biblio is in the yam (otherwise nothing is done)
 -- ths cls file must be in the yam
@@ -105,20 +105,20 @@ addRefs :: Docrep -> ErrIO Docrep
 --   let result = citeproc procOpts s m $ [cites]
 --   putStrLn . unlines . map (renderPlainStrict) . citations $ result
 
-addRefs dr1@(Docrep y1 p1) = do
+addRefs debugflag dr1@(Docrep y1 p1) = do
   -- the biblio entry is the signal that refs need to be processed
   -- only refs do not work
-  putIOwords ["addRefs", showT dr1, "\n"]
+  when debugflag $ putIOwords ["addRefs", showT dr1, "\n"]
   let biblio1 = getAtKey y1 "bibliography" :: Maybe Text
-  maybe (return dr1) (addRefs2 dr1) biblio1
+  maybe (return dr1) (addRefs2 debugflag dr1) biblio1
 
 addRefs2 ::
-  (MonadIO m, MonadError m, ErrorType m ~ Text) =>
+  (MonadIO m, MonadError m, ErrorType m ~ Text) => Bool -> 
   Docrep ->
   Text ->
   m Docrep
-addRefs2 dr1@(Docrep y1 p1) biblio1 = do
-  debugx = False 
+addRefs2 debugx dr1@(Docrep y1 p1) biblio1 = do
+  let debugx = False 
   when debugx $ putIOwords ["addRefs2-1", showT dr1, "\n"]
   let style1 = getAtKey y1 "style" :: Maybe Text
       refs1 = y1 ^? key "references" :: Maybe Value -- is an array
@@ -155,7 +155,7 @@ addRefs2 dr1@(Docrep y1 p1) biblio1 = do
   when debugx $ putIOwords ["addRefs2-3-1", "done"]
 
   biblio2 <- callIO $ Pars.readBiblioFile (const True) bibliofp
-  when True $ putIOwords ["addRefs2-3-2", "done"]
+  when debugx $ putIOwords ["addRefs2-3-2", "done"]
   style2 <- callIO $ Pars.readCSLFile loc1 stylefp
   -- error with language (de_at, but de or en works)
   when debugx $ putIOwords ["addRefs2-3-3", "done"]

@@ -26,18 +26,6 @@ import Uniform.Json (FromJSON, ToJSON, Value)
 import Uniform.PandocImports
 import UniformBase
 
--------------------- fileType ---------- CSL
--- extCSL = Extension "csl"
--- cslFileType = TypedFile5 {tpext5 = extCSL} :: TypedFile5 Text Style
-
--- instance TypedFiles7 Text Style where
---     wrap7 = id
---     unwrap7 = id
---------------------------------- Bib
--- extBib = Extension "bib"
--- bibFileType = TypedFile5 {tpext5 = extBib}
-
--- instance TypedFiles7 Text
 ----------------------------- -------------------------Markdown
 
 extMD :: Extension
@@ -62,6 +50,8 @@ instance TypedFiles7 Text MarkdownText where
   wrap7 = MarkdownText
   unwrap7 (MarkdownText a) = a
 
+-- readMarkdown, readMd2meta in Uniform.Markdown
+
 --------------------------------------------typed file Docrep
 
 -- | representation of a document
@@ -81,7 +71,6 @@ data Docrep = Docrep {yam :: Value, pan :: Pandoc} -- a json value
 -- instance Zeros Docrep where zero = Docrep zero zero
 
 instance FromJSON Docrep
-
 instance ToJSON Docrep
 
 extDocrep :: Extension
@@ -97,11 +86,6 @@ docrepFileType =
 instance TypedFiles7 Text Docrep where
   wrap7 = readNote "Docrep wrap7 sfasdwe" . t2s
   unwrap7 = showT
-
--- readMarkdown, readMd2meta in Uniform.Markdown
-
-docrep2pandoc :: Docrep -> Pandoc
-docrep2pandoc (Docrep yam1 pan1) = pan1
 
 -------------------- fileType Panrep ----------
 -- a file containing what pandoc internally works on
@@ -185,3 +169,16 @@ instance Zeros PDFfile where
 instance TypedFiles7 Text PDFfile where
   wrap7 = PDFfile
   unwrap7 = unpdffile
+
+-------------------- fileType ---------- CSL
+-- extCSL = Extension "csl"
+-- cslFileType = TypedFile5 {tpext5 = extCSL} :: TypedFile5 Text Style
+
+-- instance TypedFiles7 Text Style where
+--     wrap7 = id
+--     unwrap7 = id
+--------------------------------- Bib
+-- extBib = Extension "bib"
+-- bibFileType = TypedFile5 {tpext5 = extBib}
+
+-- instance TypedFiles7 Text
