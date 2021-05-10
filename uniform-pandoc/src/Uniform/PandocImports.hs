@@ -50,9 +50,10 @@ import qualified Text.Pandoc as Pandoc
 import qualified Text.Pandoc.Extensions as Pandoc
 import Text.Pandoc.Highlighting (tango)
 import Text.Pandoc.Shared (stringify)
-import Uniform.Json (ErrIO, ToJSON (toJSON, toJSONList), Value)
+import Uniform.Json  
 import Uniform.Yaml (ErrIO, yaml2value, yamlFileType)
 import UniformBase
+import Data.Aeson.Types
 
 -- -- type PandocBlock = Pandoc.Block
 -- instance Zeros Pandoc.Block where 
@@ -99,6 +100,9 @@ getMeta (Pandoc.Pandoc m _) = m
 putMeta :: Pandoc.Meta -> Pandoc -> Pandoc
 putMeta m1 (Pandoc _ p0) = Pandoc m1 p0
 
+fromJSONValue :: FromJSON a => Value -> Maybe a
+fromJSONValue = parseMaybe parseJSON
+
 -- | Flatten a Pandoc 'Meta' into a well-structured JSON object,  
 -- adapted from https://hackage.haskell.org/package/slick-1.1.1.0/docs/src/Slick.Pandoc.html#flattenMeta
 flattenMeta :: Pandoc.Meta -> Value
@@ -136,6 +140,57 @@ latexOptions =
           -- , Pandoc.Ext_citations           -- <-- this is the important extension for bibTex
           ]
     }
+
+----------------------------- -------------------------Markdown
+--  move to markdown TODO
+
+extMD :: Extension
+extMD = Extension "md"
+
+newtype MarkdownText = MarkdownText Text
+  deriving (Show, Read, Eq, Ord)
+
+-- a wrapper around Markdonw text
+unMT :: MarkdownText -> Text
+unMT (MarkdownText a) = a --needed for other ops
+
+instance Zeros MarkdownText where
+  zero = MarkdownText zero
+
+markdownFileType :: TypedFile5 Text MarkdownText
+markdownFileType =
+  TypedFile5 {tpext5 = extMD} :: TypedFile5 Text MarkdownText
+
+instance TypedFiles7 Text MarkdownText where
+  -- handling Markdown and read them into MarkdownText
+  wrap7 = MarkdownText
+  unwrap7 (MarkdownText a) = a
+readMarkdown2 :: MarkdownText -> ErrIO Pandoc
+-- | reads the markdown text and produces a pandoc structure
+readMarkdown2 text1 =
+    unPandocM $ Pandoc.readMarkdown markdownOptions (unwrap7 text1)
+readMarkdown3 :: Pandoc.ReaderOptions -> MarkdownText -> ErrIO Pandoc
+readMarkdown3 options text1 =
+    unPandocM $ Pandoc.readMarkdown options (unwrap7 text1)
+
+-- | Reasonable options for reading a markdown file
+markdownOptions :: Pandoc.ReaderOptions
+markdownOptions = Pandoc.def { Pandoc.readerExtensions = exts }
+  where
+    exts = mconcat
+        [ Pandoc.extensionsFromList
+            [ Pandoc.Ext_yaml_metadata_block
+            , Pandoc.Ext_fenced_code_attributes
+            , Pandoc.Ext_auto_identifiers
+            , Pandoc.Ext_raw_html   -- three extension give markdown_strict
+            , Pandoc.Ext_raw_tex   --Allow raw TeX (other than math)
+            , Pandoc.Ext_shortcut_reference_links
+            , Pandoc.Ext_spaced_reference_links
+            , Pandoc.Ext_footnotes  -- all footnotes
+            , Pandoc.Ext_citations           -- <-- this is the important extension for bibTex
+            ]
+        , Pandoc.githubMarkdownExtensions
+        ]
 
 -- instance ToJSON Text
 -- writeLaTeX :: PandocMonad m => WriterOptions -> Pandoc -> m Text

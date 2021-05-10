@@ -1,0 +1,31 @@
+cradle:
+  cabal:
+    - path: "./src"
+      component: "lib:uniform-pandoc"
+
+    - path: "../../u2to/uniform-convenience/src"
+      component: "lib:uniform-convenience"
+
+    - path: "../../u2to/uniform-convenience/test"
+      component: "uniform-convenience:test:strings-test"
+
+    - path: "../../u4blog/uniform-json/./."
+      component: "lib:uniform-json"
+
+    - path: "../../u4blog/uniform-json/tests"
+      component: "uniform-json:test:strings-test"
+
+    - path: "../../u4blog/uniform-watch/src"
+      component: "lib:uniform-watch"
+
+    - path: "../../u4blog/uniform-watch/tests"
+      component: "uniform-watch:test:webserver-test"
+
+    - path: "../../u4blog/uniform-webserver/src"
+      component: "lib:uniform-webserver"
+
+    - path: "../../u4blog/uniform-webserver/./."
+      component: "lib:uniform-webserver"
+
+    - path: "../../u4blog/uniform-webserver/tests"
+      component: "uniform-webserver:test:webserver-test"
