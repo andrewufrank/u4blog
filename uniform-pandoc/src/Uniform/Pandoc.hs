@@ -3,9 +3,7 @@
 -- Module      :  Uniform.Pandoc
         -- top import, darf nicht von andern importiert werden hier 
 -------------------------------
--- {-# LANGUAGE BangPatterns                   #-}
 {-# LANGUAGE ConstraintKinds #-}
--- {-# LANGUAGE DeriveDataTypeable    #-}
 {-# LANGUAGE DoAndIfThenElse #-}
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE FlexibleInstances #-}
@@ -13,16 +11,13 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeFamilies #-}
--- {-# LANGUAGE TypeSynonymInstances        #-}
 {-# LANGUAGE UndecidableInstances #-}
 {-# LANGUAGE DeriveGeneric #-}
 
 {-# OPTIONS_GHC -Wall -fno-warn-orphans 
             -fno-warn-missing-signatures
             -fno-warn-missing-methods 
-            -fno-warn-duplicate-exports 
             -fno-warn-unused-imports 
-            -fno-warn-dodgy-exports 
             #-}
 
 module Uniform.Pandoc
@@ -30,47 +25,13 @@ module Uniform.Pandoc
 
   , module Uniform.PandocImports
     , ReaderOptions
-    , writerExtensions
-    , writerHighlightStyle
-    , WriterOptions(..)
   )
 where
-import UniformBase -- hiding (readYaml2value)
 
--- import           Uniform.Error
--- import           Uniform.Filenames
--- import           Uniform.TypedFile              ( TypedFiles7(..)
---                                                 , TypedFiles5(..)
---                                                 , TypedFile5(..)
---                                                 )
--- import           Uniform.FileIO                 ( write8
---                                                 , read8
---                                                 -- , setExtension
---                                                 )
--- import           Uniform.Json
--- import           Uniform.Yaml
--- import Uniform.Docrep
--- import Uniform.ProcessPDF 
--- import Uniform.HTMLout
--- import Uniform.Markdown
 import Uniform.PandocImports
--- import Uniform.Filetypes4sites
-
 
 import qualified Text.Pandoc                   as Pandoc
-import           Text.Pandoc        
-            -- ( Pandoc(..)
-            --             , ReaderOptions
-            --             , Meta
-            --             , MetaValue
-            --             , writerHighlightStyle
-            --             , writerExtensions
-            --             , WriterOptions 
-            --             -- , writeMarkdown
-            --             , writeHtml5String
-            --             , writeLaTeX
-            --             , def
-            --             )
-
+import Text.Pandoc ( ReaderOptions, WriterOptions(..) )        
+ 
 justToKeepWarningAway :: Int 
 justToKeepWarningAway = 0 

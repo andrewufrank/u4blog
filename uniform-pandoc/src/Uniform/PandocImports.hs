@@ -1,14 +1,12 @@
 --------------------------------------------------------------------------
 --
 -- Module      :  Uniform.PandocImports
--- read and write pandoc files (intenal rep of pandoc written to disk)
+-- | read and write pandoc files (intenal rep of pandoc written to disk)
 -- von hier Pandoc spezifisches imortieren
 -- nich exportieren nach aussen
 -------------------------------
--- {-# LANGUAGE BangPatterns                   #-}
 {-# LANGUAGE ConstraintKinds #-}
 {-# LANGUAGE DeriveGeneric #-}
--- {-# LANGUAGE DeriveDataTypeable    #-}
 {-# LANGUAGE DoAndIfThenElse #-}
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE FlexibleInstances #-}
@@ -16,20 +14,16 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeFamilies #-}
--- {-# LANGUAGE TypeSynonymInstances        #-}
 {-# LANGUAGE UndecidableInstances #-}
 {-# LANGUAGE LiberalTypeSynonyms #-}
 {-# OPTIONS_GHC -Wall -fno-warn-orphans 
             -fno-warn-missing-signatures
             -fno-warn-missing-methods 
-            -fno-warn-duplicate-exports 
-            -fno-warn-unused-imports #-}
+            -fno-warn-duplicate-exports   #-}
 
 module Uniform.PandocImports
   ( module Uniform.PandocImports,
     Pandoc (..),
-    -- PandocBlock (..)
-    -- Pandoc.Block
   )
 where
 
@@ -47,18 +41,16 @@ import Text.Pandoc
     writeLaTeX,
   )
 import qualified Text.Pandoc as Pandoc
-import qualified Text.Pandoc.Extensions as Pandoc
 import Text.Pandoc.Highlighting (tango)
 import Text.Pandoc.Shared (stringify)
-import Uniform.Json  
-import Uniform.Yaml (ErrIO, yaml2value, yamlFileType)
+import Uniform.Json
+      
+import Uniform.Yaml  
 import UniformBase
-import Data.Aeson.Types
+import Data.Aeson.Types ( parseMaybe )
 
--- -- type PandocBlock = Pandoc.Block
--- instance Zeros Pandoc.Block where 
---         zero = Pandoc.Null
- 
+  --  zero = Pandoc.Null
+
 instance Zeros Pandoc where
   zero = Pandoc zero zero
 
@@ -117,7 +109,7 @@ flattenMeta (Pandoc.Meta meta) = toJSON $ fmap go meta
     go (Pandoc.MetaBlocks m) = toJSON $ stringify m
 
 readYaml2value :: Path Abs File -> ErrIO Value
--- read a yaml file to a value
+-- | read a yaml file to a value
 -- error when syntax issue
 readYaml2value fp = do
   t <- read8 fp yamlFileType
@@ -150,7 +142,7 @@ extMD = Extension "md"
 newtype MarkdownText = MarkdownText Text
   deriving (Show, Read, Eq, Ord)
 
--- a wrapper around Markdonw text
+-- | a wrapper around Markdonw text
 unMT :: MarkdownText -> Text
 unMT (MarkdownText a) = a --needed for other ops
 
@@ -162,7 +154,7 @@ markdownFileType =
   TypedFile5 {tpext5 = extMD} :: TypedFile5 Text MarkdownText
 
 instance TypedFiles7 Text MarkdownText where
-  -- handling Markdown and read them into MarkdownText
+-- | handling Markdown and read them into MarkdownText
   wrap7 = MarkdownText
   unwrap7 (MarkdownText a) = a
 readMarkdown2 :: MarkdownText -> ErrIO Pandoc
