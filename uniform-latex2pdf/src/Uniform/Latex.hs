@@ -22,9 +22,7 @@ module Uniform.Latex
 
 import qualified System.Exit as Sys
 import qualified System.Process as Sys
--- import Uniform2.Docrep
 import Uniform.Json
--- import Uniform.PandocImports
 import UniformBase
 
 data LatexParam = LatexParam
