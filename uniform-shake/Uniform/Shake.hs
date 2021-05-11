@@ -1,54 +1,33 @@
--- {-# LANGUAGE DeriveAnyClass        #-}
--- {-# LANGUAGE DeriveGeneric         #-}
 {-# LANGUAGE FlexibleContexts      #-}
 {-# LANGUAGE FlexibleInstances     #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE OverloadedStrings     #-}
--- {-# LANGUAGE RecordWildCards       #-}
 {-# LANGUAGE ScopedTypeVariables   #-}
 {-# LANGUAGE TypeFamilies          #-}
 
--- {-# LANGUAGE TypeSynonymInstances  #-}
 {-# LANGUAGE UndecidableInstances  #-}
--- {-# OPTIONS -Wall #-}
---{-# OPTIONS -fno-warn-missing-signatures #-}
 
 module Uniform.Shake ( 
           module Uniform.Shake
-        -- , getDirectoryToBake
         , module Uniform.Shake.Path
         , takeBaseName, splitPath 
         , Action
-        -- , module Uniform.FileIO
-        -- , module Uniform.Strings
         , module UniformBase
-    --     , module Path
-        -- , module Path.IO
-        -- , module Development.Shake.FilePath
-        -- , module Development.Shake
+        , Rules
         , shakeArgs, shake, ShakeOptions(..), shakeOptions
         , Verbosity(..), Lint(..)
-        , need, (%>), want, phony
+        , need, (%>),  (|%>) 
+        , want, phony
         )      where
 
 import Development.Shake hiding (Error )
         -- (Action, FilePattern, getDirectoryFiles, copyFileChanged)
 import Development.Shake.FilePath (takeBaseName, splitPath
                         )
-        -- (getDirectoryFiles, Action
-        --     , Rules, FilePattern)
--- import Uniform.FileIO (makeRelFile)
-
--- import qualified Path  
--- import  Path hiding ((</>)) 
-                -- (Path(..), File, Dir, Abs, Rel, toFilePath)
--- import qualified Path.IO
+     
 import UniformBase
 import Control.Exception (throw)  -- to deal with errors in action
--- import Uniform.Error
 import Uniform.Shake.Path
--- import Uniform.FileIO 
--- import Uniform.Strings -- hiding ((</>), (<.>))
 
 ($-<.>) :: Path a File -> Text ->  Path a File
 f $-<.> e = replaceExtension' e f 
@@ -114,12 +93,6 @@ instance Path2nd  a Dir where
     replaceDirectoryP pref newpref old = newpref </> rem1 
         where rem1 = stripProperPrefixP pref old
 
--- instance Exception [Text] 
--- should be in Error
-
--- liftErrIO :: ErrIO a -> Action a
--- liftErrIO = runErr2action 
-
 runErr2action :: ErrIO a -> Action a
 runErr2action op = liftIO $ do
     res <- runErr  op
@@ -132,7 +105,7 @@ runErr2action op = liftIO $ do
 
 getDirectoryToBake :: Text -> Path Abs Dir -> [FilePattern] 
         -> Action [Path Rel File]
--- get all files according to the FilePattern (see Shake docs)
+-- | get all files according to the FilePattern (see Shake docs)
 -- but excludes all filepath which contain one of the strings in 
 -- the first argument to allow directories which are not baked
 

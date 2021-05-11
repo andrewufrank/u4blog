@@ -9,7 +9,10 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeFamilies #-}
 
-module Uniform.BibTex where -- (openMain, htf_thisModuelsTests)
+module Uniform.BibTex (
+    module Uniform.BibTex
+    , Reference
+    ) where -- (openMain, htf_thisModuelsTests)
 
 import Data.List (intersperse)
 import qualified Data.Map as M
@@ -21,6 +24,8 @@ import qualified Text.BibTeX.Entry as Entry
 -- import           Text.BibTeX.Parse
 import qualified Text.BibTeX.Parse as Parse
 import Text.CSL.Pandoc (processCites')
+import Text.CSL as Pars (Reference, readBiblioFile, readCSLFile)
+import Text.CSL.Pandoc as Bib (processCites)
 import qualified Text.Pandoc as P
 import qualified Text.Pandoc.Definition as PD
 import qualified Text.Parsec as Parsec
@@ -28,6 +33,31 @@ import qualified Text.Parsec as Parsec
 -- import           Uniform.FileIO
 import Uniform.PandocImports
 import UniformBase
+import Uniform.Json 
+
+readBiblioRefs ::  
+  Bool
+  -> FilePath
+  -> Maybe Text
+  -> FilePath
+  -> Maybe Value
+  -> Pandoc
+  -> ErrIO Pandoc
+readBiblioRefs debugx bibliofp loc1 stylefp  refs1 p1 = do 
+    let refs2 = fromJustNote "refs in addRefs2 vcbnf refs2" refs1 :: Value
+    let refs3 = fromJSONValue refs2 -- :: Result [Reference]
+    let refs4 = fromJustNote "addRefs2 08werwe refs4" refs3 :: [Reference]
+    biblio2 <- callIO $ Pars.readBiblioFile (const True) bibliofp
+    when debugx $ putIOwords ["addRefs2-3-2", "done"]
+    style2 <- callIO $ Pars.readCSLFile loc1 stylefp
+    -- error with language (de_at, but de or en works)
+    when debugx $ putIOwords ["addRefs2-3-3", "done"]
+
+    let refsSum = refs4 ++ biblio2
+    let p2 = processCites style2 refsSum p1
+
+    return p2 
+
 
 {-
 , MetaBlocks

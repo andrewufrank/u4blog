@@ -9,37 +9,14 @@
     , AllowAmbiguousTypes     #-}
 
 {-# LANGUAGE DeriveGeneric, DeriveAnyClass #-}
--- {-# OPTIONS -Wall #-}
---{-# OPTIONS -fno-warn-missing-signatures #-}
 
 module Uniform.Shake.Path
     where
 
-
-
 import           Development.Shake
 import UniformBase
 import Uniform.Json 
--- import Uniform.FileIO 
--- import           Development.Shake.FilePath     ( isAbsolute
---                                                 , isRelative
---                         -- , isFile, isDir
---                                                 )
-        -- (getDirectoryFiles, Action
-        --     , Rules, FilePattern)
--- import           Uniform.FileIO
--- import           Uniform.Strings         hiding ( (</>)
---                                                 , (<.>)
---                                                 ) -- (Text, t2s)
--- import qualified Path  
--- import           Path                           ( Path
---                                                 , File
---                                                 , Dir
---                                                 , Abs
---                                                 , Rel
---                                                 , toFilePath
---                                                 -- , stripProperPrefix
---                                                 )
+ 
 
 
 getHashedShakeVersionP :: [Path r File] -> IO String

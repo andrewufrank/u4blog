@@ -1,6 +1,6 @@
 --------------------------------------------------------------------------
 --
--- Module      :  Uniform.Pandoc
+-- Module      :  Uniform.Shake
         -- top import, darf nicht von andern importiert werden hier 
 -------------------------------
 {-# LANGUAGE ConstraintKinds #-}
@@ -17,27 +17,23 @@
 {-# OPTIONS_GHC -Wall -fno-warn-orphans 
             -fno-warn-missing-signatures
             -fno-warn-missing-methods 
-            -fno-warn-unused-imports 
             #-}
 
-module Uniform.Pandoc
-  ( module Uniform.Pandoc 
+module Uniform.Shake
+  ( module Development.Shake 
 
-  , module Uniform.PandocImports
-    , ReaderOptions
-  , module Uniform.PandocHTMLwriter
-  -- , applyTemplate4  
-  , module Uniform.BibTex
-  , 
   )
 where
 
-import Uniform.PandocImports
-import Uniform.PandocHTMLwriter
-import Uniform.BibTex
-
-import qualified Text.Pandoc                   as Pandoc
-import Text.Pandoc ( ReaderOptions, WriterOptions(..) )        
- 
-justToKeepWarningAway :: Int 
-justToKeepWarningAway = 0 
+import Development.Shake
+  ( shake,
+        shakeOptions,
+        (%>),
+        phony,
+        want,
+        Action,
+        Lint(LintBasic),
+        ShakeOptions(shakeFiles, shakeVerbosity, shakeLint),
+        Rules,
+        (|%>),
+        Verbosity(..) )
