@@ -1,0 +1,50 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.34.2.
+--
+-- see: https://github.com/sol/hpack
+
+name:           uniform-latex2pdf
+version:        0.0.1.0
+synopsis:       convert a latex file to pdf
+description:    convert a latex file to pdf 
+                calling lualatex with the flags etc.
+category:       PDF Latex
+author:         Andrew Frank
+maintainer:     Andrew U. Frank <andrewufrank@gmail.com>
+license:        GPL
+license-file:   GPL_3
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
+
+library
+  exposed-modules:
+      Uniform.Latex
+  other-modules:
+      Paths_uniform_latex2pdf
+  hs-source-dirs:
+      src
+  build-depends:
+      base
+    , process
+    , uniform-json
+    , uniformBase
+  default-language: Haskell2010
+
+test-suite webserver-test
+  type: exitcode-stdio-1.0
+  main-is: Testing.hs
+  other-modules:
+      Paths_uniform_latex2pdf
+  hs-source-dirs:
+      tests
+  build-depends:
+      HTF
+    , base
+    , process
+    , quickcheck-text
+    , uniform-json
+    , uniformBase
+  default-language: Haskell2010

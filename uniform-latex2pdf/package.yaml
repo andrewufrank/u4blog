@@ -1,0 +1,43 @@
+name: uniform-latex2pdf
+version: 0.0.1.0
+# cabal-version: >=1.22
+# build-type: Simple
+license: GPL
+license-file: GPL_3
+maintainer: Andrew U. Frank <andrewufrank@gmail.com>
+author: Andrew Frank
+category: PDF Latex
+synopsis: convert a latex file to pdf 
+description: |
+  convert a latex file to pdf 
+  calling lualatex with the flags etc.
+
+# source-repository head
+#     type: git
+#     location: https://github.com/andrewufrank/uniform-http.git
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+dependencies:
+- base
+- uniformBase
+- uniform-json
+- process
+
+library:
+  source-dirs: src
+
+
+tests:
+  webserver-test:
+    main:                Testing.hs
+    source-dirs:         tests
+    dependencies:
+    # - uniform-algebras
+    - HTF
+    - quickcheck-text
+    # - uniform-strings
+    # - uniform-http
+    - uniformBase
