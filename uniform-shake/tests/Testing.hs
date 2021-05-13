@@ -21,8 +21,7 @@ module Main     where      -- must have Main (main) or Main where
 import            Test.Framework
 import  {-@ HTF_TESTS @-}         Uniform.Shake_test
 
-import           Uniform.Strings
-
+import           UniformBase
 --import TestingFileIO
 
 -- test_fileio = assertBool False

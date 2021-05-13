@@ -50,5 +50,6 @@ test-suite webserver-test
     , quickcheck-text
     , shake
     , uniform-json
+    , uniform-shake
     , uniformBase
   default-language: Haskell2010

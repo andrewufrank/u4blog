@@ -43,6 +43,7 @@ tests:
     # - uniform-strings
     # - uniform-http
     - uniformBase
+    - uniform-shake
 
 #     exposed-modules:
 #             Uniform.Http

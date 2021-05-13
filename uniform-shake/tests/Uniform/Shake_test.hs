@@ -24,7 +24,7 @@ module Uniform.Shake_test where
 
 import           Test.Framework
 import Uniform.Shake 
-import Uniform.FileIO 
+import UniformBase
 -- import Test.Invariant
 -- import Uniform.ByteString
 --import qualified Data.ByteString as BS
