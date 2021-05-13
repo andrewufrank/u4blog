@@ -17,7 +17,7 @@ module Uniform.BibTex_test where -- (openMain, htf_thisModuelsTests)
 
 import Test.Framework
 import Text.BibTeX.Entry
-import Uniform.BibTex
+-- import Uniform.BibTex
 import UniformBase
 
 deriving instance Eq (Text.BibTeX.Entry.T)
@@ -28,28 +28,28 @@ bib1pure = "/home/frank/Workspace8/TestSimple/publications/publications.bib"
 
 bibaf = "/home/frank/Workspace8/TestSimple/publications/BibTexLatex.bib"
 
-test_read = do
-  bib <- readBibTex bib1
-  assertEqual resRead (take 40 bib)
+-- test_read = do
+--   bib <- readBibTex bib1
+--   assertEqual resRead (take 40 bib)
 
-test_readaf = do
-  bib <- readBibTex bibaf
-  assertEqual resReadA (take 40 bib)
+-- test_readaf = do
+--   bib <- readBibTex bibaf
+--   assertEqual resReadA (take 40 bib)
 
-resRead = "@InProceedings{alfer2002beginning,\n  aut"
+-- resRead = "@InProceedings{alfer2002beginning,\n  aut"
 
---resRead =  "% Encoding: UTF-8\n@InProceedings{alfer20"
-resReadA = "% Encoding: UTF-8\n\n@InProceedings{navrat"
+-- --resRead =  "% Encoding: UTF-8\n@InProceedings{alfer20"
+-- resReadA = "% Encoding: UTF-8\n\n@InProceedings{navrat"
 
-test_parse = do
-  bib <- readBibTex bib1
-  entries <- parseBibTex bib
-  assertEqual resParse (take 2 entries)
+-- test_parse = do
+--   bib <- readBibTex bib1
+--   entries <- parseBibTex bib
+--   assertEqual resParse (take 2 entries)
 
-test_parseaf = do
-  bib <- readBibTex bibaf
-  entries <- parseBibTex bib
-  assertEqual resParseA (take 2 entries)
+-- test_parseaf = do
+--   bib <- readBibTex bibaf
+--   entries <- parseBibTex bib
+--   assertEqual resParseA (take 2 entries)
 
 resParse =
   [ Cons
@@ -140,17 +140,17 @@ resParseA =
 --    let entries1 = filterByGroup "group1" entries
 --    assertEqual resFilter1 ( take 2 $ entries1)
 
-test_filter2 = do
-  bib <- readBibTex bib1
-  entries <- parseBibTex bib
-  let entries1 = filterByGroup "group1" entries
-  assertEqual resFilter1 (take 2 entries1)
+-- test_filter2 = do
+--   bib <- readBibTex bib1
+--   entries <- parseBibTex bib
+--   let entries1 = filterByGroup "group1" entries
+--   assertEqual resFilter1 (take 2 entries1)
 
-test_filter2af = do
-  bib <- readBibTex bibaf
-  entries <- parseBibTex bib
-  let entries1 = filterByGroup "authorAF" entries
-  assertEqual resFilter2 (take 2 entries1)
+-- test_filter2af = do
+--   bib <- readBibTex bibaf
+--   entries <- parseBibTex bib
+--   let entries1 = filterByGroup "authorAF" entries
+--   assertEqual resFilter2 (take 2 entries1)
 
 resFilter2 =
   [ Cons
@@ -209,7 +209,7 @@ resFilter1 =
       }
   ]
 
-test_filerPure = assertEqual resFilter (filterByGroup "group1" resParse)
+-- test_filerPure = assertEqual resFilter (filterByGroup "group1" resParse)
 
 resFilter =
   [ Cons
@@ -230,9 +230,9 @@ resFilter =
       }
   ]
 
-test_getIds2 = do
-  bib <- readBibTex bibaf
-  entries <- parseBibTex bib
-  let entries1 = filterByGroup "authorAF" entries
-  let ids = getBibIdentifier entries1
-  assertEqual ["Frank2010a"] ids
+-- test_getIds2 = do
+--   bib <- readBibTex bibaf
+--   entries <- parseBibTex bib
+--   let entries1 = filterByGroup "authorAF" entries
+--   let ids = getBibIdentifier entries1
+--   assertEqual ["Frank2010a"] ids

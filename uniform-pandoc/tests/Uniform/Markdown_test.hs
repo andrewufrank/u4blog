@@ -25,14 +25,14 @@ module Uniform.Markdown_test where
 --
 ---- using uniform:
 import Test.Framework
-import Uniform.Docrep
+-- import Uniform.Docrep
 --(TypedFiles7(..))
 
 import UniformBase
-import Uniform.Markdown
+-- import Uniform.Markdown
 import Uniform.Pandoc
 import Uniform.Test.TestHarness
-import Uniform.Filetypes4sites
+-- import Uniform.Filetypes4sites
 
 
 -- all filenames without extension
@@ -86,25 +86,25 @@ test_readDocrepWithRef =
 
 withRef = makeAbsFile "/home/frank/Workspace8/uniform/uniform-pandoc/tests/data/withRef.md"
 
-readDocrep2 mfn = do
-  text1 <- read8 mfn markdownFileType
-  res1 :: Docrep <- readMarkdown2docrep text1
-  write8 mfn docrepFileType res1
-  return res1
+-- readDocrep2 mfn = do
+--   text1 <- read8 mfn markdownFileType
+--   res1 :: Docrep <- readMarkdown2docrep text1
+--   write8 mfn docrepFileType res1
+--   return res1
 
--- test_addRefs = do    -- is visual test
---     res2 <- runErr $ do
---         dr1 <- read8 withRef docrepFileType
---         res1 <- docrepAddRefs dr1
---         putIOwords ["test_addRefs", showT res1]
---         return (res1)
---     assertEqual (Left "") res2
--- -- works but should be using a regression test. output is too long
+-- -- test_addRefs = do    -- is visual test
+-- --     res2 <- runErr $ do
+-- --         dr1 <- read8 withRef docrepFileType
+-- --         res1 <- docrepAddRefs dr1
+-- --         putIOwords ["test_addRefs", showT res1]
+-- --         return (res1)
+-- --     assertEqual (Left "") res2
+-- -- -- works but should be using a regression test. output is too long
 
--- res4text1 = "ttxx   " :: Text
-instance ShowTestHarness Pandoc
+-- -- res4text1 = "ttxx   " :: Text
+-- instance ShowTestHarness Pandoc
 
-instance ShowTestHarness Docrep
+-- instance ShowTestHarness Docrep
 
 test_readpanrecShort =
   testVar0FileIO
@@ -142,4 +142,4 @@ read2panrep2 mfn = do
   write8 mfn panrepFileType res1
   return res1
 
-instance ShowTestHarness Panrep
+-- instance ShowTestHarness Panrep

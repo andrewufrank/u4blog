@@ -56,5 +56,8 @@ library:
 #     - HTF
 #     - uniform-pandoc
 #     - uniform-convenience
-#     # - uniformBase
-#     # - ReplaceUmlaut 
+
+    # - ssg
+    # - uniform-convenience
+    # - uniformBase
+    # - ReplaceUmlaut 
