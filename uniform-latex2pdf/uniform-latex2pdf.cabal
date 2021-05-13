@@ -37,6 +37,7 @@ test-suite webserver-test
   type: exitcode-stdio-1.0
   main-is: Testing.hs
   other-modules:
+      Uniform.Latex2pdf_test
       Paths_uniform_latex2pdf
   hs-source-dirs:
       tests
@@ -46,5 +47,6 @@ test-suite webserver-test
     , process
     , quickcheck-text
     , uniform-json
+    , uniform-latex2pdf
     , uniformBase
   default-language: Haskell2010

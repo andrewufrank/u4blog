@@ -41,3 +41,4 @@ tests:
     # - uniform-strings
     # - uniform-http
     - uniformBase
+    - uniform-latex2pdf
