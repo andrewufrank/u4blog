@@ -24,18 +24,16 @@
 module Uniform.Watch_test where
 
 import           Test.Framework
-import           Uniform.Strings  
+import           UniformBase 
 import Uniform.Watch
 
-import   Uniform.Error
-import Uniform.Strings
-import Uniform.FileIO 
-import           Control.Concurrent (forkIO, killThread)
-import           Uniform.Convenience.StartApp (startProg)
--- import Uniform.Watch (startWatch2)
-import Uniform.WebServer
-import Control.Exception
-import Twitch 
+
+-- import           Control.Concurrent (forkIO, killThread)
+-- import           Uniform.Convenience.StartApp (startProg)
+-- -- import Uniform.Watch (startWatch2)
+-- import Uniform.WebServer
+-- import Control.Exception
+-- import Twitch 
  
           
 

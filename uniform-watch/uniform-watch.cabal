@@ -31,20 +31,3 @@ library
     , twitch
     , uniformBase
   default-language: Haskell2010
-
-test-suite webserver-test
-  type: exitcode-stdio-1.0
-  main-is: Testing.hs
-  other-modules:
-      Uniform.TwitchMinimal
-      Uniform.Watch_test
-      Paths_uniform_watch
-  hs-source-dirs:
-      tests
-  build-depends:
-      HTF
-    , base
-    , quickcheck-text
-    , twitch
-    , uniformBase
-  default-language: Haskell2010

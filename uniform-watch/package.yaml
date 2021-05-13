@@ -29,17 +29,19 @@ library:
   source-dirs: src
 
 
-tests:
-  webserver-test:
-    main:                Testing.hs
-    source-dirs:         tests
-    dependencies:
-    # - uniform-algebras
-    - HTF
-    - quickcheck-text
-    # - uniform-strings
-    # - uniform-http
-    - uniformBase
+# tests:
+#   webserver-test:
+#     main:                Testing.hs
+#     source-dirs:         tests
+#     dependencies:
+#     # - uniform-algebras
+#     - HTF
+#     - quickcheck-text
+#     # - uniform-strings
+#     # - uniform-http
+#     - uniformBase
+#     - uniform-watch
+
 
 #     exposed-modules:
 #             Uniform.Http
