@@ -154,9 +154,10 @@ markdownFileType =
   TypedFile5 {tpext5 = extMD} :: TypedFile5 Text MarkdownText
 
 instance TypedFiles7 Text MarkdownText where
--- | handling Markdown and read them into MarkdownText
-  wrap7 = MarkdownText
+--  handling Markdown and read them into MarkdownText
+  wrap7 a = MarkdownText a
   unwrap7 (MarkdownText a) = a
+
 readMarkdown2 :: MarkdownText -> ErrIO Pandoc
 -- | reads the markdown text and produces a pandoc structure
 readMarkdown2 text1 =
