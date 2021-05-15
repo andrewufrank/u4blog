@@ -22,6 +22,7 @@ module Uniform.Latex
 
 import qualified System.Exit as Sys
 import qualified System.Process as Sys
+import System.IO.Silently (silence)
 import Uniform.Json
 import UniformBase
 
@@ -100,7 +101,7 @@ makebiblio style biblio =
     , ""
     ]
 
-writePDF2 :: Bool -> Path Abs File -> Path Abs File -> Path Abs Dir -> ErrIO ()
+writePDF2 :: NoticeLevel -> Path Abs File -> Path Abs File -> Path Abs Dir -> ErrIO ()
 -- convert the text in the file given (a full latex, exetnsion "tex") into a pdf
 -- in the second path
 -- set the current working directory (which must be the directory
@@ -115,7 +116,7 @@ writePDF2 debug fn fnres refDir = do
     -- process
 
     let infn = fn -- setExtension extTex fn :: Path Abs File
-    putIOwords
+    when (inform debug) $ when (inform debug) $ putIOwords
         [ "writePDF2text 1 infn"
         , showT infn
         , "\n\t fnres"
@@ -125,11 +126,12 @@ writePDF2 debug fn fnres refDir = do
         ]
     let dir1 = getParentDir fnres :: FilePath
     let out1 = "--output-directory=" <> dir1
-    putIOwords ["writePDF2text 2 out1", showT out1]
+    when (inform debug) $ putIOwords ["writePDF2text 2 out1", showT out1]
     callProcessWithCWD
         "lualatex"
         [out1, "-interaction=nonstopmode", toFilePath infn]
         refDir
+    when (inform debug) $ putIOwords ["writePDF2text end"]
     -- callIO $ Sys.callProcess "xelatex" [out1,  "-interaction=nonstopmode" , toFilePath infn]
     -- callIO $ Sys.callProcess "lualatex" [out1, toFilePath infn]
 
@@ -158,9 +160,11 @@ writePDF2 debug fn fnres refDir = do
  terminated.
 
  @since 1.2.0.0
+
+ wrapped in silence to avoid output on std out
 -}
 callProcessWithCWD :: FilePath -> [String] -> Path Abs Dir -> ErrIO ()
-callProcessWithCWD cmd args cwd1 = callIO $ do
+callProcessWithCWD cmd args cwd1 = callIO . silence $ do
     exit_code <-
         Sys.withCreateProcess -- "callProcess"
             (Sys.proc cmd args)

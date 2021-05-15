@@ -25,6 +25,7 @@ dependencies:
 - uniformBase
 - uniform-json
 - process
+- silently
 
 library:
   source-dirs: src

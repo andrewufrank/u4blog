@@ -27,6 +27,10 @@ import           Test.Framework
 import           UniformBase
 import Uniform.Latex         
 
-
-tesnull2 = assertEqual 0 0 
+test_null2 = 
+            assertEqual 0 0 
+    
+-- tex2latex_files fn = do 
+--     do 
+--     r <- runErrOrVal $ do 
  
