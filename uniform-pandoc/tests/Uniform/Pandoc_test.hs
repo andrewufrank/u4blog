@@ -47,7 +47,7 @@ test_templateJson= do
     res <- runErr $ do 
             t :: Text <- applyTemplate4 True template2 (toJSON emp1)
             return t
-    assertEqual (Right "XX") res 
+    assertEqual (Right "Hi, John. You make 100.\n") res 
 
 -- for test with JSON 
 data Employee = Employee { firstName :: String
@@ -74,7 +74,8 @@ test_templateJ2= do
     res <- runErr $ do 
             t :: Text <- applyTemplate4 True template4 m2
             return t
-    assertEqual (Right "XX") res 
+    assertEqual (Right  "Hi, John. You make 100. You work for Peter.\n") res 
+-- m2 is Object (fromList [("boss",String "Peter"),("dept",String "Accounting"),("name",Object (fromList [("first",String "John"),("last",String "Doe")])),("salary",Number 100.0)])
 
 -- test_readWritePandoc = do 
 --     res5 <- runErr $ do 
