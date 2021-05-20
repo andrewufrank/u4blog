@@ -58,6 +58,7 @@ html5Options =
 applyTemplate4 :: (ToJSON a) => Bool -- ^ 
   -> Text -- ^ the page text in a format that has toJSON
   -> a -- ^ the values to fill in (will be converted to JSON)
+  -- possibly Map (Text, Text) from Data.Map 
   -> ErrIO Text -- ^ the resulting html text 
 applyTemplate4 debug t1 val = do
     templ1 <- liftIO $ DocTemplates.compileTemplate mempty t1

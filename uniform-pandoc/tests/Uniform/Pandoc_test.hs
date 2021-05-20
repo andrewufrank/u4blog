@@ -10,14 +10,16 @@
 {-# LANGUAGE OverloadedStrings     #-}
 {-# LANGUAGE ScopedTypeVariables   #-}
 {-# LANGUAGE TypeFamilies          #-}
+{-# LANGUAGE DeriveGeneric          #-}
 -- {-# LANGUAGE TypeSynonymInstances  #-}
 -- {-# OPTIONS_GHC -fno-warn-missing-methods #-}
 
 module Uniform.Pandoc_test where
 
 import Test.Framework
-import Data.Map 
+import qualified Data.Map as M 
 ---- using uniform:
+import Uniform.Json 
 import Uniform.Pandoc 
 -- import Uniform.Filenames 
 -- import Uniform2.Filetypes4sites should not be imported here
@@ -29,8 +31,10 @@ import UniformBase
 
 templ1, res4 :: Text 
 templ1 = "some $words$ are replaced $if(x1)$the text for x1 $x1$ $endif$."
-vals1 :: Map Text Text 
-vals1 = fromList [("words","Woerter"), ("x1","erstes x")]
+-- vals1 :: M.Map Text Text 
+vals1 = fromList vals0  -- Data.HashMap 
+vals0 = [("words","Woerter"), ("x1","erstes x")] :: [(String,Text)]
+-- vals2 = fromList [("words","Woerter"), ("x1","erstes x")]  
 res4 = "some Woerter are replaced the text for x1 erstes x ."
 
 test_template1 = do 
@@ -38,7 +42,39 @@ test_template1 = do
             t :: Text <- applyTemplate4 True templ1 vals1
             return t
     assertEqual (Right res4) res 
-        
+
+test_templateJson= do 
+    res <- runErr $ do 
+            t :: Text <- applyTemplate4 True template2 (toJSON emp1)
+            return t
+    assertEqual (Right "XX") res 
+
+-- for test with JSON 
+data Employee = Employee { firstName :: String
+                         , lastName  :: String
+                         , salary    :: Maybe Int } deriving (Show)
+instance ToJSON Employee where
+  toJSON e = object [ "name" .= object [ "first" .= firstName e
+                                       , "last"  .= lastName e ]
+                    , "salary" .= salary e ]
+
+template2 :: Text
+template2 = "Hi, $name.first$. $if(salary)$You make $salary$.$else$No salary data.$endif$\n"
+template3 = "$for(employee)$Hi, $employee.name.first$. $if(employee.salary)$You make $employee.salary$.$else$No salary data.$endif$$sep$\n$endfor$"
+emp1 = Employee "John" "Doe" (Just 100)
+
+data Job = Job {dept :: String, boss :: String} deriving (Show, Generic)
+instance ToJSON Job
+
+job1 = Job "Accounting" "Peter"
+m2 = mergeLeftPref [toJSON emp1, toJSON job1]
+template4 = "Hi, $name.first$. $if(salary)$You make $salary$.$else$No salary data.$endif$ You work for $boss$.\n"
+
+test_templateJ2= do 
+    res <- runErr $ do 
+            t :: Text <- applyTemplate4 True template4 m2
+            return t
+    assertEqual (Right "XX") res 
 
 -- test_readWritePandoc = do 
 --     res5 <- runErr $ do 
