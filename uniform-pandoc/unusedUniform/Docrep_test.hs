@@ -16,9 +16,9 @@
 module Uniform.Docrep_test where
 
 import Test.Framework
-    ( assertEqual_, makeLoc, makeTestSuite, makeUnitTest, TestSuite )
+     
 import           Uniform.Pandoc
-import Uniform.Docrep ()
+-- import Uniform.Docrep ()
 import Uniform.Json
     ( encode,
       object,
@@ -26,20 +26,14 @@ import Uniform.Json
       Value(String, Object),
       (.=),
       AtKey(putAtKey) )
-import UniformBase ()
+import UniformBase 
 import Uniform.Test.TestHarness
-    ( assertEqual_,
-      makeLoc,
-      makeTestSuite,
-      makeUnitTest,
-      TestSuite,
-      testVar0FileIO,
-      ShowTestHarness )
+    
 -- import Text.Pandoc 
 -- import           Uniform.Error           hiding ( (<.>) )  -- (</>)
 import Uniform.Markdown_test
-    ( shortFile, regFile, complexFile, withRef )
-import Uniform.Filetypes4sites
+    
+-- import Uniform.Filetypes4sites
 
 
 test_zero = (assertEqual_ (makeLoc "/home/frank/Workspace11/u4blog/uniform-pandoc/tests/Uniform/Docrep_test.hs" 45))

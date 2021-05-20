@@ -16,20 +16,29 @@
 module Uniform.Pandoc_test where
 
 import Test.Framework
+import Data.Map 
 ---- using uniform:
 import Uniform.Pandoc 
 -- import Uniform.Filenames 
-import Uniform.Filetypes4sites
+-- import Uniform2.Filetypes4sites should not be imported here
 
 import Uniform.Test.TestHarness
-import Uniform.Markdown_test 
+-- import Uniform.Markdown_test 
 -- import Uniform.Error           hiding (  (<.>)  )  -- (</>)
 import UniformBase
 
-tmp1, res4 :: Text 
-tmp1 = "some $words$ are replaced $if(x1)$the text for x1 $x1$ $endif$."
-vals1 = [("words","Woerter"), ("x1","erstes x")]
+templ1, res4 :: Text 
+templ1 = "some $words$ are replaced $if(x1)$the text for x1 $x1$ $endif$."
+vals1 :: Map Text Text 
+vals1 = fromList [("words","Woerter"), ("x1","erstes x")]
 res4 = "some Woerter are replaced the text for x1 erstes x ."
+
+test_template1 = do 
+    res <- runErr $ do 
+            t :: Text <- applyTemplate4 True templ1 vals1
+            return t
+    assertEqual (Right res4) res 
+        
 
 -- test_readWritePandoc = do 
 --     res5 <- runErr $ do 
@@ -48,27 +57,27 @@ res4 = "some Woerter are replaced the text for x1 erstes x ."
 --     assertEqual target3 res3
 
 
-test_writeTexSnip2short = testVar0FileIO "uniform-pandoc" 
-        shortFile
-        "test_writeTexSnip2short" writeTexSnip4 
-test_writeTexSnip2reg = testVar0FileIO "uniform-pandoc" 
-        regFile
-        "test_writeTexSnip2reg" writeTexSnip4 
-test_writeTexSnip2complex = testVar0FileIO "uniform-pandoc" 
-        complexFile
-        "test_writeTexSnip2complex" writeTexSnip4 
-test_writeTexSnip2withRef = testVar0FileIO "uniform-pandoc" 
-        withRef
-        "test_writeTexSnip2withRef" writeTexSnip4 
+-- test_writeTexSnip2short = testVar0FileIO "uniform-pandoc" 
+--         shortFile
+--         "test_writeTexSnip2short" writeTexSnip4 
+-- test_writeTexSnip2reg = testVar0FileIO "uniform-pandoc" 
+--         regFile
+--         "test_writeTexSnip2reg" writeTexSnip4 
+-- test_writeTexSnip2complex = testVar0FileIO "uniform-pandoc" 
+--         complexFile
+--         "test_writeTexSnip2complex" writeTexSnip4 
+-- test_writeTexSnip2withRef = testVar0FileIO "uniform-pandoc" 
+--         withRef
+--         "test_writeTexSnip2withRef" writeTexSnip4 
 
 -- testVar0FileIO :: (Zeros b, Eq b, Show b, Read b, ShowTestHarness b)
             -- => Text -> a -> FilePath -> (a-> ErrIO b) -> IO ()
-writeTexSnip4 pfn1  = do       
-        pan1 :: Panrep <- read8 pfn1 panrepFileType 
-        -- let p1 = unwrap7 pan1 :: Pandoc 
-        tex1   <- writeTexSnip2 . panpan $ pan1 
-        write8 pfn1 texSnipFileType (TexSnip (panyam pan1) tex1)
-        return tex1
+-- writeTexSnip4 pfn1  = do       
+--         pan1 :: Panrep <- read8 pfn1 panrepFileType 
+--         -- let p1 = unwrap7 pan1 :: Pandoc 
+--         tex1   <- writeTexSnip2 . panpan $ pan1 
+--         write8 pfn1 texSnipFileType (TexSnip (panyam pan1) tex1)
+--         return tex1
 
 -- test_pdf1 = testVar0File "uniform-pandoc" shortFile 
 --                 "test_writePDF2short" writePDF4 
@@ -80,4 +89,4 @@ writeTexSnip4 pfn1  = do
 --         res <- writePDF2 True fnin fnout 
 --         putIOwords ["writePDF4 res", showT res]
 --         return res
-instance ShowTestHarness TexSnip 
+-- instance ShowTestHarness TexSnip 

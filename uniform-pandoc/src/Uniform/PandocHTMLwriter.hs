@@ -33,13 +33,13 @@ import UniformBase
 
 -- import Uniform.PandocImports (  unPandocM )
 import Text.Pandoc
-  
+
 import Text.Pandoc.Highlighting (tango)
 import qualified Text.Pandoc as Pandoc
-import Uniform.PandocImports 
+import Uniform.PandocImports
 import Text.DocLayout (render)
 import Text.DocTemplates as DocTemplates
-     
+
 writeHtml5String2 :: Pandoc -> ErrIO Text
 writeHtml5String2 pandocRes = do
     p <- unPandocM $ writeHtml5String html5Options pandocRes
@@ -55,19 +55,19 @@ html5Options =
 
 -- | apply the template 
 -- concentrating the specific pandoc ops 
-applyTemplate4 :: Bool -- ^ 
-  -> Text -- ^ the page text 
-  -> Value -- ^ the values to fill in (will be converted to JSON)
+applyTemplate4 :: (ToJSON a) => Bool -- ^ 
+  -> Text -- ^ the page text in a format that has toJSON
+  -> a -- ^ the values to fill in (will be converted to JSON)
   -> ErrIO Text -- ^ the resulting html text 
-applyTemplate4 debug t1 val = do 
-    temp1 <- liftIO $ DocTemplates.compileTemplate mempty t1
+applyTemplate4 debug t1 val = do
+    templ1 <- liftIO $ DocTemplates.compileTemplate mempty t1
     -- err1 :: Either String (Doc Text) <- liftIO $ DocTemplates.applyTemplate mempty (unwrap7 templText) (unDocValue val)
-    let tmp3 = case temp1 of
+    let templ3 = case templ1 of
             Left msg -> error msg
             Right tmp2 -> tmp2
-    when debug $ putIOwords ["applyTemplate3 temp2", take' 300 $ showT tmp3]
+    when debug $ putIOwords ["applyTemplate3 temp2", take' 300 $ showT templ3]
     -- renderTemplate :: (TemplateTarget a, ToContext a b) => Template a -> b -> Doc a
-    let res = renderTemplate tmp3 (toJSON val)
+    let res = renderTemplate templ3 (toJSON val)
     when False $ putIOwords ["applyTemplate3 res", take' 300 $ showT res]
     let res2 = render Nothing res
     return res2
@@ -82,7 +82,7 @@ writeAST2md dat = do
                 Pandoc.def{Pandoc.writerSetextHeaders = False}
                 dat
         return r1
-    return  $ r
+    return  r
 
 writeAST3md :: Pandoc.WriterOptions -> Pandoc -> ErrIO Text
 
@@ -94,4 +94,4 @@ writeAST3md options dat = do
                 options -- Pandoc.def { Pandoc.writerSetextHeaders = False }
                 dat
         return r1
-    return  $ r
+    return r

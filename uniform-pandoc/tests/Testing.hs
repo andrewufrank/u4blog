@@ -22,14 +22,14 @@ import Test.Framework
 -- import     {-@ HTF_TESTS @-}       Uniform.Yaml_test
 --import    {-@ HTF_TESTS @-}        Uniform.FileStatus_test
 --import     {-@ HTF_TESTS @-}       Uniform.Piped_test
-import    {-@ HTF_TESTS @-}        Uniform.BibTex_test
+-- import    {-@ HTF_TESTS @-}        Uniform.BibTex_test
 
-import    {-@ HTF_TESTS @-}        Uniform.Markdown_test
+-- import    {-@ HTF_TESTS @-}        Uniform.Markdown_test
 import    {-@ HTF_TESTS @-}        Uniform.Pandoc_test
--- TODO not yet working inut file missing
-import    {-@ HTF_TESTS @-}        Uniform.ProcessPDF_test
-import {-@ HTF_TESTS @-} Uniform.Docrep_test
-import    {-@ HTF_TESTS @-}        Uniform.HTMLout_test
+-- -- TODO not yet working inut file missing
+-- import    {-@ HTF_TESTS @-}        Uniform.ProcessPDF_test
+-- import {-@ HTF_TESTS @-} Uniform.Docrep_test
+-- import    {-@ HTF_TESTS @-}        Uniform.HTMLout_test
 -- braucht files
 
 import UniformBase

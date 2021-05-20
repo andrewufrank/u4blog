@@ -56,33 +56,33 @@ test_readWrite = do
   let Right (target3, res3) = res4
   assertEqual target3 res3
 
-test_readDocrepShort =
-  testVar0FileIO
-    "uniform-Docrep"
-    shortFile
-    "test_readDocrepShort"
-    readDocrep2
+-- test_readDocrepShort =
+--   testVar0FileIO
+--     "uniform-Docrep"
+--     shortFile
+--     "test_readDocrepShort"
+--     readDocrep2
 
-test_readDocrepReg =
-  testVar0FileIO
-    "uniform-Docrep"
-    regFile
-    "test_readDocrepReg"
-    readDocrep2
+-- test_readDocrepReg =
+--   testVar0FileIO
+--     "uniform-Docrep"
+--     regFile
+--     "test_readDocrepReg"
+--     readDocrep2
 
-test_readDocrepComplex =
-  testVar0FileIO
-    "uniform-Docrep"
-    complexFile
-    "test_readDocrepComplex"
-    readDocrep2
+-- test_readDocrepComplex =
+--   testVar0FileIO
+--     "uniform-Docrep"
+--     complexFile
+--     "test_readDocrepComplex"
+--     readDocrep2
 
-test_readDocrepWithRef =
-  testVar0FileIO
-    "uniform-Docrep"
-    withRef
-    "test_readDocrepWithRef"
-    readDocrep2
+-- test_readDocrepWithRef =
+--   testVar0FileIO
+--     "uniform-Docrep"
+--     withRef
+--     "test_readDocrepWithRef"
+--     readDocrep2
 
 withRef = makeAbsFile "/home/frank/Workspace8/uniform/uniform-pandoc/tests/data/withRef.md"
 
@@ -106,40 +106,40 @@ withRef = makeAbsFile "/home/frank/Workspace8/uniform/uniform-pandoc/tests/data/
 
 -- instance ShowTestHarness Docrep
 
-test_readpanrecShort =
-  testVar0FileIO
-    "uniform-panrec"
-    shortFile
-    "test_readpanrecShort"
-    read2panrep2
+-- test_readpanrecShort =
+--   testVar0FileIO
+--     "uniform-panrec"
+--     shortFile
+--     "test_readpanrecShort"
+--     read2panrep2
 
-test_readpanrecReg =
-  testVar0FileIO
-    "uniform-panrec"
-    regFile
-    "test_readpanrecReg"
-    read2panrep2
+-- test_readpanrecReg =
+--   testVar0FileIO
+--     "uniform-panrec"
+--     regFile
+--     "test_readpanrecReg"
+--     read2panrep2
 
-test_readpanrecComplex =
-  testVar0FileIO
-    "uniform-panrec"
-    complexFile
-    "test_readpanrecComplex"
-    read2panrep2
+-- test_readpanrecComplex =
+--   testVar0FileIO
+--     "uniform-panrec"
+--     complexFile
+--     "test_readpanrecComplex"
+--     read2panrep2
 
-test_readpanrecwithRef =
-  testVar0FileIO
-    "uniform-panrec"
-    withRef
-    "test_readpanrecwithRef"
-    read2panrep2
+-- test_readpanrecwithRef =
+--   testVar0FileIO
+--     "uniform-panrec"
+--     withRef
+--     "test_readpanrecwithRef"
+--     read2panrep2
 
 -- testVar0FileIO :: (Zeros b, Eq b, Show b, Read b, ShowTestHarness b)
 -- => Text -> a -> FilePath -> (a-> ErrIO b) -> IO ()
-read2panrep2 mfn = do
-  text1 <- read8 mfn docrepFileType
-  let res1 = Panrep (yam text1) (pan text1)
-  write8 mfn panrepFileType res1
-  return res1
+-- read2panrep2 mfn = do
+--   text1 <- read8 mfn docrepFileType
+--   let res1 = Panrep (yam text1) (pan text1)
+--   write8 mfn panrepFileType res1
+--   return res1
 
 -- instance ShowTestHarness Panrep

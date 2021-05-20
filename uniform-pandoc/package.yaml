@@ -44,18 +44,18 @@ library:
   - src   
 # the '.' finds the library in their folders with LibName
 
-# tests:
-#   pandoctest:
-#     main:                Testing.hs
-#     source-dirs:         tests
-#     ghc-options:
-#     - -threaded
-#     - -rtsopts
-#     - -with-rtsopts=-N
-#     dependencies:
-#     - HTF
-#     - uniform-pandoc
-#     - uniform-convenience
+tests:
+  pandoctest:
+    main:                Testing.hs
+    source-dirs:         tests
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - HTF
+    - uniform-pandoc
+    - uniform-convenience
 
     # - ssg
     # - uniform-convenience
