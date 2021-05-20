@@ -55,7 +55,7 @@ html5Options =
 
 -- | apply the template 
 -- concentrating the specific pandoc ops 
-applyTemplate4 :: (ToJSON a) => Bool -- ^ 
+applyTemplate4 :: (ToJSON a, Show a) => Bool -- ^ 
   -> Text -- ^ the page text in a format that has toJSON
   -> a -- ^ the values to fill in (will be converted to JSON)
   -- possibly Map (Text, Text) from Data.Map 
@@ -68,6 +68,7 @@ applyTemplate4 debug t1 val = do
             Right tmp2 -> tmp2
     when debug $ putIOwords ["applyTemplate3 temp2", take' 300 $ showT templ3]
     -- renderTemplate :: (TemplateTarget a, ToContext a b) => Template a -> b -> Doc a
+    when debug $ putIOwords ["the val is ", showT val]
     let res = renderTemplate templ3 (toJSON val)
     when False $ putIOwords ["applyTemplate3 res", take' 300 $ showT res]
     let res2 = render Nothing res
