@@ -175,7 +175,7 @@ markdownOptions = Pandoc.def { Pandoc.readerExtensions = exts }
             [ Pandoc.Ext_yaml_metadata_block
             , Pandoc.Ext_fenced_code_attributes
             , Pandoc.Ext_auto_identifiers
-            , Pandoc.Ext_raw_html   -- three extension give markdown_strict
+            -- , Pandoc.Ext_raw_html   -- three extension give markdown_strict
             , Pandoc.Ext_raw_tex   --Allow raw TeX (other than math)
             , Pandoc.Ext_shortcut_reference_links
             , Pandoc.Ext_spaced_reference_links
