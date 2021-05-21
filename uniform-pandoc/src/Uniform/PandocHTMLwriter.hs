@@ -55,23 +55,24 @@ html5Options =
 
 -- | apply the template 
 -- concentrating the specific pandoc ops 
-applyTemplate4 :: (ToJSON a, Show a) => Bool -- ^ 
+applyTemplate4 ::  Bool -- ^ 
   -> Text -- ^ the page text in a format that has toJSON
-  -> a -- ^ the values to fill in (will be converted to JSON)
+  -> [Value]-- ^ the values to fill in (produce with toJSON)
   -- possibly Map (Text, Text) from Data.Map 
   -> ErrIO Text -- ^ the resulting html text 
-applyTemplate4 debug t1 val = do
+applyTemplate4 debug t1 vals = do
     templ1 <- liftIO $ DocTemplates.compileTemplate mempty t1
     -- err1 :: Either String (Doc Text) <- liftIO $ DocTemplates.applyTemplate mempty (unwrap7 templText) (unDocValue val)
     let templ3 = case templ1 of
             Left msg -> error msg
             Right tmp2 -> tmp2
-    when debug $ putIOwords ["applyTemplate3 temp2", take' 300 $ showT templ3]
+    when debug $ putIOwords ["applyTemplate3 temp2",  showT templ3]
     -- renderTemplate :: (TemplateTarget a, ToContext a b) => Template a -> b -> Doc a
-    when debug $ putIOwords ["the val is ", showT val]
-    let res = renderTemplate templ3 (toJSON val)
-    when False $ putIOwords ["applyTemplate3 res", take' 300 $ showT res]
-    let res2 = render Nothing res
+    let valmerged = mergeLeftPref vals
+    when debug $ putIOwords ["the val is ", showT valmerged]
+    let res = renderTemplate templ3 ( valmerged)
+    when debug $ putIOwords ["applyTemplate3 res",  showT res]
+    let res2 = render Nothing res  -- macht reflow (zeileneinteilung)
     return res2
 
 writeAST2md :: Pandoc -> ErrIO Text

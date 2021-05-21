@@ -4,6 +4,8 @@
 -- | read and write pandoc files (intenal rep of pandoc written to disk)
 -- von hier Pandoc spezifisches imortieren
 -- nich exportieren nach aussen
+--
+-- das ist, was von pandoc zum import gebraucht wird
 -------------------------------
 {-# LANGUAGE ConstraintKinds #-}
 {-# LANGUAGE DeriveGeneric #-}

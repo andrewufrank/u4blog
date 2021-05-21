@@ -28,24 +28,29 @@ import Uniform.Test.TestHarness
 -- import Uniform.Markdown_test 
 -- import Uniform.Error           hiding (  (<.>)  )  -- (</>)
 import UniformBase
+import Text.DocLayout (render)
+import Text.DocTemplates as DocTemplates
 
-templ1, res4 :: Text 
-templ1 = "some $words$ are replaced $if(x1)$the text for x1 $x1$ $endif$."
--- vals1 :: M.Map Text Text 
-vals1 = fromList vals0  -- Data.HashMap 
-vals0 = [("words","Woerter"), ("x1","erstes x")] :: [(String,Text)]
--- vals2 = fromList [("words","Woerter"), ("x1","erstes x")]  
-res4 = "some Woerter are replaced the text for x1 erstes x ."
+-- works only with json values now 
+-- templ1, res4 :: Text 
+-- templ1 = "some $words$ are replaced $if(x1)$the text for x1 $x1$ $endif$."
+-- -- vals1 :: M.Map Text Text 
+-- vals1 = fromList vals0  -- Data.HashMap 
+-- vals0 = [("words","Woerter"), ("x1","erstes x")] :: [(String,Text)]
+-- -- vals2 = fromList [("words","Woerter"), ("x1","erstes x")]  
+-- res4 = "some Woerter are replaced the text for x1 erstes x ."
 
-test_template1 = do 
-    res <- runErr $ do 
-            t :: Text <- applyTemplate4 True templ1 vals1
-            return t
-    assertEqual (Right res4) res 
+-- test_template1 = do 
+--     res <- runErr $ do 
+--             tp <- compileTemplate mempty templ1
+--             t :: Text <- render Nothing . renderTemplate templ1 [vals1]
+--             return t
+--     assertEqual (Right res4) res 
+--
 
 test_templateJson= do 
     res <- runErr $ do 
-            t :: Text <- applyTemplate4 True template2 (toJSON emp1)
+            t :: Text <- applyTemplate4 True template2 [toJSON emp1]
             return t
     assertEqual (Right "Hi, John. You make 100.\n") res 
 
@@ -72,7 +77,7 @@ template4 = "Hi, $name.first$. $if(salary)$You make $salary$.$else$No salary dat
 
 test_templateJ2= do 
     res <- runErr $ do 
-            t :: Text <- applyTemplate4 True template4 m2
+            t :: Text <- applyTemplate4 True template4 [toJSON emp1, toJSON job1]
             return t
     assertEqual (Right  "Hi, John. You make 100. You work for Peter.\n") res 
 -- m2 is Object (fromList [("boss",String "Peter"),("dept",String "Accounting"),("name",Object (fromList [("first",String "John"),("last",String "Doe")])),("salary",Number 100.0)])

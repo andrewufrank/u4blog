@@ -1,6 +1,6 @@
 ------------------------------------------------------------------------
 --
--- Module      :  Uniform.HTMLout
+-- Module      :  Uniform.HTMLout  -- das ist was von pandoc fuer output gebraucht wird 
 -----------------------------------------------------------------------
 -- {-# LANGUAGE BangPatterns                   #-}
 {-# LANGUAGE ConstraintKinds #-}
