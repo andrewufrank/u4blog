@@ -56,7 +56,7 @@ html5Options =
 -- | apply the template 
 -- concentrating the specific pandoc ops 
 applyTemplate4 ::  Bool -- ^ 
-  -> Text -- ^ the page text in a format that has toJSON
+  -> Text -- ^ the template as text
   -> [Value]-- ^ the values to fill in (produce with toJSON)
   -- possibly Map (Text, Text) from Data.Map 
   -> ErrIO Text -- ^ the resulting html text 
@@ -69,9 +69,9 @@ applyTemplate4 debug t1 vals = do
     when debug $ putIOwords ["applyTemplate3 temp2",  showT templ3]
     -- renderTemplate :: (TemplateTarget a, ToContext a b) => Template a -> b -> Doc a
     let valmerged = mergeLeftPref vals
-    when debug $ putIOwords ["the val is ", showT valmerged]
+    when debug $ putIOwords ["the valmerged is ", showPretty valmerged]
     let res = renderTemplate templ3 ( valmerged)
-    when debug $ putIOwords ["applyTemplate3 res",  showT res]
+    -- when debug $ putIOwords ["applyTemplate3 res",  showT res]
     let res2 = render Nothing res  -- macht reflow (zeileneinteilung)
     return res2
 
