@@ -5,7 +5,8 @@ cabal-version: 1.12
 -- see: https://github.com/sol/hpack
 
 name:           uniform-shake
-version:        0.0.1.1
+version:        0.0.1.2
+
 synopsis:       uniform wrapper for shake
 description:    shake top level functions using Path (not filepath)
                 version 2 to include in uniform ecosystem
@@ -31,9 +32,9 @@ library
       ./.
   build-depends:
       base
-    , shake
+    , shake == 0.19.6
     , uniform-json
-    , uniformBase
+    , uniformBase== 0.1.2
   default-language: Haskell2010
 
 test-suite webserver-test
