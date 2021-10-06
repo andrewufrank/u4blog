@@ -34,23 +34,8 @@ import qualified Text.Parsec as Parsec
 import Uniform.PandocImports
     ( Pandoc, getMeta, putMeta, fromJSONValue )
 import UniformBase
-    ( when,
-      Text,
-      ErrIO,
-      Zeros(zero),
-      Path,
-      Abs,
-      File,
-      toFilePath,
-      fromJustNote,
-      callIO,
-      currentDir,
-      setCurrentDir,
-      s2t,
-      t2s,
-      putIOwords,
-      Dir )
-import Uniform.Json ( Value ) 
+    
+import Uniform.Json ( Value, Result, Value(Null) ) 
 
 readBiblioRefs ::  
   Bool
@@ -68,9 +53,9 @@ readBiblioRefs debugx biblio1 loc1 style1  refs1 p1 = do
     let stylefp = toFilePath style1
     when True $ putIOwords ["readBiblioRefs-3-1"
             , "bibliofp", s2t bibliofp]
-    let refs2 = fromJustNote "refs in readBiblioRefs vcbnf refs2" refs1 :: Value
-    let refs3 = fromJSONValue refs2 -- :: Result [Reference]
-    let refs4 = fromJustNote "readBiblioRefs 08werwe refs4" refs3 :: [Reference]
+    let refs2 = fromMaybe Null  refs1  :: Value
+    let refs4 = fromMaybe [] $ fromJSONValue refs2  :: [Reference]
+    -- let refs4 = fromJustNote "readBiblioRefs 08werwe refs4" refs3 :: [Reference]
     biblio2 <- callIO $ Citeproc.readBiblioFile (const True) bibliofp
     -- seems to be requiring a full path 
     -- (long discussion https://github.com/jgm/pandoc/issues/5982 )
