@@ -18,43 +18,72 @@ import Data.List (intersperse)
 import qualified Data.Map as M
 -- import           System.Directory (setCurrentDirectory, getCurrentDirectory)
 
-import Text.BibTeX.Entry ()
-import Text.BibTeX.Entry as T
+-- import Text.BibTeX.Entry ()
+import Text.BibTeX.Entry as T ( T(fields, identifier) )
 import qualified Text.BibTeX.Entry as Entry
 -- import           Text.BibTeX.Parse
 import qualified Text.BibTeX.Parse as Parse
-import Text.CSL.Pandoc (processCites')
-import Text.CSL as Pars (Reference, readBiblioFile, readCSLFile)
-import Text.CSL.Pandoc as Bib (processCites)
+import Text.CSL as Citeproc
+    ( Reference, readBiblioFile, readCSLFile )  
+import Text.CSL.Pandoc as Bib (processCites, processCites')
 import qualified Text.Pandoc as P
 import qualified Text.Pandoc.Definition as PD
 import qualified Text.Parsec as Parsec
 -- import           Uniform.Error
 -- import           Uniform.FileIO
 import Uniform.PandocImports
+    ( Pandoc, getMeta, putMeta, fromJSONValue )
 import UniformBase
-import Uniform.Json 
+    ( when,
+      Text,
+      ErrIO,
+      Zeros(zero),
+      Path,
+      Abs,
+      File,
+      toFilePath,
+      fromJustNote,
+      callIO,
+      currentDir,
+      setCurrentDir,
+      s2t,
+      t2s,
+      putIOwords,
+      Dir )
+import Uniform.Json ( Value ) 
 
 readBiblioRefs ::  
   Bool
-  -> FilePath
-  -> Maybe Text
-  -> FilePath
-  -> Maybe Value
+  -> Path Abs File  -- ^ for biblio FilePath
+  -> Maybe Text  -- ^ locale - not used in citeproc-hs
+  -> Path Abs File -- ^ for csl FilePath   
+  -> Maybe Value -- ^ references in the md file
   -> Pandoc
   -> ErrIO Pandoc
-readBiblioRefs debugx bibliofp loc1 stylefp  refs1 p1 = do 
-    let refs2 = fromJustNote "refs in addRefs2 vcbnf refs2" refs1 :: Value
+  -- unpack the references in the pandoc value
+  -- call readBiblioFile from citeproc and put refs into metadata
+  -- the file path should be absolute path 
+readBiblioRefs debugx biblio1 loc1 style1  refs1 p1 = do 
+    let bibliofp = toFilePath biblio1
+    let stylefp = toFilePath style1
+    when True $ putIOwords ["readBiblioRefs-3-1"
+            , "bibliofp", s2t bibliofp]
+    let refs2 = fromJustNote "refs in readBiblioRefs vcbnf refs2" refs1 :: Value
     let refs3 = fromJSONValue refs2 -- :: Result [Reference]
-    let refs4 = fromJustNote "addRefs2 08werwe refs4" refs3 :: [Reference]
-    biblio2 <- callIO $ Pars.readBiblioFile (const True) bibliofp
-    when debugx $ putIOwords ["addRefs2-3-2", "done"]
-    style2 <- callIO $ Pars.readCSLFile loc1 stylefp
+    let refs4 = fromJustNote "readBiblioRefs 08werwe refs4" refs3 :: [Reference]
+    biblio2 <- callIO $ Citeproc.readBiblioFile (const True) bibliofp
+    -- seems to be requiring a full path 
+    -- (long discussion https://github.com/jgm/pandoc/issues/5982 )
+
+    when True $ putIOwords ["readBiblioRefs-3-2", "done"]
+    style2 <- callIO $ Citeproc.readCSLFile loc1 stylefp
+    -- citeproc will not allow loc1 but add the locale later with mergeLocale or similar 
     -- error with language (de_at, but de or en works)
-    when debugx $ putIOwords ["addRefs2-3-3", "done"]
+    when True $ putIOwords ["readBiblioRefs-3-3", "done"]
 
     let refsSum = refs4 ++ biblio2
     let p2 = processCites style2 refsSum p1
+    when True $ putIOwords ["readBiblioRefs-3-4", "done"]
 
     return p2 
 
@@ -86,6 +115,7 @@ readBiblioRefs debugx bibliofp loc1 stylefp  refs1 p1 = do
                            ]
                            [ Str "@frank09geo" ]
                        , Space
+
                        , Cite
                            [ Citation
                                { citationId = "Frank2010a"

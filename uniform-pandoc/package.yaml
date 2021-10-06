@@ -1,5 +1,5 @@
 name:         uniform-pandoc 
-version:      0.0.2.2
+version:      0.0.2.3
 license:      GPL
 license-file: GPL_3
 maintainer:   Andrew U. Frank <andrewufrank@gmail.com>
@@ -11,7 +11,10 @@ description: |
   remove particular aspects of abstraction 
   0.0.2.1 for cabal may 2021 8.10.4
   0.0.2.2 systematic bakeOneX2y function names
+  0.0.2.3 biblio-refs fixing, not yet change to citeproc-hs
+            currently fixed to old version of pandoc-types 
 
+# cabal-version:  1.12
 
 extra-source-files:
 - README.md
@@ -19,11 +22,12 @@ extra-source-files:
 
 dependencies:
 - base >= 4.7 && < 5
-- pandoc
-- pandoc-citeproc # replace later with citeproc
-- pandoc-types
+- pandoc >=0.3.10
+- pandoc-citeproc # replace later with 
+# - citeproc-hs >=0.3.10 -- but currently fixed to old version of pandoc-types 
+- pandoc-types  
 - bibtex
-- uniformBase
+- uniformBase ==0.1.2
 - uniform-json
 
 # - uniform-fileio

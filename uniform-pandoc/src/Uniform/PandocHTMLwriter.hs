@@ -64,7 +64,7 @@ applyTemplate4 debug t1 vals = do
     templ1 <- liftIO $ DocTemplates.compileTemplate mempty t1
     -- err1 :: Either String (Doc Text) <- liftIO $ DocTemplates.applyTemplate mempty (unwrap7 templText) (unDocValue val)
     let templ3 = case templ1 of
-            Left msg -> error msg
+            Left msg -> errorT ["applyTemplate4 error", showT msg]
             Right tmp2 -> tmp2
     when debug $ putIOwords ["applyTemplate3 temp2",  showT templ3]
     -- renderTemplate :: (TemplateTarget a, ToContext a b) => Template a -> b -> Doc a
