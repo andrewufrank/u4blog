@@ -5,7 +5,7 @@ license-file: GPL_3
 maintainer:   Andrew U. Frank <andrewufrank@gmail.com>
 author:       Andrew Frank
 copyright:    2021 Andrew U. Frank
-category:     Uniformhandling of   some pandoc stuff
+category:     Uniform handling of   some pandoc stuff
 synopsis:   handling of   some pandoc stuff   
 description: | 
   remove particular aspects of abstraction 
@@ -13,6 +13,7 @@ description: |
   0.0.2.2 systematic bakeOneX2y function names
   0.0.2.3 biblio-refs fixing, not yet change to citeproc-hs
             currently fixed to old version of pandoc-types 
+            processPDF.hs replaced with uniform-latex2pdf
 
 # cabal-version:  1.12
 

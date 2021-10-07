@@ -51,7 +51,7 @@ readBiblioRefs ::
 readBiblioRefs debugx biblio1 loc1 style1  refs1 p1 = do 
     let bibliofp = toFilePath biblio1
     let stylefp = toFilePath style1
-    when True $ putIOwords ["readBiblioRefs-3-1"
+    when debugx $ putIOwords ["readBiblioRefs-3-1"
             , "bibliofp", s2t bibliofp]
     let refs2 = fromMaybe Null  refs1  :: Value
     let refs4 = fromMaybe [] $ fromJSONValue refs2  :: [Reference]
@@ -60,15 +60,15 @@ readBiblioRefs debugx biblio1 loc1 style1  refs1 p1 = do
     -- seems to be requiring a full path 
     -- (long discussion https://github.com/jgm/pandoc/issues/5982 )
 
-    when True $ putIOwords ["readBiblioRefs-3-2", "done"]
+    when debugx $ putIOwords ["readBiblioRefs-3-2", "done"]
     style2 <- callIO $ Citeproc.readCSLFile loc1 stylefp
     -- citeproc will not allow loc1 but add the locale later with mergeLocale or similar 
     -- error with language (de_at, but de or en works)
-    when True $ putIOwords ["readBiblioRefs-3-3", "done"]
+    when debugx $ putIOwords ["readBiblioRefs-3-3", "done"]
 
     let refsSum = refs4 ++ biblio2
     let p2 = processCites style2 refsSum p1
-    when True $ putIOwords ["readBiblioRefs-3-4", "done"]
+    when debugx $ putIOwords ["readBiblioRefs-3-4", "done"]
 
     return p2 
 

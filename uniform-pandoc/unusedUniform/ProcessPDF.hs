@@ -152,15 +152,15 @@ writePDF2 :: Bool -> Path Abs File -> Path Abs File -> Path Abs Dir -> ErrIO ()
 writePDF2 debug fn fnres refDir = do
   -- -- check for locale
   -- loc <- callIO $ Sys.callProcess "locale" []
-  -- putIOwords ["writePDF2text locale "]
+  -- putIOwords ["writePDF2 locale "]
   -- ls <- callIO $ Sys.callProcess "ls" []
-  -- putIOwords ["writePDF2text ls "]
+  -- putIOwords ["writePDF2 ls "]
 
   -- process
 
   let infn = setExtension extTex fn :: Path Abs File
   putIOwords
-    [ "writePDF2text 1 infn",
+    [ "writePDF2 1 infn",
       showT infn,
       "\n\t fnres",
       showT fnres,
@@ -169,7 +169,7 @@ writePDF2 debug fn fnres refDir = do
     ]
   let dir1 = getParentDir fnres :: FilePath
   let out1 = "--output-directory=" <> dir1
-  putIOwords ["writePDF2text 2 out1", showT out1]
+  putIOwords ["writePDF2 2 out1", showT out1]
   callProcessWithCWD
     "lualatex"
     [out1, "-interaction=nonstopmode", toFilePath infn]
@@ -180,11 +180,12 @@ writePDF2 debug fn fnres refDir = do
   -- does not work to read pdf.
   -- the files written seem ok
   -- let resfn = setExtension extPDF  fn
-  -- putIOwords ["writePDF2text 4 pdf filename", showT resfn]
+  -- putIOwords ["writePDF2 4 pdf filename", showT resfn]
 
   -- resPDFtext :: pdfFileType <- read8 resfn pdfFileType
-  -- putIOwords ["writePDF2text lualatex result ok (otherwise error)"
-  --             , "pdf is", take' 300 . unwrap7 $ resPDFtext]
+  putIOwords ["writePDF2 lualatex result ok (otherwise error)"
+  --             , "pdf is", take' 300 . unwrap7 $ resPDFtext
+            ]
 
   return ()
 

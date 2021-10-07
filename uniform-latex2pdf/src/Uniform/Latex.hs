@@ -80,6 +80,7 @@ preamble1 =
     , "\\usepackage{graphicx}"
     , "\\usepackage{makeidx}"
     , "\\usepackage{natbib}"
+    , "\\usepackage{bookmark}"  -- to avoid the need for rerun lualatex
     , "\\makeindex"
     , "\\usepackage[colorlinks]{hyperref}"
     , "\\providecommand{\\tightlist}{%"
@@ -109,15 +110,15 @@ writePDF2 :: NoticeLevel -> Path Abs File -> Path Abs File -> Path Abs Dir -> Er
 writePDF2 debug fn fnres refDir = do
     -- -- check for locale
     -- loc <- callIO $ Sys.callProcess "locale" []
-    -- putIOwords ["writePDF2text locale "]
+    -- putIOwords ["writePDF2 locale "]
     -- ls <- callIO $ Sys.callProcess "ls" []
-    -- putIOwords ["writePDF2text ls "]
+    -- putIOwords ["writePDF2 ls "]
 
     -- process
 
     let infn = fn -- setExtension extTex fn :: Path Abs File
     when (inform debug) $ when (inform debug) $ putIOwords
-        [ "writePDF2text 1 infn"
+        [ "writePDF2 1 infn"
         , showT infn
         , "\n\t fnres"
         , showT fnres
@@ -126,22 +127,34 @@ writePDF2 debug fn fnres refDir = do
         ]
     let dir1 = getParentDir fnres :: FilePath
     let out1 = "--output-directory=" <> dir1
-    when (inform debug) $ putIOwords ["writePDF2text 2 out1", showT out1]
-    callProcessWithCWD
+    when (inform debug) $ putIOwords ["writePDF2 2 out1", showT out1]
+
+    exit_code <- callProcessWithCWD (not (inform debug))  -- silenced or not 
         "lualatex"
         [out1, "-interaction=nonstopmode", toFilePath infn]
         refDir
-    when (inform debug) $ putIOwords ["writePDF2text end"]
+
+    case exit_code of
+        Sys.ExitSuccess -> return ()
+        Sys.ExitFailure r -> do 
+                putIOwords ["callProcessWithCWD - failed" 
+                            , "show exit code", showT r
+                            , "\n\tif lualatex then check log file "
+                            , "\n\tfor output file", showT out1
+                            ]
+                -- fail . show $ r
+                return ()  -- lualatex does not deal with error information well - check log file 
+    when (informAll debug) $ putIOwords ["writePDF2 end for", showT out1]
     -- callIO $ Sys.callProcess "xelatex" [out1,  "-interaction=nonstopmode" , toFilePath infn]
     -- callIO $ Sys.callProcess "lualatex" [out1, toFilePath infn]
 
     -- does not work to read pdf.
     -- the files written seem ok
     -- let resfn = setExtension extPDF  fn
-    -- putIOwords ["writePDF2text 4 pdf filename", showT resfn]
+    -- putIOwords ["writePDF2 4 pdf filename", showT resfn]
 
     -- resPDFtext :: pdfFileType <- read8 resfn pdfFileType
-    -- putIOwords ["writePDF2text lualatex result ok (otherwise error)"
+    -- putIOwords ["writePDF2 lualatex result ok (otherwise error)"
     --             , "pdf is", take' 300 . unwrap7 $ resPDFtext]
 
     return ()
@@ -163,8 +176,10 @@ writePDF2 debug fn fnres refDir = do
 
  wrapped in silence to avoid output on std out
 -}
-callProcessWithCWD :: FilePath -> [String] -> Path Abs Dir -> ErrIO ()
-callProcessWithCWD cmd args cwd1 = callIO . silence $ do
+callProcessWithCWD :: Bool ->  FilePath -> [String] -> Path Abs Dir -> ErrIO Sys.ExitCode
+-- | call a process silenced 
+callProcessWithCWD silenced cmd args cwd1 = callIO 
+        . (if silenced then (silence) else (id)) $ do -- . silence $ do
     exit_code <-
         Sys.withCreateProcess -- "callProcess"
             (Sys.proc cmd args)
@@ -173,9 +188,16 @@ callProcessWithCWD cmd args cwd1 = callIO . silence $ do
                 }
             $ \_ _ _ p ->
                 Sys.waitForProcess p
-    case exit_code of
-        Sys.ExitSuccess -> return ()
-        Sys.ExitFailure r -> fail . show $ r
+    return exit_code 
+
+    -- case exit_code of
+    --     Sys.ExitSuccess -> return ()
+    --     Sys.ExitFailure r -> do 
+    --             putIOwords ["callProcessWithCWD - failed" 
+    --                         , "show r", showT r
+    --                         , "if lualatex then check log file "
+    --                         ]
+    --             fail . show $ r
 
 -- processFailedException :: String -> String -> [String] -> Int -> IO a
 -- processFailedException fun cmd args exit_code =
