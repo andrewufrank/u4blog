@@ -18,7 +18,7 @@
 --                 Pandrep -> HTML
 -- Each result is written as a typed file with a specific extension
 module Uniform.Filetypes4sites
-  ( module Uniform.Filetypes4sites,
+  ( module DO NOT USE Uniform.Filetypes4sites,
   )
 where
 

@@ -31,14 +31,16 @@ import Data.Aeson.Types
 
 
 data LatexParam = LatexParam
-    { latTitle :: Maybe Text
+-- | the fields from the yaml date passed to latex-pdf
+    { latTitle :: Maybe Text  
     , latAbstract :: Maybe Text
     , latBibliography :: Maybe Text
     , latStyle :: Maybe Text
+    , latContent :: Maybe Text -- ^ a list of the .md files which are collected into a multi-md pdf
     }
     deriving (Eq, Ord, Read, Show, Generic)
 
-instance Zeros LatexParam where zero = LatexParam zero zero zero zero
+instance Zeros LatexParam where zero = LatexParam zero zero zero zero zero
 
 instance FromJSON LatexParam where
   parseJSON = genericParseJSON defaultOptions {
@@ -55,14 +57,15 @@ instance ToJSON LatexParam where
 -- TODO create a default/minimal preamble 
 -- and add preamble as parameter
 
-tex2latex :: LatexParam -> [Text] -> Text
+tex2latex :: LatexParam ->  Text -> Text
 {- ^ combine a snipped (produced from an md file) with a preamble to
  produce a compilable latex file.
  references are processed earlier (in  panrep)
+ keps the metadata
 -}
 tex2latex latpar snips = concat'
         $ [ unlines' preamble1
-          , concat' snips -- (map unTexSnip snips)
+          , snips -- concat' snips -- (map unTexSnip snips)
           , unlines' $
                 if isZero latpar
                     then [""]
