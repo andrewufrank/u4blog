@@ -26,13 +26,23 @@ import System.IO.Silently (silence)
 import Uniform.Json
 import UniformBase
 
+import Data.Aeson
+import Data.Aeson.Types
+
+
 data LatexParam = LatexParam
-    { latBibliography :: Maybe Text
+    { latTitle :: Maybe Text
+    , latAbstract :: Maybe Text
+    , latBibliography :: Maybe Text
     , latStyle :: Maybe Text
     }
     deriving (Eq, Ord, Read, Show, Generic)
 
-instance Zeros LatexParam where zero = LatexParam zero zero
+instance Zeros LatexParam where zero = LatexParam zero zero zero zero
+
+instance FromJSON LatexParam where
+  parseJSON = genericParseJSON defaultOptions {
+                fieldLabelModifier =  toLower' . drop 3 }
 
 doclatexOptions =
     defaultOptions
@@ -41,9 +51,6 @@ doclatexOptions =
 
 instance ToJSON LatexParam where
     toJSON = genericToJSON doclatexOptions
-
-instance FromJSON LatexParam where
-    parseJSON = genericParseJSON doclatexOptions
 
 -- TODO create a default/minimal preamble 
 -- and add preamble as parameter
@@ -145,6 +152,7 @@ writePDF2 debug fn fnres refDir = do
                 -- fail . show $ r
                 return ()  -- lualatex does not deal with error information well - check log file 
     when (informAll debug) $ putIOwords ["writePDF2 end for", showT out1]
+
     -- callIO $ Sys.callProcess "xelatex" [out1,  "-interaction=nonstopmode" , toFilePath infn]
     -- callIO $ Sys.callProcess "lualatex" [out1, toFilePath infn]
 
@@ -190,36 +198,3 @@ callProcessWithCWD silenced cmd args cwd1 = callIO
                 Sys.waitForProcess p
     return exit_code 
 
-    -- case exit_code of
-    --     Sys.ExitSuccess -> return ()
-    --     Sys.ExitFailure r -> do 
-    --             putIOwords ["callProcessWithCWD - failed" 
-    --                         , "show r", showT r
-    --                         , "if lualatex then check log file "
-    --                         ]
-    --             fail . show $ r
-
--- processFailedException :: String -> String -> [String] -> Int -> IO a
--- processFailedException fun cmd args exit_code =
---       ioError (mkIOError OtherError (fun ++ ": " ++ cmd ++
---                                      concatMap ((' ':) . show) args ++
---                                      " (exit " ++ show exit_code ++ ")")
---                                  Nothing Nothing)
-
--- -- wrapper so we can get exceptions with the appropriate function name.
--- withCreateProcess_
---   :: String
---   -> CreateProcess
---   -> (Maybe Handle -> Maybe Handle -> Maybe Handle -> ProcessHandle -> IO a)
---   -> IO a
--- withCreateProcess_ fun c action =
---     C.bracketOnError (createProcess_ fun c) cleanupProcess
---                      (\(m_in, m_out, m_err, ph) -> action m_in m_out m_err ph)
-
--- withCreateProcess
---   :: CreateProcess
---   -> (Maybe Handle -> Maybe Handle -> Maybe Handle -> ProcessHandle -> IO a)
---   -> IO a
--- withCreateProcess c action =
---     C.bracket (createProcess c) cleanupProcess
---               (\(m_in, m_out, m_err, ph) -> action m_in m_out m_err ph)

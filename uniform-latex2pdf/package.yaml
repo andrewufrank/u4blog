@@ -29,6 +29,7 @@ dependencies:
 - uniform-json
 - process
 - silently
+- aeson  # for generic read 
 
 library:
   source-dirs: src

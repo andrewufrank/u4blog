@@ -30,7 +30,8 @@ library
   hs-source-dirs:
       src
   build-depends:
-      base
+      aeson
+    , base
     , process
     , silently
     , uniform-json
@@ -47,6 +48,7 @@ test-suite webserver-test
       tests
   build-depends:
       HTF
+    , aeson
     , base
     , process
     , quickcheck-text
