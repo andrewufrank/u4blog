@@ -35,7 +35,8 @@ data LatexParam = LatexParam
     { latTitle ::  Text  
     , latAuthor :: Text 
     , latAbstract ::  Text
-    , latBibliography :: Maybe Text
+    , latBibliographyP :: Maybe (Path Abs File)  -- the bibliio file 
+            -- problem with multiple files? 
     , latStyle :: Maybe Text
     , latContent :: [Text] -- ^ a list of the .md files which are collected into a multi-md pdf
     }
@@ -69,12 +70,15 @@ tex2latex latpar snips = concat'
         $ [ unlines' (preamble1 latpar)
           , snips -- concat' snips -- (map unTexSnip snips)
           , unlines' $
-                if isZero (latBibliography latpar)
+                if isNothing (latBibliographyP latpar)
                     then [""]
                     else
                         makebiblio
                             (fromJustNote "tex2latex 2wrqwe" $ latStyle latpar)
-                            (fromJustNote "tex2latex 00wr" $ latBibliography latpar)
+                            (case (latBibliographyP  latpar) of 
+                                    Nothing -> error "tex2latex dwerdd00"
+                                    Just a -> s2t . toFilePath $ a 
+                            )
           , unlines' postamble1
           ]
 
@@ -93,6 +97,8 @@ preamble1 latpar =
     , "\\usepackage{graphicx}"
     , "\\usepackage{makeidx}"
     , "\\usepackage{natbib}"
+    , "\\newenvironment{abstract}{}{}"
+    , "\\usepackage{abstract}" -- not necessary
     , "\\makeindex"
     , "\\usepackage[colorlinks]{hyperref}"
     , "\\usepackage{bookmark}"  -- to avoid the need for rerun lualatex, must be loaded after hyperref
@@ -108,25 +114,27 @@ preamble1 latpar =
     , ""
     , "\\maketitle"
 	, "\\begin{abstract}" <> latAbstract latpar <> "\\end{abstract}"
+    , "\\bigskip" -- a blank line after the abstract
     , ""
     ] ::
         [Text]
 
 postamble1 = ["", "", "\\printindex", "\\end{document}"] :: [Text]
 
-makebiblio style biblio =
+makebiblio :: Text -> Text -> [Text] 
+makebiblio _ biblio =
     [ ""
     , ""
     , "\\bibliographystyle{plainnat}"
     , ""
-    , "\\bibliography{" <> biblio <> "}"
+    , "\\bibliography{" <>  biblio <> "}"
     , ""
-    ]
+    ]  
 
 writePDF2 :: NoticeLevel -> Path Abs File -> Path Abs File -> Path Abs Dir -> ErrIO ()
 -- convert the text in the file given (a full latex, exetnsion "tex") into a pdf
 -- in the second path
--- set the current working directory (which must be the directory
+-- refDir is the current working directory (which must be the directory
 -- from which images etc. are searched for )
 writePDF2 debug fn fnres refDir = do
     -- -- check for locale
@@ -138,12 +146,12 @@ writePDF2 debug fn fnres refDir = do
     -- process
 
     let infn = fn -- setExtension extTex fn :: Path Abs File
-    when (inform debug) $ when (inform debug) $ putIOwords
+    when (informAll debug) $ when (inform debug) $ putIOwords
         [ "writePDF2 1 infn"
         , showT infn
         , "\n\t fnres"
         , showT fnres
-        , "\n\t refDir"
+        , "\n\t refDir (will be current working dir but seem not to work)"
         , showT refDir
         ]
     let dir1 = getParentDir fnres :: FilePath
