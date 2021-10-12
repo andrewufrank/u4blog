@@ -32,11 +32,11 @@ import Data.Aeson.Types
 
 data LatexParam = LatexParam
 -- | the fields from the yaml date passed to latex-pdf
-    { latTitle :: Maybe Text  
-    , latAbstract :: Maybe Text
+    { latTitle ::  Text  
+    , latAbstract ::  Text
     , latBibliography :: Maybe Text
     , latStyle :: Maybe Text
-    , latContent :: Maybe Text -- ^ a list of the .md files which are collected into a multi-md pdf
+    , latContent :: [Text] -- ^ a list of the .md files which are collected into a multi-md pdf
     }
     deriving (Eq, Ord, Read, Show, Generic)
 
@@ -67,7 +67,7 @@ tex2latex latpar snips = concat'
         $ [ unlines' preamble1
           , snips -- concat' snips -- (map unTexSnip snips)
           , unlines' $
-                if isZero latpar
+                if isZero (latBibliography latpar)
                     then [""]
                     else
                         makebiblio
@@ -90,9 +90,9 @@ preamble1 =
     , "\\usepackage{graphicx}"
     , "\\usepackage{makeidx}"
     , "\\usepackage{natbib}"
-    , "\\usepackage{bookmark}"  -- to avoid the need for rerun lualatex
     , "\\makeindex"
     , "\\usepackage[colorlinks]{hyperref}"
+    , "\\usepackage{bookmark}"  -- to avoid the need for rerun lualatex, must be loaded after hyperref
     , "\\providecommand{\\tightlist}{%"
     , "\\setlength{\\itemsep}{0pt}\\setlength{\\parskip}{0pt}}"
     , ""
