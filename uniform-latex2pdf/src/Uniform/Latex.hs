@@ -33,6 +33,7 @@ import Data.Aeson.Types
 data LatexParam = LatexParam
 -- | the fields from the yaml date passed to latex-pdf
     { latTitle ::  Text  
+    , latAuthor :: Text 
     , latAbstract ::  Text
     , latBibliography :: Maybe Text
     , latStyle :: Maybe Text
@@ -40,7 +41,8 @@ data LatexParam = LatexParam
     }
     deriving (Eq, Ord, Read, Show, Generic)
 
-instance Zeros LatexParam where zero = LatexParam zero zero zero zero zero
+instance Zeros LatexParam where 
+    zero = LatexParam zero zero zero zero zero zero
 
 instance FromJSON LatexParam where
   parseJSON = genericParseJSON defaultOptions {
@@ -64,7 +66,7 @@ tex2latex :: LatexParam ->  Text -> Text
  keps the metadata
 -}
 tex2latex latpar snips = concat'
-        $ [ unlines' preamble1
+        $ [ unlines' (preamble1 latpar)
           , snips -- concat' snips -- (map unTexSnip snips)
           , unlines' $
                 if isZero (latBibliography latpar)
@@ -78,10 +80,11 @@ tex2latex latpar snips = concat'
 
 -- todo  - macche einen file
 
-preamble1 :: [Text]
-preamble1 =
+preamble1 :: LatexParam -> [Text]
+preamble1 latpar =
     [ -- "%%% eval: (setenv \"LANG\" \"de_CH.utf8\")",
-      "\\documentclass[a4paper,10pt]{scrbook}"
+      "\\documentclass[a4paper,10pt,notitlepage]{scrbook}"
+      -- notitlepage makes title and abstract and text on same page
     , "\\usepackage{fontspec}"
     , -- "\\setsansfont{CMU Sans Serif}%{Arial}",  -- not for xetex
       -- "\\setmainfont{CMU Serif}%{Times New Roman}",
@@ -96,7 +99,15 @@ preamble1 =
     , "\\providecommand{\\tightlist}{%"
     , "\\setlength{\\itemsep}{0pt}\\setlength{\\parskip}{0pt}}"
     , ""
+    ,	"\\title{"<> latTitle latpar <> "}"
+    ,   "\\author{" <> latAuthor latpar <> "}"
+    -- does this produce nothing if the author field is empty? TODO
+    ,   "\\date{}"  -- no date
+    , ""
     , "\\begin{document}"
+    , ""
+    , "\\maketitle"
+	, "\\begin{abstract}" <> latAbstract latpar <> "\\end{abstract}"
     , ""
     ] ::
         [Text]
@@ -139,7 +150,7 @@ writePDF2 debug fn fnres refDir = do
     let out1 = "--output-directory=" <> dir1
     when (inform debug) $ putIOwords ["writePDF2 2 out1", showT out1]
 
-    exit_code <- callProcessWithCWD (not (inform debug))  -- silenced or not 
+    exit_code <- callProcessWithCWD True -- (not (inform debug))  -- silenced or not 
         "lualatex"
         [out1, "-interaction=nonstopmode", toFilePath infn]
         refDir
