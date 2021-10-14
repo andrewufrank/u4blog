@@ -67,25 +67,27 @@ tex2latex :: LatexParam ->  Text -> Text
  keps the metadata
 -}
 tex2latex latpar snips = concat'
-        $ [ unlines' (preamble1 latpar)
+        $ [ unlines' (preamble1 
+                (maybe ""  (s2t . toFilePath) $ latBibliographyP latpar)latpar)
           , snips -- concat' snips -- (map unTexSnip snips)
           , unlines' $
-                if isNothing (latBibliographyP latpar)
-                    then [""]
-                    else
-                        makebiblio
-                            (fromJustNote "tex2latex 2wrqwe" $ latStyle latpar)
-                            (case (latBibliographyP  latpar) of 
-                                    Nothing -> error "tex2latex dwerdd00"
-                                    Just a -> s2t . toFilePath $ a 
-                            )
+                -- if isNothing (latBibliographyP latpar)
+                --     then [""]
+                --     else
+                makebiblio 
+                    
+                            -- (fromJustNote "tex2latex 2wrqwe" $ latStyle latpar)
+                            -- (case (latBibliographyP  latpar) of 
+                            --         Nothing -> error "tex2latex dwerdd00"
+                            --         Just a -> s2t . toFilePath $ a 
+                            -- )
           , unlines' postamble1
           ]
 
 -- todo  - macche einen file
 
-preamble1 :: LatexParam -> [Text]
-preamble1 latpar =
+preamble1 :: Text -> LatexParam -> [Text]
+preamble1 biblio latpar =
     [ -- "%%% eval: (setenv \"LANG\" \"de_CH.utf8\")",
       "\\documentclass[a4paper,10pt,notitlepage]{scrbook}"
       -- notitlepage makes title and abstract and text on same page
@@ -96,7 +98,15 @@ preamble1 latpar =
       "\\usepackage[ngerman]{babel}"
     , "\\usepackage{graphicx}"
     , "\\usepackage{makeidx}"
-    , "\\usepackage{natbib}"
+    -- , "\\usepackage{natbib}"
+    , "\\usepackage[backend=biber," --  %% Hilfsprogramm "biber" (statt "biblatex" oder "bibtex")
+    ,   "style=authoryear," -- %% Zitierstil (siehe Dokumentation)
+    ,   "natbib=true," --  %% Bereitstellen von natbib-kompatiblen Zitierkommandos
+    ,   "hyperref=true," -- %% hyperref-Paket verwenden, um Links zu erstellen
+    ,   "]{biblatex}"
+    , "\\addbibresource{" <>  biblio <> "}"
+    -- , "\\addbibresource{/home/frank/Workspace11/ssg/docs/site/dough/resources/BibTexLatex.bib}"
+    
     , "\\newenvironment{abstract}{}{}"
     , "\\usepackage{abstract}" -- not necessary
     , "\\makeindex"
@@ -121,13 +131,13 @@ preamble1 latpar =
 
 postamble1 = ["", "", "\\printindex", "\\end{document}"] :: [Text]
 
-makebiblio :: Text -> Text -> [Text] 
-makebiblio _ biblio =
+makebiblio ::   [Text] 
+makebiblio  =
     [ ""
     , ""
-    , "\\bibliographystyle{plainnat}"
-    , ""
-    , "\\bibliography{" <>  biblio <> "}"
+    -- , "\\bibliographystyle{plainnat}"
+    , "\\printbibliography"
+    -- , "\\bibliography{" <>  biblio <> "}"
     , ""
     ]  
 
@@ -145,7 +155,7 @@ writePDF2 debug fn fnres refDir = do
 
     -- process
 
-    let infn = fn -- setExtension extTex fn :: Path Abs File
+    let infn =   getNakedFileName $ fn :: FilePath -- setExtension extTex fn :: Path Abs File
     when (informAll debug) $ when (inform debug) $ putIOwords
         [ "writePDF2 1 infn"
         , showT infn
@@ -154,26 +164,41 @@ writePDF2 debug fn fnres refDir = do
         , "\n\t refDir (will be current working dir but seem not to work)"
         , showT refDir
         ]
-    let dir1 = getParentDir fnres :: FilePath
+    let dir1 = getParentDir fnres :: FilePath 
     let out1 = "--output-directory=" <> dir1
     when (inform debug) $ putIOwords ["writePDF2 2 out1", showT out1]
 
-    exit_code <- callProcessWithCWD True -- (not (inform debug))  -- silenced or not 
+    exit_code1 <- callProcessWithCWD True -- (not (inform debug))  -- silenced or not 
         "lualatex"
-        [out1, "-interaction=nonstopmode", toFilePath infn]
+        [out1, "-interaction=nonstopmode",  infn]
         refDir
+    exitHandling exit_code1 infn
 
+    exit_code2 <- callProcessWithCWD True -- (not (inform debug))  -- silenced or not 
+        "biber"
+        [ infn]
+        refDir
+    exitHandling exit_code2 infn
+
+    exit_code3 <- callProcessWithCWD True -- (not (inform debug))  -- silenced or not 
+        "lualatex"
+        [out1, "-interaction=nonstopmode",  infn]
+        refDir
+    exitHandling exit_code3 infn 
+
+    when (informAll debug) $ putIOwords ["writePDF2 end for", showT out1]
+
+exitHandling exit_code filename = do
     case exit_code of
         Sys.ExitSuccess -> return ()
         Sys.ExitFailure r -> do 
                 putIOwords ["callProcessWithCWD - failed" 
                             , "show exit code", showT r
                             , "\n\tif lualatex then check log file "
-                            , "\n\tfor output file", showT out1
+                            , "\n\tfor output file", showT filename
                             ]
                 -- fail . show $ r
                 return ()  -- lualatex does not deal with error information well - check log file 
-    when (informAll debug) $ putIOwords ["writePDF2 end for", showT out1]
 
     -- callIO $ Sys.callProcess "xelatex" [out1,  "-interaction=nonstopmode" , toFilePath infn]
     -- callIO $ Sys.callProcess "lualatex" [out1, toFilePath infn]
@@ -212,7 +237,7 @@ callProcessWithCWD silenced cmd args cwd1 = callIO
         . (if silenced then (silence) else (id)) $ do -- . silence $ do
     exit_code <-
         Sys.withCreateProcess -- "callProcess"
-            (Sys.proc cmd args)
+            (Sys.proc cmd   args)
                 { Sys.delegate_ctlc = True
                 , Sys.cwd = Just . toFilePath $ cwd1
                 }

@@ -1,0 +1,49 @@
+\documentclass[a4paper,10pt,notitlepage]{scrbook}
+\usepackage{fontspec}
+\usepackage[ngerman]{babel}
+\usepackage{graphicx}
+\usepackage{makeidx}
+%\usepackage{natbib}
+\usepackage[backend=biber, %% Hilfsprogramm "biber" (statt "biblatex" oder "bibtex")
+style=authoryear, %% Zitierstil (siehe Dokumentation)
+natbib=true, %% Bereitstellen von natbib-kompatiblen Zitierkommandos
+hyperref=true, %% hyperref-Paket verwenden, um Links zu erstellen
+]{biblatex}
+\addbibresource{/home/frank/Workspace11/ssg/docs/site/dough/resources/BibTexLatex.bib}
+
+%
+
+%add
+\newenvironment{abstract}{}{}
+\usepackage{abstract}
+%
+\makeindex
+\usepackage[colorlinks]{hyperref}
+\usepackage{bookmark}
+\providecommand{\tightlist}{%
+\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+\title{05withRefnoStyle blog}
+\author{AUF}
+\date{}
+
+\begin{document}
+
+\maketitle
+\begin{abstract}02withRef abstract What are the objects of ontologists .\end{abstract}
+
+02withRef but no style text -
+
+The\citep{frank09geo} and\citep{frank-machbarkeit} are just refs.
+
+The references are in "resources/BibTexLatex.bib". The default style is
+/home/frank/Desktop/myHomepage/resources/chicago-fullnote-bibliography-bb.csl
+
+%\bibliographystyle{plainnat}
+%\bibliography{resources/BibTexLatex.bib}
+	\printbibliography	
+
+
+
+\printindex
+\end{document}
