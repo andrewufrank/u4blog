@@ -35,15 +35,17 @@ data LatexParam = LatexParam
     { latTitle ::  Text  
     , latAuthor :: Text 
     , latAbstract ::  Text
-    , latBibliographyP :: Maybe (Path Abs File)  -- the bibliio file 
+    , latBibliographyP :: Text  -- the bibliio file 
             -- problem with multiple files? 
-    , latStyle :: Maybe Text
+    , latStyle :: Text
+            -- is not used 
+    , latBook :: Bool  -- is this a long text for a book/booklet
     , latContent :: [Text] -- ^ a list of the .md files which are collected into a multi-md pdf
     }
     deriving (Eq, Ord, Read, Show, Generic)
 
 instance Zeros LatexParam where 
-    zero = LatexParam zero zero zero zero zero zero
+    zero = LatexParam zero zero zero zero zero zero zero
 
 instance FromJSON LatexParam where
   parseJSON = genericParseJSON defaultOptions {
@@ -67,8 +69,12 @@ tex2latex :: LatexParam ->  Text -> Text
  keps the metadata
 -}
 tex2latex latpar snips = concat'
-        $ [ unlines' (preamble1 
-                (maybe ""  (s2t . toFilePath) $ latBibliographyP latpar)latpar)
+        $ [ unlines' 
+                (preamble1 
+                    -- (maybe ""  (s2t . toFilePath) $ latBibliographyP latpar)
+                    -- (maybe "authoryear" id (latStyle latpar))
+                    latpar
+                )
           , snips -- concat' snips -- (map unTexSnip snips)
           , unlines' $
                 -- if isNothing (latBibliographyP latpar)
@@ -84,10 +90,15 @@ tex2latex latpar snips = concat'
           , unlines' postamble1
           ]
 
+--   where 
+--     latpar2 = latpar{
+--             latBibliographyP = maybe ""  (s2t . toFilePath) $ latBibliographyP latpar,
+--             latStyle = maybe "authoryear" id $ latStyle latpar
+--             }
 -- todo  - macche einen file
 
-preamble1 :: Text -> LatexParam -> [Text]
-preamble1 biblio latpar =
+preamble1 ::   LatexParam -> [Text]
+preamble1   latpar =
     [ -- "%%% eval: (setenv \"LANG\" \"de_CH.utf8\")",
     --   "\\documentclass[a4paper,10pt,notitlepage]{scrbook}"
       "\\documentclass[a4paper,10pt,notitlepage]{scrartcl}"
@@ -101,11 +112,11 @@ preamble1 biblio latpar =
     , "\\usepackage{makeidx}"
     -- , "\\usepackage{natbib}"
     , "\\usepackage[backend=biber," --  %% Hilfsprogramm "biber" (statt "biblatex" oder "bibtex")
-    ,   "style=authoryear," -- %% Zitierstil (siehe Dokumentation)
+    ,   "style=" <> latStyle latpar <> "," -- %% Zitierstil (siehe Dokumentation)
     ,   "natbib=true," --  %% Bereitstellen von natbib-kompatiblen Zitierkommandos
     ,   "hyperref=true," -- %% hyperref-Paket verwenden, um Links zu erstellen
     ,   "]{biblatex}"
-    , "\\addbibresource{" <>  biblio <> "}"
+    , "\\addbibresource{" <>  latBibliographyP latpar <> "}"
     -- , "\\addbibresource{/home/frank/Workspace11/ssg/docs/site/dough/resources/BibTexLatex.bib}"
     
     , "\\newenvironment{abstract}{}{}"
