@@ -89,7 +89,8 @@ tex2latex latpar snips = concat'
 preamble1 :: Text -> LatexParam -> [Text]
 preamble1 biblio latpar =
     [ -- "%%% eval: (setenv \"LANG\" \"de_CH.utf8\")",
-      "\\documentclass[a4paper,10pt,notitlepage]{scrbook}"
+    --   "\\documentclass[a4paper,10pt,notitlepage]{scrbook}"
+      "\\documentclass[a4paper,10pt,notitlepage]{scrartcl}"
       -- notitlepage makes title and abstract and text on same page
     , "\\usepackage{fontspec}"
     , -- "\\setsansfont{CMU Sans Serif}%{Arial}",  -- not for xetex
@@ -145,7 +146,8 @@ writePDF2 :: NoticeLevel -> Path Abs File -> Path Abs File -> Path Abs Dir -> Er
 -- convert the text in the file given (a full latex, exetnsion "tex") into a pdf
 -- in the second path
 -- refDir is the current working directory (which must be the directory
--- from which images etc. are searched for )
+-- where the intermediate files are produced
+--  likely wrong: from which images etc. are searched for )
 writePDF2 debug fn fnres refDir = do
     -- -- check for locale
     -- loc <- callIO $ Sys.callProcess "locale" []
@@ -194,7 +196,8 @@ exitHandling exit_code filename = do
         Sys.ExitFailure r -> do 
                 putIOwords ["callProcessWithCWD - failed" 
                             , "show exit code", showT r
-                            , "\n\tif lualatex then check log file "
+                            , "\n\tif lualatex: 1 is normal, check log file "
+                            , "\n\tif biber: 2 is normal, check blg file "
                             , "\n\tfor output file", showT filename
                             ]
                 -- fail . show $ r
@@ -233,6 +236,8 @@ exitHandling exit_code filename = do
 -}
 callProcessWithCWD :: Bool ->  FilePath -> [String] -> Path Abs Dir -> ErrIO Sys.ExitCode
 -- | call a process silenced 
+-- cwd1 is the curren working dir (where the intermediate files are
+-- but seems not to be the place where biblio is searched for
 callProcessWithCWD silenced cmd args cwd1 = callIO 
         . (if silenced then (silence) else (id)) $ do -- . silence $ do
     exit_code <-
