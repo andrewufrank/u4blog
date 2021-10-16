@@ -39,13 +39,14 @@ data LatexParam = LatexParam
             -- problem with multiple files? 
     , latStyle :: Text
             -- is not used 
+    , latReferences :: Text 
     , latBook :: Bool  -- is this a long text for a book/booklet
     , latContent :: [Text] -- ^ a list of the .md files which are collected into a multi-md pdf
     }
     deriving (Eq, Ord, Read, Show, Generic)
 
 instance Zeros LatexParam where 
-    zero = LatexParam zero zero zero zero zero zero zero
+    zero = LatexParam zero zero zero zero zero zero zero zero
 
 instance FromJSON LatexParam where
   parseJSON = genericParseJSON defaultOptions {
@@ -116,7 +117,7 @@ preamble1   latpar =
     ,   "natbib=true," --  %% Bereitstellen von natbib-kompatiblen Zitierkommandos
     ,   "hyperref=true," -- %% hyperref-Paket verwenden, um Links zu erstellen
     ,   "]{biblatex}"
-    , "\\addbibresource{" <>  latBibliographyP latpar <> "}"
+    , "\\addbibresource{" <>  latBibliographyP latpar <> ", jobname.bib}"
     -- , "\\addbibresource{/home/frank/Workspace11/ssg/docs/site/dough/resources/BibTexLatex.bib}"
     
     , "\\newenvironment{abstract}{}{}"
@@ -133,6 +134,11 @@ preamble1   latpar =
     ,   "\\date{}"  -- no date
     , ""
     , "\\begin{document}"
+    , ""
+    , "\\usepackage{filecontents}"
+    ,       "\\begin{filecontents}{\\jobname.bib}"
+    ,       latReferences latpar
+    ,       "\\end{filecontents}"
     , ""
     , "\\maketitle"
 	, "\\begin{abstract}" <> latAbstract latpar <> "\\end{abstract}"
