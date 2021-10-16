@@ -39,7 +39,7 @@ data LatexParam = LatexParam
             -- problem with multiple files? 
     , latStyle :: Text
             -- is not used 
-    , latReferences :: Text 
+    , latReferences :: Text  -- ^ used only for citeproc to produce html, not for biblatex to produce pdf 
     , latBook :: Bool  -- is this a long text for a book/booklet
     , latContent :: [Text] -- ^ a list of the .md files which are collected into a multi-md pdf
     }
@@ -117,7 +117,8 @@ preamble1   latpar =
     ,   "natbib=true," --  %% Bereitstellen von natbib-kompatiblen Zitierkommandos
     ,   "hyperref=true," -- %% hyperref-Paket verwenden, um Links zu erstellen
     ,   "]{biblatex}"
-    , "\\addbibresource{" <>  latBibliographyP latpar <> ", jobname.bib}"
+    , "\\addbibresource{" <>  latBibliographyP latpar <> "}"
+                    -- <> ", jobname.bib
     -- , "\\addbibresource{/home/frank/Workspace11/ssg/docs/site/dough/resources/BibTexLatex.bib}"
     
     , "\\newenvironment{abstract}{}{}"
@@ -135,11 +136,11 @@ preamble1   latpar =
     , ""
     , "\\begin{document}"
     , ""
-    , "\\usepackage{filecontents}"
-    ,       "\\begin{filecontents}{\\jobname.bib}"
-    ,       latReferences latpar
-    ,       "\\end{filecontents}"
-    , ""
+    -- , "\\usepackage{filecontents}"
+    -- ,       "\\begin{filecontents}{\\jobname.bib}"
+    -- ,       latReferences latpar
+    -- ,       "\\end{filecontents}"
+    -- , ""
     , "\\maketitle"
 	, "\\begin{abstract}" <> latAbstract latpar <> "\\end{abstract}"
     , "\\bigskip" -- a blank line after the abstract
