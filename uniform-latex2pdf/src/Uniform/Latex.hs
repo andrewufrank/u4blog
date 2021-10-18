@@ -121,8 +121,9 @@ preamble1   latpar =
                     -- <> ", jobname.bib
     -- , "\\addbibresource{/home/frank/Workspace11/ssg/docs/site/dough/resources/BibTexLatex.bib}"
     
-    , "\\newenvironment{abstract}{}{}"
-    , "\\usepackage{abstract}" -- not necessary
+    -- , "\\newenvironment{abstract}{}{}" -- is this necessary
+
+    -- , "\\usepackage{abstract}" -- not necessary
     , "\\makeindex"
     , "\\usepackage[colorlinks]{hyperref}"
     , "\\usepackage{bookmark}"  -- to avoid the need for rerun lualatex, must be loaded after hyperref
