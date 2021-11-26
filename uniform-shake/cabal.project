@@ -3,6 +3,7 @@ packages:
  
     ../../uBase/uniformBase/*.cabal
     ../../uBase/uniform-strings/*.cabal
+    ../../uBase/uniform-fileio/*.cabal
 
 -- /home/frank/Workspace11/uBase/uniformBase/uniformBase.cabal
     ../../u4blog/uniform-json/*.cabal

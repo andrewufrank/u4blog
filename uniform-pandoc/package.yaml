@@ -28,7 +28,7 @@ dependencies:
 # - citeproc-hs >=0.3.10 -- but currently fixed to old version of pandoc-types 
 - pandoc-types  
 - bibtex
-- uniformBase ==0.1.2
+- uniformBase ==0.1.3
 - uniform-json
 
 # - uniform-fileio

@@ -25,25 +25,25 @@ extra-source-files:
 dependencies:
 -  base
 - shake
-- uniformBase
+- uniformBase ==0.1.3
 - uniform-json
 
 library:
   source-dirs: .
 
 
-tests:
-  webserver-test:
-    main:                Testing.hs
-    source-dirs:         tests
-    dependencies:
-    # - uniform-algebras
-    - HTF
-    - quickcheck-text
-    # - uniform-strings
-    # - uniform-http
-    - uniformBase
-    - uniform-shake
+# tests:
+#   webserver-test:
+#     main:                Testing.hs
+#     source-dirs:         tests
+#     dependencies:
+#     # - uniform-algebras
+#     - HTF
+#     - quickcheck-text
+#     # - uniform-strings
+#     # - uniform-http
+#     - uniformBase ==0.1.3
+#     - uniform-shake
 
 #     exposed-modules:
 #             Uniform.Http
