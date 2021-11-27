@@ -1,0 +1,44 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.34.5.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 9d576d434a81d946e9edda8a0f2fcd49f5fbfcb50177cd5aaf881c6e890dc60a
+
+name:           uniform-json
+version:        0.0.4
+synopsis:       handling of JSON and YAML in an uniform way
+description:    remove particular aspects of abstraction in json and yaml - with an eye to use it with pandoc
+                v0.0.4 for aeson >2.0
+category:       Data Text JSON YAML Pandoc
+author:         Andrew Frank
+maintainer:     Andrew U. Frank <frank@geoinfo.tuwien.ac.at>
+copyright:      2021 Andrew U. Frank
+license:        GPL
+license-file:   GPL_3
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
+
+library
+  exposed-modules:
+      Uniform.Json
+      Uniform.Yaml
+  other-modules:
+      Paths_uniform_json
+  hs-source-dirs:
+      src
+  build-depends:
+      aeson ==1.5.6.0
+    , aeson-pretty
+    , base >=4.7 && <5
+    , lens
+    , lens-aeson
+    , monads-tf
+    , pretty-show
+    , uniformBase ==0.1.3
+    , unordered-containers
+    , yaml
+  default-language: Haskell2010
