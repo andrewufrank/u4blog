@@ -1,5 +1,5 @@
 name:         uniform-json 
-version:      0.0.4
+version:      0.0.5
 license:      GPL
 license-file: GPL_3
 maintainer:   Andrew U. Frank <frank@geoinfo.tuwien.ac.at>
@@ -10,6 +10,7 @@ synopsis: handling of JSON and YAML in an uniform way
 description: |
     remove particular aspects of abstraction in json and yaml - with an eye to use it with pandoc
     v0.0.4 for aeson >2.0
+    v0.0.5 for ghc 9.2.1, aeson >= 2 
 
 # source-repository: head
 # type: git
