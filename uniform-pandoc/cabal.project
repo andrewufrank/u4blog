@@ -4,20 +4,18 @@ packages:
 -- add here the location of uniformBase for local use 
 
     ../../uBase/uniformBase/*.cabal
---    ../../uBase/uniform-algebras/*.cabal
+    ../../uBase/uniform-algebras/*.cabal
     ../../uBase/uniform-strings/*.cabal
 --    ../../uBase/uniform-error/*.cabal
 --   ../../uBase/uniform-time/*.cabal
     ../../uBase/uniform-fileio/*.cabal 
 
-
-    ../../u4blog/uniform-json/*.cabal
-
-    ../../u4blog/uniform-webserver/*.cabal
+-- removed for 9.2.1    ../../u4blog/uniform-webserver/*.cabal
     ../../u4blog/uniform-shake/*.cabal
     ../../u4blog/uniform-watch/*.cabal
     ../../u4blog/uniform-latex2pdf/*.cabal
     ../../u4blog/uniform-json/*.cabal
+
     ../../u2to/uniform-convenience/*.cabal
     ../../u2to/uniform-cmdLineArgs/*.cabal
---    ../../ssg/*.cabal
+ 

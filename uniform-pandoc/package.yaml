@@ -1,5 +1,5 @@
 name:         uniform-pandoc 
-version:      0.0.2.3
+version:      0.0.2.4
 license:      GPL
 license-file: GPL_3
 maintainer:   Andrew U. Frank <andrewufrank@gmail.com>
@@ -14,6 +14,7 @@ description: |
   0.0.2.3 biblio-refs fixing, not yet change to citeproc-hs
             currently fixed to old version of pandoc-types 
             processPDF.hs replaced with uniform-latex2pdf
+  0.0.2.4 for ghc 9.2.1
 
 # cabal-version:  1.12
 
@@ -23,9 +24,9 @@ extra-source-files:
 
 dependencies:
 - base >= 4.7 && < 5
-- pandoc >=0.3.10
-- pandoc-citeproc # replace later with 
-# - citeproc-hs >=0.3.10 -- but currently fixed to old version of pandoc-types 
+- pandoc 
+# - pandoc-citeproc # replace later with  - tried for 9.2.1
+- citeproc == 0.6 # >=0.3.10 -- but currently fixed to old version of pandoc-types 
 - pandoc-types  
 - bibtex
 - uniformBase ==0.1.3

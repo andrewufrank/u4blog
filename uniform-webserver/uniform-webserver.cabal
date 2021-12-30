@@ -1,14 +1,15 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.34.2.
+-- This file has been generated from package.yaml by hpack version 0.34.6.
 --
 -- see: https://github.com/sol/hpack
 
 name:           uniform-webserver
-version:        0.0.10.2
+version:        0.0.10.3
 synopsis:       uniform text based operations to call http
 description:    http using text
                   0.0.10.2 for cabal
+                  0.0.10.3 for ghc 9.2.1
 category:       Data, Text, Uniform
 author:         Andrew Frank
 maintainer:     Andrew U. Frank <andrewufrank@gmail.com>
@@ -27,13 +28,13 @@ library
       Paths_uniform_webserver
   hs-source-dirs:
       src
-      ./.
+      ./
   build-depends:
       base
     , scotty
     , uniformBase
     , wai-middleware-static
-    , warp
+    , warp ==3.3.18
   default-language: Haskell2010
 
 test-suite webserver-test
@@ -51,5 +52,5 @@ test-suite webserver-test
     , scotty
     , uniformBase
     , wai-middleware-static
-    , warp
+    , warp ==3.3.18
   default-language: Haskell2010

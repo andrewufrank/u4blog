@@ -1,5 +1,5 @@
 name: uniform-webserver
-version: 0.0.10.2
+version: 0.0.10.3
 # cabal-version: >=1.22
 # build-type: Simple
 license: GPL
@@ -11,6 +11,7 @@ synopsis: uniform text based operations to call http
 description: |
   http using text
     0.0.10.2 for cabal
+    0.0.10.3 for ghc 9.2.1
 
 # source-repository head
 #     type: git
@@ -22,8 +23,9 @@ extra-source-files:
 
 dependencies:
 -  base
+# the next depend on memory, which is not yet avaiblable for 9.2.1
 - scotty
-- warp
+- warp ==3.3.18
 - wai-middleware-static
 - uniformBase
 

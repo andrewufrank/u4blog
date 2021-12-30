@@ -1,13 +1,13 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.34.5.
+-- This file has been generated from package.yaml by hpack version 0.34.6.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 752c4750ed21e68142df9ce9f759ee74e2f4f19729d17c7a479cdd7cc762ab76
+-- hash: 34897d0f5711a619d7d5bc1b54416def1becc5000da6278a3e221528bddb6716
 
 name:           uniform-pandoc
-version:        0.0.2.3
+version:        0.0.2.4
 synopsis:       handling of   some pandoc stuff
 description:    remove particular aspects of abstraction 
                 0.0.2.1 for cabal may 2021 8.10.4
@@ -15,6 +15,7 @@ description:    remove particular aspects of abstraction
                 0.0.2.3 biblio-refs fixing, not yet change to citeproc-hs
                           currently fixed to old version of pandoc-types 
                           processPDF.hs replaced with uniform-latex2pdf
+                0.0.2.4 for ghc 9.2.1
 category:       Uniform handling of   some pandoc stuff
 author:         Andrew Frank
 maintainer:     Andrew U. Frank <andrewufrank@gmail.com>
@@ -41,13 +42,13 @@ library
       aeson
     , base >=4.7 && <5
     , bibtex
+    , citeproc ==0.6
     , containers
     , doclayout
     , doctemplates
     , lens
     , lens-aeson
-    , pandoc >=0.3.10
-    , pandoc-citeproc
+    , pandoc
     , pandoc-types
     , parsec
     , process
@@ -72,13 +73,13 @@ test-suite pandoctest
     , aeson
     , base >=4.7 && <5
     , bibtex
+    , citeproc ==0.6
     , containers
     , doclayout
     , doctemplates
     , lens
     , lens-aeson
-    , pandoc >=0.3.10
-    , pandoc-citeproc
+    , pandoc
     , pandoc-types
     , parsec
     , process
