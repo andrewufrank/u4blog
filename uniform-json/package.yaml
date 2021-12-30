@@ -29,7 +29,7 @@ dependencies:
 # - bytestring
 - pretty-show
 - yaml
-- aeson ==1.5.6.0 
+- aeson 
 # for citeproc!
 - lens
 - lens-aeson
