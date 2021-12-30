@@ -56,7 +56,6 @@ import Data.Aeson.Lens (key, AsValue)
 import Data.Aeson.Encode.Pretty (encodePretty)
 import Data.Aeson.Lens
 import qualified Data.HashMap.Lazy as HML
-import qualified Data.Aeson.KeyMap as KM -- added for ghc 9.2
 import UniformBase
 -- import Uniform.Error hiding (at)
 -- import Uniform.Strings hiding (at)
@@ -139,14 +138,7 @@ mergeLeftPref ::[Value] -> Value
 -- all values must be objects, which can be prooduced with toJSON
 -- It prefers the first map when duplicate keys are encountered,
 -- http://hackage.haskell.org/package/hashmap-1.3.3/docs/Data-HashMap.html
--- for ghc 8.7  
--- mergeLeftPref = Object . HML.unions .  map unObject
--- for ghc 9.2.1
-mergeLeftPref = Object .unions' .  map unObject
-
-unions' :: [KM.KeyMap Value]  -> KM.KeyMap Value
-unions' = KM.fromHashMap . HML.unions . map KM.toHashMap
--- end
+mergeLeftPref = Object . HML.unions .  map unObject
 
 mergeRightPref :: [Value] -> Value
 mergeRightPref = mergeLeftPref . reverse

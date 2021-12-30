@@ -1,16 +1,17 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.34.5.
+-- This file has been generated from package.yaml by hpack version 0.34.6.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 9d576d434a81d946e9edda8a0f2fcd49f5fbfcb50177cd5aaf881c6e890dc60a
+-- hash: ea75e6e069a00083660f51489e3b53be5b4e9cd0d685ee3d81e6fcb1c7cc5302
 
 name:           uniform-json
-version:        0.0.4
+version:        0.0.5
 synopsis:       handling of JSON and YAML in an uniform way
 description:    remove particular aspects of abstraction in json and yaml - with an eye to use it with pandoc
                 v0.0.4 for aeson >2.0
+                v0.0.5 for ghc 9.2.1, aeson >= 2 
 category:       Data Text JSON YAML Pandoc
 author:         Andrew Frank
 maintainer:     Andrew U. Frank <frank@geoinfo.tuwien.ac.at>
@@ -31,7 +32,7 @@ library
   hs-source-dirs:
       src
   build-depends:
-      aeson ==1.5.6.0
+      aeson
     , aeson-pretty
     , base >=4.7 && <5
     , lens
