@@ -40,10 +40,13 @@ import UniformBase
 -- import Uniform.Json ( Value, Result, Value(Null) ) 
 
 pandocProcessCites ::
-  Path Abs Dir -> Path Abs File -> Maybe Text -> Pandoc -> ErrIO Pandoc
+--   Path Abs Dir -> Path Abs File -> Maybe Text ->
+       Pandoc -> ErrIO Pandoc
 -- ^ process the citations
 -- including the filling the references for publication lists
-pandocProcessCites doughP biblio groupname pandoc1 = do
+pandocProcessCites 
+    -- doughP biblio groupname 
+                    pandoc1 = do
 
     pandoc9 <- unPandocM $ PC.processCitations pandoc1
     return pandoc1
@@ -76,7 +79,7 @@ pandocProcessCites doughP biblio groupname pandoc1 = do
 --   return res
 
 {-
-
+the function used so far: 
 
 readBiblioRefs ::  
   Bool
