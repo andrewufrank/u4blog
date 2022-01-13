@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: ea75e6e069a00083660f51489e3b53be5b4e9cd0d685ee3d81e6fcb1c7cc5302
+-- hash: 17cf9321254f2884c8705d6909331b38d47688b04ed76876305586cf36e62053
 
 name:           uniform-json
 version:        0.0.5
@@ -32,7 +32,7 @@ library
   hs-source-dirs:
       src
   build-depends:
-      aeson
+      aeson >=2
     , aeson-pretty
     , base >=4.7 && <5
     , lens

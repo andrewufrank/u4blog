@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------
 --
--- Module      : reading bibtex and producing the list for nocite
+-- Module      : process the references in the pandoc data
+
+-- was : reading bibtex and producing the list for nocite
 -----------------------------------------------------------------------------
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE FlexibleInstances #-}
@@ -11,31 +13,70 @@
 
 module Uniform.BibTex (
     module Uniform.BibTex
-    , Reference
+    -- , Reference
     ) where -- (openMain, htf_thisModuelsTests)
 
-import Data.List (intersperse)
-import qualified Data.Map as M
--- import           System.Directory (setCurrentDirectory, getCurrentDirectory)
+-- import Data.List (intersperse)
+-- import qualified Data.Map as M
+-- -- import           System.Directory (setCurrentDirectory, getCurrentDirectory)
 
--- import Text.BibTeX.Entry ()
-import Text.BibTeX.Entry as T ( T(fields, identifier) )
-import qualified Text.BibTeX.Entry as Entry
--- import           Text.BibTeX.Parse
-import qualified Text.BibTeX.Parse as Parse
-import Text.CSL as Citeproc
-    ( Reference, readBiblioFile, readCSLFile )  
-import Text.CSL.Pandoc as Bib (processCites, processCites')
-import qualified Text.Pandoc as P
-import qualified Text.Pandoc.Definition as PD
-import qualified Text.Parsec as Parsec
--- import           Uniform.Error
--- import           Uniform.FileIO
+-- -- import Text.BibTeX.Entry ()
+-- import Text.BibTeX.Entry as T ( T(fields, identifier) )
+-- import qualified Text.BibTeX.Entry as Entry
+-- -- import           Text.BibTeX.Parse
+-- import qualified Text.BibTeX.Parse as Parse
+-- -- import Text.CSL as Citeproc
+--     -- ( Reference, readBiblioFile, readCSLFile )  
+-- -- import Text.CSL.Pandoc as Bib (processCites, processCites')
+import qualified Text.Pandoc.Citeproc as PC
+-- import qualified Text.Pandoc.Definition as PD
+-- import qualified Text.Parsec as Parsec
+-- -- import           Uniform.Error
+-- -- import           Uniform.FileIO
 import Uniform.PandocImports
-    ( Pandoc, getMeta, putMeta, fromJSONValue )
+--     ( Pandoc, getMeta, putMeta, fromJSONValue )
 import UniformBase
     
-import Uniform.Json ( Value, Result, Value(Null) ) 
+-- import Uniform.Json ( Value, Result, Value(Null) ) 
+
+pandocProcessCites ::
+  Path Abs Dir -> Path Abs File -> Maybe Text -> Pandoc -> ErrIO Pandoc
+-- ^ process the citations
+-- including the filling the references for publication lists
+pandocProcessCites doughP biblio groupname pandoc1 = do
+
+    pandoc9 <- unPandocM $ PC.processCitations pandoc1
+    return pandoc1
+
+--   pandoc2 <- case groupname of
+--     Nothing -> return pandoc1
+--     Just gn -> do
+--       bibids <- bibIdentifierFromBibTex biblio (t2s gn)
+--       let meta1 = constructNoCite (map s2t bibids)
+--       --                    let cits = map (\s -> [fillCitation . s2t $ s]) bibids :: [[PD.Citation]]
+--       --                    let refs = map (\s -> [PD.Str ("@" <> s)]) bibids :: [[PD.Inline]]
+--       --                    let cites = zipWith PD.Cite cits refs  :: [PD.Inline]
+--       --                    let metablocks = PD.MetaBlocks [PD.Plain cites]
+--       --                    let map1 = M.insert "nocite" metablocks M.empty
+--       let meta2 = getMeta pandoc1 :: P.Meta
+--       --                    let meta3 = meta2 <> P.Meta map1
+--       let pandoc2 = putMeta (meta2 <> meta1) pandoc1
+--       return pandoc2
+--   --    callIO $ do
+--   currDir <- currentDir
+--   -- the current dir is the directory in which the procCites of pando will
+--   -- search.
+
+--   --            putIOwords ["markdownToPandoc", "currDir", showT currDir, "\ndoughP", showT doughP]
+--   --            putIOwords ["markdownToPandoc", "bibfp", showT bib]
+--   setCurrentDir doughP
+--   res <- callIO $ processCites' pandoc2
+--   setCurrentDir currDir
+--   --            putIOwords ["markdownToPandoc", "again currDir", showT currDir, "\nwas doughP", showT doughP]
+--   return res
+
+{-
+
 
 readBiblioRefs ::  
   Bool
@@ -139,37 +180,7 @@ constructNoCite bibids = P.Meta map1
     metablocks = PD.MetaBlocks [PD.Plain (intersperse PD.Space cites)]
     map1 = M.insert "nocite" metablocks M.empty
 
-pandocProcessCites ::
-  Path Abs Dir -> Path Abs File -> Maybe Text -> Pandoc -> ErrIO Pandoc
--- ^ process the citations
--- including the filling the references for publication lists
-pandocProcessCites doughP biblio groupname pandoc1 = do
-  pandoc2 <- case groupname of
-    Nothing -> return pandoc1
-    Just gn -> do
-      bibids <- bibIdentifierFromBibTex biblio (t2s gn)
-      let meta1 = constructNoCite (map s2t bibids)
-      --                    let cits = map (\s -> [fillCitation . s2t $ s]) bibids :: [[PD.Citation]]
-      --                    let refs = map (\s -> [PD.Str ("@" <> s)]) bibids :: [[PD.Inline]]
-      --                    let cites = zipWith PD.Cite cits refs  :: [PD.Inline]
-      --                    let metablocks = PD.MetaBlocks [PD.Plain cites]
-      --                    let map1 = M.insert "nocite" metablocks M.empty
-      let meta2 = getMeta pandoc1 :: P.Meta
-      --                    let meta3 = meta2 <> P.Meta map1
-      let pandoc2 = putMeta (meta2 <> meta1) pandoc1
-      return pandoc2
-  --    callIO $ do
-  currDir <- currentDir
-  -- the current dir is the directory in which the procCites of pando will
-  -- search.
 
-  --            putIOwords ["markdownToPandoc", "currDir", showT currDir, "\ndoughP", showT doughP]
-  --            putIOwords ["markdownToPandoc", "bibfp", showT bib]
-  setCurrentDir doughP
-  res <- callIO $ processCites' pandoc2
-  setCurrentDir currDir
-  --            putIOwords ["markdownToPandoc", "again currDir", showT currDir, "\nwas doughP", showT doughP]
-  return res
 
 readBibTex :: FilePath -> IO String
 -- ^ reads the bibtex file
@@ -211,3 +222,4 @@ bibIdentifierFromBibTex bibfn group = callIO $ do
   let es = filterByGroup group entries
       ids = getBibIdentifier es
   return ids
+-}
