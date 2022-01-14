@@ -3,7 +3,7 @@ packages:
 
 -- add here the location of uniformBase for local use 
     ../../uBase/uniformBase/*.cabal
---    ../../uBase/uniform-algebras/*.cabal
+    ../../uBase/uniform-algebras/*.cabal
     ../../uBase/uniform-strings/*.cabal
 --    ../../uBase/uniform-error/*.cabal
 --   ../../uBase/uniform-time/*.cabal

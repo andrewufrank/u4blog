@@ -193,31 +193,39 @@ writePDF2 debug fn fnres refDir = do
         "lualatex"
         [out1, "-interaction=nonstopmode",  infn]
         refDir
-    exitHandling exit_code1 infn
+    exitHandling exit_code1 infn 1
 
     exit_code2 <- callProcessWithCWD True -- (not (inform debug))  -- silenced or not 
         "biber"
         [ infn]
         refDir
-    exitHandling exit_code2 infn
+    exitHandling exit_code2 infn 2
+
+    exit_code3 <- callProcessWithCWD True -- (not (inform debug))  -- silenced or not 
+        "makeindex"
+        ["-q", infn]
+        refDir
+    exitHandling exit_code3 infn 3
 
     exit_code3 <- callProcessWithCWD True -- (not (inform debug))  -- silenced or not 
         "lualatex"
         [out1, "-interaction=nonstopmode",  infn]
         refDir
-    exitHandling exit_code3 infn 
+    exitHandling exit_code3 infn 4
 
     when (inform debug) $ putIOwords ["writePDF2 end for", showT out1]
 
-exitHandling exit_code filename = do
+exitHandling :: Sys.ExitCode -> FilePath -> Int -> ErrIO ()
+exitHandling exit_code filename step = do
+    -- the count indicated the step count 
     case exit_code of
         Sys.ExitSuccess -> return ()
         Sys.ExitFailure r -> do 
-                putIOwords ["callProcessWithCWD - failed" 
-                            , "show exit code", showT r
-                            , "\n\tif lualatex: 1 is normal, check log file "
-                            , "\n\tif biber: 2 is normal, check blg file "
-                            , "\n\tfor output file", showT filename
+                putIOwords ["callProcessWithCWD - failed - check for 1 log, for 2 blg " 
+                            , "show exit code", showT r, "step", showT step
+                            -- , "\n\tif lualatex: 1 is normal, check log file "
+                            -- , "\n\tif biber: 2 is normal, check blg file "
+                            -- , "\n\tfor output file", showT filename
                             ]
                 -- fail . show $ r
                 return ()  -- lualatex does not deal with error information well - check log file 
