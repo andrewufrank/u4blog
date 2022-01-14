@@ -1,4 +1,4 @@
 packages: 
     *.cabal
-    ../../uBase/uniformBase/*.cabal
+--    ../../uBase/uniformBase/*.cabal
 --    ../../../uniformBase/uniformSources/uniform-algebras/*.cabal
