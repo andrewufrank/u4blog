@@ -207,7 +207,7 @@ writePDF2 debug fn fnres refDir = do
         refDir
     exitHandling exit_code3 infn 
 
-    when (informAll debug) $ putIOwords ["writePDF2 end for", showT out1]
+    when (inform debug) $ putIOwords ["writePDF2 end for", showT out1]
 
 exitHandling exit_code filename = do
     case exit_code of
