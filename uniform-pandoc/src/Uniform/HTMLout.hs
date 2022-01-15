@@ -25,14 +25,14 @@
             
 module Uniform.HTMLout
   ( module Uniform.HTMLout
-    , extHTML
-    , writeHtml5String
-                        , writerExtensions
-                        , writerHighlightStyle
-                        , WriterOptions
-                        , def
---   , Pandoc(..)
---   , module Uniform.Error   -- or at least ErrIO
+--     , extHTML
+--     , writeHtml5String
+--                         , writerExtensions
+--                         , writerHighlightStyle
+--                         , WriterOptions
+--                         , def
+-- --   , Pandoc(..)
+-- --   , module Uniform.Error   -- or at least ErrIO
 --   , write8
 --   , TypedFile5
 --   , TypedFiles5
@@ -44,62 +44,62 @@ where
 
 import UniformBase 
 import           Uniform.Json
--- import Uniform.Pandoc
--- import Uniform.DocValue
--- import Uniform.FileIO 
-import Uniform.PandocImports 
+-- -- import Uniform.Pandoc
+-- -- import Uniform.DocValue
+-- -- import Uniform.FileIO 
+-- import Uniform.PandocImports 
  
-import           Text.Pandoc                    ( Pandoc(..)
-                        , writeHtml5String
-                        , writerExtensions
-                        , writerHighlightStyle
-                        , WriterOptions
-                        , def
-                        )
-import           Text.Pandoc.Highlighting       ( tango )
+-- import           Text.Pandoc                    ( Pandoc(..)
+--                         , writeHtml5String
+--                         , writerExtensions
+--                         , writerHighlightStyle
+--                         , WriterOptions
+--                         , def
+--                         )
+-- import           Text.Pandoc.Highlighting       ( tango )
                                                   
-import Text.DocTemplates as DocTemplates  ( -- applyTemplate, 
-        Doc(..), renderTemplate, compileTemplate, Template)
-import Text.DocLayout (render)
+-- import Text.DocTemplates as DocTemplates  ( -- applyTemplate, 
+--         Doc(..), renderTemplate, compileTemplate, Template)
+-- import Text.DocLayout (render)
 
--- | Reasonable options for rendering to HTML
-html5Options :: WriterOptions
-html5Options = def { writerHighlightStyle = Just tango
-                   , writerExtensions     = writerExtensions def
-                   }
+-- -- | Reasonable options for rendering to HTML
+-- html5Options :: WriterOptions
+-- html5Options = def { writerHighlightStyle = Just tango
+--                    , writerExtensions     = writerExtensions def
+--                    }
 
--- writeHtml5String2 :: Pandoc -> ErrIO HTMLout
--- writeHtml5String2 pandocRes = do
---     p <- unPandocM $ writeHtml5String html5Options pandocRes
---     return . HTMLout $ p
+-- -- writeHtml5String2 :: Pandoc -> ErrIO HTMLout
+-- -- writeHtml5String2 pandocRes = do
+-- --     p <- unPandocM $ writeHtml5String html5Options pandocRes
+-- --     return . HTMLout $ p
 
 -- type Dtemplate = Template Text
 
-applyTemplate3 :: Path Abs File -> Value -> ErrIO HTMLout
--- needed for old ssg lts-13.12 - also changed for 15.13
+-- applyTemplate3 :: Path Abs File -> Value -> ErrIO HTMLout
+-- -- needed for old ssg lts-13.12 - also changed for 15.13
 
--- | apply the template in the file to the text
--- for help look in ssg master.ptpl as an example
--- the description are in doctemplates (on hackage)
-applyTemplate3 templName val = do
-    t1 ::   Text  <- readFile2 templName 
-    putIOwords ["test_readTempl", take' 300 . showT $ t1]
-    -- let t2 = read (t2s t1) :: Template Text
-    -- putIOwords ["test_readTempl Dtemplate", take' 300 . showT $ t2] 
-    temp1     <- liftIO $ DocTemplates.compileTemplate mempty t1
-    -- err1 :: Either String (Doc Text) <- liftIO $ DocTemplates.applyTemplate mempty (unwrap7 templText) (unDocValue val) 
-    let tmp3 = case temp1 of
-                Left msg -> error msg 
-                Right tmp2 -> tmp2
-    when False $ putIOwords ["applyTemplate3 temp2", take' 300 $ showT tmp3 ]
--- renderTemplate :: (TemplateTarget a, ToContext a b) => Template a -> b -> Doc a     
-    let res = renderTemplate tmp3 val
-    when False $ putIOwords ["applyTemplate3 res", take' 300 $ showT res ]
-    let res2 =  render Nothing res
-    when True $ putIOwords ["applyTemplate3 done res2", take' 300 $ showT res2 ]
+-- -- | apply the template in the file to the text
+-- -- for help look in ssg master.ptpl as an example
+-- -- the description are in doctemplates (on hackage)
+-- applyTemplate3 templName val = do
+--     t1 ::   Text  <- readFile2 templName 
+--     putIOwords ["test_readTempl", take' 300 . showT $ t1]
+--     -- let t2 = read (t2s t1) :: Template Text
+--     -- putIOwords ["test_readTempl Dtemplate", take' 300 . showT $ t2] 
+--     temp1     <- liftIO $ DocTemplates.compileTemplate mempty t1
+--     -- err1 :: Either String (Doc Text) <- liftIO $ DocTemplates.applyTemplate mempty (unwrap7 templText) (unDocValue val) 
+--     let tmp3 = case temp1 of
+--                 Left msg -> error msg 
+--                 Right tmp2 -> tmp2
+--     when False $ putIOwords ["applyTemplate3 temp2", take' 300 $ showT tmp3 ]
+-- -- renderTemplate :: (TemplateTarget a, ToContext a b) => Template a -> b -> Doc a     
+--     let res = renderTemplate tmp3 val
+--     when False $ putIOwords ["applyTemplate3 res", take' 300 $ showT res ]
+--     let res2 =  render Nothing res
+--     when True $ putIOwords ["applyTemplate3 done res2", take' 300 $ showT res2 ]
 
-    let res3 = HTMLout res2 
-    return (res3 :: HTMLout) 
+--     let res3 = HTMLout res2 
+--     return (res3 :: HTMLout) 
 
 newtype HTMLout = HTMLout {contentHtml::Text}
   deriving (Show, Read, Eq, Ord, Generic)
