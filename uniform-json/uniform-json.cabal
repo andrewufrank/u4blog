@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 17cf9321254f2884c8705d6909331b38d47688b04ed76876305586cf36e62053
+-- hash: cc0090012ce73439e58c1c930324919b5aecf4a1685c5af298365f125e774ae4
 
 name:           uniform-json
 version:        0.0.5
@@ -39,7 +39,7 @@ library
     , lens-aeson
     , monads-tf
     , pretty-show
-    , uniformBase ==0.1.3
+    , uniformBase >=0.1.3
     , unordered-containers
     , yaml
   default-language: Haskell2010

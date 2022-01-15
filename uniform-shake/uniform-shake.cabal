@@ -1,6 +1,6 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.34.5.
+-- This file has been generated from package.yaml by hpack version 0.34.6.
 --
 -- see: https://github.com/sol/hpack
 
@@ -32,6 +32,6 @@ library
   build-depends:
       base
     , shake
-    , uniform-json
-    , uniformBase ==0.1.3
+    , uniform-json >=0.0.5
+    , uniformBase >=0.1.3
   default-language: Haskell2010

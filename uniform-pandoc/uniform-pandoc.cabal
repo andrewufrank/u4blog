@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: b69b188887cbd4c435ef18c3a43f1bb1a47d59c6bdb66aba826a413d38788791
+-- hash: da153b9ad6c591379b2f9e080985f6851e9420f4c9fd8fdc188fb13cc615ddd0
 
 name:           uniform-pandoc
 version:        0.0.2.4
@@ -48,10 +48,10 @@ library
     , doctemplates
     , lens
     , lens-aeson
-    , pandoc
+    , pandoc >=2.11
     , parsec
     , process
     , shake
-    , uniform-json ==0.0.5
-    , uniformBase ==0.1.3
+    , uniform-json >=0.0.5
+    , uniformBase >=0.1.3
   default-language: Haskell2010

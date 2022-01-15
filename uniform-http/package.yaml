@@ -47,17 +47,17 @@ library:
   source-dirs: src
 
 
-tests:
-  http-test:
-    main:                Testing.hs
-    source-dirs:         tests
-    dependencies:
-    # - uniform-algebras
-    - HTF
-    - quickcheck-text
-    # - uniform-strings
-    # - uniform-http
-    - uniformBase
+# tests:
+#   http-test:
+#     main:                Testing.hs
+#     source-dirs:         tests
+#     dependencies:
+#     # - uniform-algebras
+#     - HTF
+#     - quickcheck-text
+#     # - uniform-strings
+#     # - uniform-http
+#     - uniformBase
 
 #     exposed-modules:
 #             Uniform.Http
