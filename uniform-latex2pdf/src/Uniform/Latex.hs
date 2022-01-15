@@ -26,8 +26,8 @@ import System.IO.Silently (silence)
 import Uniform.Json
 import UniformBase
 
-import Data.Aeson
-import Data.Aeson.Types
+-- import Data.Aeson
+-- import Data.Aeson.Types
 
 
 data LatexParam = LatexParam
@@ -230,17 +230,6 @@ exitHandling exit_code filename step = do
                 -- fail . show $ r
                 return ()  -- lualatex does not deal with error information well - check log file 
 
-    -- callIO $ Sys.callProcess "xelatex" [out1,  "-interaction=nonstopmode" , toFilePath infn]
-    -- callIO $ Sys.callProcess "lualatex" [out1, toFilePath infn]
-
-    -- does not work to read pdf.
-    -- the files written seem ok
-    -- let resfn = setExtension extPDF  fn
-    -- putIOwords ["writePDF2 4 pdf filename", showT resfn]
-
-    -- resPDFtext :: pdfFileType <- read8 resfn pdfFileType
-    -- putIOwords ["writePDF2 lualatex result ok (otherwise error)"
-    --             , "pdf is", take' 300 . unwrap7 $ resPDFtext]
 
     return ()
 

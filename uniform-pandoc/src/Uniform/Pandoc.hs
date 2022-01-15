@@ -26,7 +26,6 @@ module Uniform.Pandoc
   , module Uniform.PandocImports
     , ReaderOptions
   , module Uniform.PandocHTMLwriter
-  -- , applyTemplate4  
   , module Uniform.BibTex
   , 
   )

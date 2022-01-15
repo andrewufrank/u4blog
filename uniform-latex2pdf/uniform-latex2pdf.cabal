@@ -31,8 +31,7 @@ library
   hs-source-dirs:
       src
   build-depends:
-      aeson
-    , base
+      base
     , process
     , silently
     , uniform-json
