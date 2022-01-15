@@ -42,7 +42,7 @@ module Uniform.Json
   )
 where
 
-import Control.Lens
+import Control.Lens  -- aufzaehlung notwendi um := fuer aeson zu erlauben
   ( at,
     (&),
     (?~),
@@ -52,9 +52,9 @@ import Data.Aeson
 import Data.Aeson.Types 
 import Data.Aeson as Aeson
 import Data.Aeson.Lens (key, AsValue)
--- import Data.Aeson.Text 
+-- -- import Data.Aeson.Text 
 import Data.Aeson.Encode.Pretty (encodePretty)
-import Data.Aeson.Lens
+import Data.Aeson.Lens -- um die underline argumente zu ermoeglichen 
 import qualified Data.HashMap.Lazy as HML
 import qualified Data.Aeson.KeyMap as KM -- added for ghc 9.2
 import UniformBase
