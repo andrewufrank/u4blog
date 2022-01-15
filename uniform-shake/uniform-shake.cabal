@@ -28,7 +28,7 @@ library
   other-modules:
       Paths_uniform_shake
   hs-source-dirs:
-      ./
+      src
   build-depends:
       base
     , shake
