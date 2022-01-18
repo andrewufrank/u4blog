@@ -66,27 +66,36 @@ unPandocM op1 =
     res <-
       callIO $
         Pandoc.runIO op1
-    --   ( do
-    --       -- liftIO $putStrLn "unPandocM op"
-    --       a <- op1 --       error "xx"
-    --       -- liftIO $putStrLn "error xx"
-    --       -- should be
-    --       --     result <- P.runIO $ op
-    --       --     rst1   <- P.handleError result
-    --       -- and put then in the two parts of ErrIO
-    --       return a
-    --   )
     either
       ( \e -> do
-          putIOwords ["unPandocM error", showT e]
           throwError . showT $ e
       )
       return
       res
     `catchError` ( \e -> do
-                     putIOwords ["unPandocM catchError", showT e]
                      throwError . showT $ e
                  )
+
+-- callPandoc :: Pandoc.PandocIO a -> ErrIO a
+-- callPandoc op1 = 
+--     callIO $ Pandoc.runIO op1
+--     >>= 
+--     either (\e -> throwError . showT $  e)  return  
+--   `catchError` (\e -> throwError . showT $ e)
+
+-- callPandoc1 :: Pandoc.PandocIO a -> ErrIO a
+-- callPandoc1 op1 = 
+--     callIO $ Pandoc.runIO op1
+--     >>= 
+--     either ( throwError . showT  )  return  
+--  `catchError` (throwError . showT)
+
+callPandoc :: Pandoc.PandocIO a -> ErrIO a
+callPandoc op1 = do
+    res <- callIO $ Pandoc.runIO op1
+    either (throwError . showT) return res
+  `catchError` (throwError . showT)
+
 
 getMeta :: Pandoc -> Pandoc.Meta
 getMeta (Pandoc.Pandoc m _) = m
