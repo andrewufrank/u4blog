@@ -28,20 +28,30 @@ module Uniform.Markdown
   , MarkdownText, unMT 
   , readMarkdown2
   , extMD
+--   , readMarkdownFile2docrep
   )
 where
 
   
 import qualified Text.Pandoc as Pandoc
 import UniformBase
-    ( TypedFiles7(..),
-      Text,
-      Zeros(zero),
-      Extension(..),
-      TypedFile5(..),
-      ErrIO )
+
 import Uniform.PandocImports ( Pandoc, callPandoc )
-      
+
+-- readMarkdownFile2docrep  :: NoticeLevel -> Path Abs Dir -> Path Abs File -> ErrIO Docrep 
+-- -- read a markdown file and convert to docrep
+-- readMarkdownFile2docrep debug doughP fnin = do
+--     when (inform debug) $ putIOwords 
+--         ["getFile2index fnin", showPretty fnin]
+
+--     mdfile <- read8 fnin markdownFileType 
+--     pd <- readMarkdown2 mdfile
+--     -- could perhaps "need" all ix as files?
+
+--     let doc1 = pandoc2docrep doughP fnin pd
+--     return doc1
+
+     
 ----------------------------- -------------------------Markdown
 
 extMD :: Extension
