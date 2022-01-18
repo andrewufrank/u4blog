@@ -70,10 +70,10 @@ readMarkdown2docrep md = do
 
 readMarkdown2 :: MarkdownText -> ErrIO Pandoc
 readMarkdown2 text1 =
-    unPandocM $ Pandoc.readMarkdown markdownOptions (unwrap7 text1)
-readMarkdown3 :: Pandoc.ReaderOptions -> MarkdownText -> ErrIO Pandoc
-readMarkdown3 options text1 =
-    unPandocM $ Pandoc.readMarkdown options (unwrap7 text1)
+    callPandoc $ Pandoc.readMarkdown markdownOptions (unwrap7 text1)
+-- readMarkdown3 :: Pandoc.ReaderOptions -> MarkdownText -> ErrIO Pandoc
+-- readMarkdown3 options text1 =
+--     unPandocM $ Pandoc.readMarkdown options (unwrap7 text1)
 
 -- | Reasonable options for reading a markdown file
 markdownOptions :: Pandoc.ReaderOptions

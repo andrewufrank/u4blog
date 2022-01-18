@@ -172,10 +172,11 @@ instance TypedFiles7 Text MarkdownText where
 readMarkdown2 :: MarkdownText -> ErrIO Pandoc
 -- | reads the markdown text and produces a pandoc structure
 readMarkdown2 text1 =
-    unPandocM $ Pandoc.readMarkdown markdownOptions (unwrap7 text1 :: Text)
-readMarkdown3 :: Pandoc.ReaderOptions -> MarkdownText -> ErrIO Pandoc
-readMarkdown3 options text1 =
-    unPandocM $ Pandoc.readMarkdown options (unwrap7 text1::Text)
+    callPandoc $ Pandoc.readMarkdown markdownOptions (unwrap7 text1 :: Text)
+
+-- readMarkdown3 :: Pandoc.ReaderOptions -> MarkdownText -> ErrIO Pandoc
+-- readMarkdown3 options text1 =
+--     unPandocM $ Pandoc.readMarkdown options (unwrap7 text1::Text)
 
 -- | Reasonable options for reading a markdown file
 markdownOptions :: Pandoc.ReaderOptions
