@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 0f396d9a5f87aae8a4a62615af0272cda8da4c8f268a2afaa5f3afd74c915c96
+-- hash: 3bed86d15df28b61d78c44de65392ae3e99194c8675e028c214479732defeb76
 
 name:           uniform-pandoc
 version:        0.0.2.4
@@ -33,6 +33,7 @@ library
   exposed-modules:
       Uniform.BibTex
       Uniform.HTMLout
+      Uniform.Markdown
       Uniform.Pandoc
       Uniform.PandocHTMLwriter
       Uniform.PandocImports

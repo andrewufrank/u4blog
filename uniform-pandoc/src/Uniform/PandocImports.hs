@@ -144,69 +144,69 @@ latexOptions =
           ]
     }
 
------------------------------ -------------------------Markdown
---  move to markdown TODO
+-- ----------------------------- -------------------------Markdown
+-- --  move to markdown TODO
 
-extMD :: Extension
-extMD = Extension "md"
+-- extMD :: Extension
+-- extMD = Extension "md"
 
-newtype MarkdownText = MarkdownText Text
-  deriving (Show, Read, Eq, Ord)
+-- newtype MarkdownText = MarkdownText Text
+--   deriving (Show, Read, Eq, Ord)
 
--- | a wrapper around Markdonw text
-unMT :: MarkdownText -> Text
-unMT (MarkdownText a) = a --needed for other ops
+-- -- | a wrapper around Markdonw text
+-- unMT :: MarkdownText -> Text
+-- unMT (MarkdownText a) = a --needed for other ops
 
-instance Zeros MarkdownText where
-  zero = MarkdownText zero
+-- instance Zeros MarkdownText where
+--   zero = MarkdownText zero
 
-markdownFileType :: TypedFile5 Text MarkdownText
-markdownFileType =
-  TypedFile5 {tpext5 = extMD} :: TypedFile5 Text MarkdownText
+-- markdownFileType :: TypedFile5 Text MarkdownText
+-- markdownFileType =
+--   TypedFile5 {tpext5 = extMD} :: TypedFile5 Text MarkdownText
 
-instance TypedFiles7 Text MarkdownText where
---  handling Markdown and read them into MarkdownText
-  wrap7 a = MarkdownText a
-  unwrap7 (MarkdownText a) = a
+-- instance TypedFiles7 Text MarkdownText where
+-- --  handling Markdown and read them into MarkdownText
+--   wrap7 a = MarkdownText a
+--   unwrap7 (MarkdownText a) = a
 
-readMarkdown2 :: MarkdownText -> ErrIO Pandoc
--- | reads the markdown text and produces a pandoc structure
-readMarkdown2 text1 =
-    callPandoc $ Pandoc.readMarkdown markdownOptions (unwrap7 text1 :: Text)
+-- readMarkdown2 :: MarkdownText -> ErrIO Pandoc
+-- -- | reads the markdown text and produces a pandoc structure
+-- readMarkdown2 text1 =
+--     callPandoc $ Pandoc.readMarkdown markdownOptions (unwrap7 text1 :: Text)
 
--- readMarkdown3 :: Pandoc.ReaderOptions -> MarkdownText -> ErrIO Pandoc
--- readMarkdown3 options text1 =
---     unPandocM $ Pandoc.readMarkdown options (unwrap7 text1::Text)
+-- -- readMarkdown3 :: Pandoc.ReaderOptions -> MarkdownText -> ErrIO Pandoc
+-- -- readMarkdown3 options text1 =
+-- --     unPandocM $ Pandoc.readMarkdown options (unwrap7 text1::Text)
 
--- | Reasonable options for reading a markdown file
-markdownOptions :: Pandoc.ReaderOptions
-markdownOptions = Pandoc.def { Pandoc.readerExtensions = exts }
-  where
-    exts = mconcat
-        [ Pandoc.extensionsFromList
-            [ Pandoc.Ext_yaml_metadata_block
-            , Pandoc.Ext_fenced_code_attributes
-            , Pandoc.Ext_auto_identifiers
-            -- , Pandoc.Ext_raw_html   -- three extension give markdown_strict
-            , Pandoc.Ext_raw_tex   --Allow raw TeX (other than math)
-            , Pandoc.Ext_shortcut_reference_links
-            , Pandoc.Ext_spaced_reference_links
-            , Pandoc.Ext_footnotes  -- all footnotes
-            , Pandoc.Ext_citations           -- <-- this is the important extension for bibTex
-            ]
-        , Pandoc.githubMarkdownExtensions
-        ]
+-- -- | Reasonable options for reading a markdown file
+-- markdownOptions :: Pandoc.ReaderOptions
+-- markdownOptions = Pandoc.def { Pandoc.readerExtensions = exts }
+--   where
+--     exts = mconcat
+--         [ Pandoc.extensionsFromList
+--             [ Pandoc.Ext_yaml_metadata_block
+--             , Pandoc.Ext_fenced_code_attributes
+--             , Pandoc.Ext_auto_identifiers
+--             -- , Pandoc.Ext_raw_html   -- three extension give markdown_strict
+--             , Pandoc.Ext_raw_tex   --Allow raw TeX (other than math)
+--             , Pandoc.Ext_shortcut_reference_links
+--             , Pandoc.Ext_spaced_reference_links
+--             , Pandoc.Ext_footnotes  -- all footnotes
+--             , Pandoc.Ext_citations           -- <-- this is the important extension for bibTex
+--             ]
+--         , Pandoc.githubMarkdownExtensions
+--         ]
 
--- instance ToJSON Text
--- writeLaTeX :: PandocMonad m => WriterOptions -> Pandoc -> m Text
+-- -- instance ToJSON Text
+-- -- writeLaTeX :: PandocMonad m => WriterOptions -> Pandoc -> m Text
 
-instance TypedFiles7 Text Text where
-  wrap7 = id
-  unwrap7 = id
+-- instance TypedFiles7 Text Text where
+--   wrap7 = id
+--   unwrap7 = id
 
-writeTexSnip2 :: Pandoc -> ErrIO Text
--- write a latex file from a pandoc doc
-writeTexSnip2 pandocRes = do
-  p <- unPandocM $ writeLaTeX latexOptions pandocRes
-  return p
+-- writeTexSnip2 :: Pandoc -> ErrIO Text
+-- -- write a latex file from a pandoc doc
+-- writeTexSnip2 pandocRes = do
+--   p <- unPandocM $ writeLaTeX latexOptions pandocRes
+--   return p
 
