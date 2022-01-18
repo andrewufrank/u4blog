@@ -31,7 +31,7 @@ pandocProcessCites ::
 pandocProcessCites   pandoc1 = do
 
     pandoc9 <- unPandocM $ PC.processCitations pandoc1
-    return pandoc1
+    return pandoc9
 
 
 
