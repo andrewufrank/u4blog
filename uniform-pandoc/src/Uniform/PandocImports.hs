@@ -25,7 +25,8 @@
 
 module Uniform.PandocImports
   ( module Uniform.PandocImports,
-    Pandoc (..),
+    Pandoc (..)
+    , writeTexSnip2
   )
 where
 
@@ -38,9 +39,9 @@ import Text.Pandoc
       ( writerCiteMethod,
         writerExtensions,
         writerHighlightStyle
-      ),
-    def,
-    writeLaTeX,
+      )
+    , def
+    , writeLaTeX,
   )
 import qualified Text.Pandoc as Pandoc
 import Text.Pandoc.Highlighting (tango)
@@ -204,9 +205,9 @@ latexOptions =
 --   wrap7 = id
 --   unwrap7 = id
 
--- writeTexSnip2 :: Pandoc -> ErrIO Text
--- -- write a latex file from a pandoc doc
--- writeTexSnip2 pandocRes = do
---   p <- unPandocM $ writeLaTeX latexOptions pandocRes
---   return p
+writeTexSnip2 :: Pandoc -> ErrIO Text
+-- write a latex file from a pandoc doc
+writeTexSnip2 pandocRes = do
+  p <- unPandocM $ writeLaTeX latexOptions pandocRes
+  return p
 

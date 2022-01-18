@@ -27,13 +27,14 @@ module Uniform.Pandoc
     , ReaderOptions
   , module Uniform.PandocHTMLwriter
   , module Uniform.BibTex
-  , 
+  , module Uniform.Markdown
   )
 where
 
 import Uniform.PandocImports
 import Uniform.PandocHTMLwriter
 import Uniform.BibTex
+import Uniform.Markdown
 
 import qualified Text.Pandoc                   as Pandoc
 import Text.Pandoc ( ReaderOptions, WriterOptions(..) )        

@@ -27,13 +27,20 @@ module Uniform.Markdown
   (markdownFileType
   , MarkdownText, unMT 
   , readMarkdown2
+  , extMD
   )
 where
 
   
 import qualified Text.Pandoc as Pandoc
 import UniformBase
-import Uniform.PandocImports
+    ( TypedFiles7(..),
+      Text,
+      Zeros(zero),
+      Extension(..),
+      TypedFile5(..),
+      ErrIO )
+import Uniform.PandocImports ( Pandoc, callPandoc )
       
 ----------------------------- -------------------------Markdown
 
