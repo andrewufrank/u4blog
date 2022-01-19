@@ -81,7 +81,7 @@ fromJSONerrio :: (FromJSON a, Show a) => Value -> ErrIO a
 fromJSONerrio v = callIO $ do
   result1 (fromJSON v)
 
-fromJSONfailError :: (FromJSON a, Show a) => Value -> ErrorT Text IO a
+fromJSONfailError :: (FromJSON a, Show a) => Value -> ErrIO a
 -- | converts fromJson to a record structure
 -- throws error if fails
 fromJSONfailError v = case (fromJSON v) of
