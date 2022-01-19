@@ -17,6 +17,7 @@ description: |
   0.0.2.4 for ghc 9.2.1 (first for 8.10.7 limits on rpi64)
             uses pandoc (and the Pandoc.Citeproc code
             not pandoc-citeproc.hs)
+  0.0.2.5 adaption to use of ExceptionT
 
 # cabal-version:  1.12
 
@@ -28,8 +29,8 @@ dependencies:
 - base >= 4.7 && < 5
 - pandoc >= 2.11
 
-- uniformBase >=0.1.3
-- uniform-json >=0.0.5
+- uniformBase >=0.1.4
+- uniform-json >=0.0.6
 
 - doctemplates
 - doclayout  #for  html writer (both)

@@ -62,20 +62,20 @@ instance Zeros Text.Pandoc.Meta where
 
 -- | Handle possible pandoc failure within the PandocIO Monad
 unPandocM :: Pandoc.PandocIO a -> ErrIO a
-unPandocM op1 =
-  do
-    res <-
-      callIO $
-        Pandoc.runIO op1
-    either
-      ( \e -> do
-          throwError . showT $ e
-      )
-      return
-      res
-    `catchError` ( \e -> do
-                     throwError . showT $ e
-                 )
+unPandocM op1 = callPandoc op1
+--   do
+--     res <-
+--       callIO $
+--         Pandoc.runIO op1
+--     either
+--       ( \e -> do
+--           throwErrorT [e]
+--       )
+--       return
+--       res
+--     `catchError` ( \e -> do
+--                      throwErrorT [e]
+--                  )
 
 -- callPandoc :: Pandoc.PandocIO a -> ErrIO a
 -- callPandoc op1 = 
@@ -94,8 +94,8 @@ unPandocM op1 =
 callPandoc :: Pandoc.PandocIO a -> ErrIO a
 callPandoc op1 = do
     res <- callIO $ Pandoc.runIO op1
-    either (throwError . showT) return res
-  `catchError` (throwError . showT)
+    either (throwErrorT . showT) return res
+  `catchError` (throwErrorT . showT)
 
 
 getMeta :: Pandoc -> Pandoc.Meta

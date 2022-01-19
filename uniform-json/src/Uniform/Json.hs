@@ -86,7 +86,7 @@ fromJSONfailError :: (FromJSON a, Show a) => Value -> ErrIO a
 -- throws error if fails
 fromJSONfailError v = case (fromJSON v) of
             Success a -> return a
-            x -> throwErrorT ["fromJson", showT x]
+            x -> throwErrorWords ["fromJson", showT x]
 
 result1 :: (Monad m, MonadFail m) => Result a -> m a
 result1 (Aeson.Error msg) = fail msg

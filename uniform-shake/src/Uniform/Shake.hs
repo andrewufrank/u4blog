@@ -97,7 +97,7 @@ runErr2action :: ErrIO a -> Action a
 runErr2action op = liftIO $ do
     res <- runErr  op
     case res of
-        Left msg -> throw ["runErr2action", msg]
+        Left msg -> fail . t2s . unwords' $ ["runErr2action", msg]
         Right a -> return a
 
 -- throwAction :: Text -> Action () 
