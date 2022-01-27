@@ -1,5 +1,5 @@
 name: uniform-http
-version: 0.0.2.7
+version: 0.0.2.8
 # cabal-version: >=1.22
 # build-type: Simple
 license: GPL
@@ -14,6 +14,7 @@ description: |
     0.0.2.4 change structure to export as Http
     0.0.2.6 add back callHTTP8get
     0.0.2.7 for cabal 8.10.4 may 2021
+    0.0.2.8 moved filetypes for html here
 
 # source-repository head
 #     type: git
@@ -36,11 +37,12 @@ dependencies:
 # --            , uri-encode
 
 # -- mine
-# - uniform-strings
+# # - uniformBase
 # - uniform-error
 # - uniform-algebras
-# - uniform-json
-- uniformBase
+# - uniform-fileio
+- uniformBase >= 0.1.4
+- uniform-json
 # - uniform-http
 
 library:

@@ -1,16 +1,18 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.34.2.
+-- This file has been generated from package.yaml by hpack version 0.34.6.
 --
 -- see: https://github.com/sol/hpack
 
 name:           uniform-http
-version:        0.0.2.7
+version:        0.0.2.8
 synopsis:       uniform text based operations to call http
 description:    http using text
                   0.0.2.3 added HttpVarParams
                   0.0.2.4 change structure to export as Http
                   0.0.2.6 add back callHTTP8get
+                  0.0.2.7 for cabal 8.10.4 may 2021
+                  0.0.2.8 moved filetypes for html here
 category:       Data, Text, Uniform
 author:         Andrew Frank
 maintainer:     Andrew U. Frank <andrewufrank@gmail.com>
@@ -23,7 +25,10 @@ extra-source-files:
 
 library
   exposed-modules:
-      Main
+      Uniform.Http
+      Uniform.HttpCall
+      Uniform.HttpFiles
+      Uniform.HttpURI
   other-modules:
       Paths_uniform_http
   hs-source-dirs:
@@ -34,25 +39,6 @@ library
     , http-client
     , http-conduit
     , network-uri
-    , uniformBase
-  default-language: Haskell2010
-
-test-suite http-test
-  type: exitcode-stdio-1.0
-  main-is: Testing.hs
-  other-modules:
-      Uniform.HttpCall_test
-      Uniform.HttpURI_test
-      Paths_uniform_http
-  hs-source-dirs:
-      tests
-  build-depends:
-      HTF
-    , base
-    , bytestring
-    , http-client
-    , http-conduit
-    , network-uri
-    , quickcheck-text
-    , uniformBase
+    , uniform-json
+    , uniformBase >=0.1.4
   default-language: Haskell2010

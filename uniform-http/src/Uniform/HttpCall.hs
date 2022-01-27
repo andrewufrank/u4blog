@@ -24,11 +24,11 @@
 
 
 module Uniform.HttpCall (module Uniform.HttpCall
-    , module Uniform.Error
+    -- , module Uniform.Error
     , mkServerURI, ServerURI
             )  where
 
-import           Uniform.Error
+import           UniformBase
 import     qualified      Network.HTTP.Simple          as Http
 import     qualified      Network.HTTP.Conduit         as Conduit
 
@@ -87,15 +87,16 @@ callHTTP10post debug (AppType apptype) (ServerURI dest) (HttpPath path)
                                 , "\nbody", bl2t txt ]
 --            "text length"
 --                    , showT length]
-    res <- callIO $ do
-              Http.httpLBS req2
-            `catchError` \e -> do
-                     putIOwords ["callHTTP10post  error caught 3", showT e
-                            , "\n should not occur - caught by callIO ??"
-                            , "\n note hint: replace localhost by 127.0.0.1"
-                            ,  "\n", showT req2]
-                     fail . unwords $  [ "callHTTP10post httperror 3", show e]
-                                             -- is in the IO monad, not ErrIO
+    res <- callIO $ Http.httpLBS req2
+
+                -- callIO does itself catch, additional should not be needed, except perhaps for not providing good informaiton
+                        -- `catch` \e -> do
+                        --         -- putIOwords ["callHTTP10post  error caught 3", showT e
+                        --         --         , "\n should not occur - caught by callIO ??"
+                        --         --         , "\n note hint: replace localhost by 127.0.0.1"
+                        --         --         ,  "\n", showT req2]
+                        --         fail . unwords $  [ "callHTTP10post httperror 3", show e]
+                        --                      -- is in the IO monad, not ErrIO
     let statusCode = Http.getResponseStatusCode res
 --    when debug $
     putIOwords ["callHTTP10post The status code was: ", showT statusCode]

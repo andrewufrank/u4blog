@@ -33,12 +33,13 @@ module Uniform.Http (
     , callHTTP8get  
     , mkHttpPath, HttpPath   -- from / to ?
     , mkHttpQueryParams, HttpQueryParams  -- after the ?
-    , module Uniform.Error
+    , module Uniform.HttpFiles
             )  where
 
-import           Uniform.Error
+-- import           Uniform.Error
 import Uniform.HttpCall
 import Uniform.HttpURI
+import Uniform.HttpFiles
 
 
 

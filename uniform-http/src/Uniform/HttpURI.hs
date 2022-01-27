@@ -32,8 +32,8 @@ module Uniform.HttpURI (
         -- TimeOutSec, mkTimeOut, mkTimeOutDefault
         -- , URI, HttpQueryParams
     module Uniform.HttpURI
-    , module Uniform.Zero
-    , module Uniform.Strings
+    -- , module Uniform.Zero
+    -- , module Uniform.Strings
 --    , module N.Network.URI
     -- , uriT
             )  where
@@ -42,13 +42,13 @@ module Uniform.HttpURI (
 import qualified Network.URI as N
 -- import  Network.URI (URI(..)) 
 -- URI is a newtype with URI as a wrapper
-import           Uniform.Error (errorT)
+-- import           Uniform.Error (errorT)
 import           Uniform.Json
-import           Uniform.ListForm -- (IsString (..), (</>), (<.>))
-import           Uniform.Strings 
-import           Uniform.Strings.Infix ((</>), (<.>))
+-- import           Uniform.ListForm -- (IsString (..), (</>), (<.>))
+-- import           Uniform.Strings 
+-- import           Uniform.Strings.Infix ((</>), (<.>))
 
-import           Uniform.Zero
+import           UniformBase
 --import qualified   Network.URI.Encode as N2
 
 newtype URI = URI  Text 
@@ -67,7 +67,7 @@ makeURI = parseURI
 
 addToURI :: URI -> Text -> URI   -- an url encoded string (use s2url or t2url)
 -- add a text at end to an URI
-addToURI u t = makeURI $ uriT u </> t
+addToURI u t = makeURI $ uriT u <> "/" <> t  -- infix does hide </>
 -- less secure but simpler
 --              = case (t2,u2) of
 --                 (Just t3, Just u3) -> URI . showT $ N.nonStrictRelativeTo t3 u3

@@ -1,9 +1,17 @@
 packages: 
      *.cabal
---    ../../../uniformBase/uniformBase.cabal
---    ../../../uniformBase/uniformSources/uniform-algebras/*.cabal
---    ../../../uniformBase/uniformSources/uniform-error/*.cabal
---    ../../../uniformBase/uniformSources/uniform-fileio/*.cabal
-    ../../../uniformBase/uniformSources/uniform-json/*.cabal
-    ../../../uniformBase/uniformSources/uniform-strings/*.cabal
-    ../../../uniformBase/uniformSources/uniform-time/*.cabal
+ 
+    ../../uBase/uniformBase/*.cabal
+--    ../../uBase/uniform-strings/*.cabal
+    ../../uBase/uniform-fileio/*.cabal
+    ../../uBase/uniform-error/*.cabal
+
+-- /home/frank/Workspace11/uBase/uniformBase/uniformBase.cabal
+
+    ../../u4blog/uniform-json/*.cabal
+
+--    ../../u4blog/uniform-webserver/*.cabal
+--    ../../u4blog/uniform-watch/*.cabal
+
+--    ../../u2to/uniform-convenience/*.cabal
+
