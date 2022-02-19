@@ -100,6 +100,7 @@ markdownOptions = Pandoc.def { Pandoc.readerExtensions = exts }
             , Pandoc.Ext_spaced_reference_links
             , Pandoc.Ext_footnotes  -- all footnotes
             , Pandoc.Ext_citations           -- <-- this is the important extension for bibTex
+            , Pandoc.Ext_implicit_figures  -- a figure alone in a para will have a caption
             ]
         , Pandoc.githubMarkdownExtensions
         ]

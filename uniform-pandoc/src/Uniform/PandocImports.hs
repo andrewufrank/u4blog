@@ -141,7 +141,9 @@ latexOptions =
           [ Pandoc.Ext_raw_tex --Allow raw TeX (other than math)
           -- , Pandoc.Ext_shortcut_reference_links
           -- , Pandoc.Ext_spaced_reference_links
-          -- , Pandoc.Ext_citations           -- <-- this is the important extension for bibTex
+          -- , Pandoc.Ext_citations     
+          , Pandoc.Ext_implicit_figures -- a figure alone will have a caption !!      
+          -- <-- this is the important extension for bibTex
           ]
     }
 
