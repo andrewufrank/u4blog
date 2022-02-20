@@ -92,7 +92,8 @@ markdownOptions = Pandoc.def { Pandoc.readerExtensions = exts }
     exts = mconcat
         [ Pandoc.extensionsFromList
             [ Pandoc.Ext_yaml_metadata_block
-            , Pandoc.Ext_fenced_code_attributes
+            -- , Pandoc.Ext_fenced_code-block -- code blocks with ~
+            , Pandoc.Ext_backtick_code_blocks
             , Pandoc.Ext_fenced_code_attributes  -- eg for haskell code snippets
             , Pandoc.Ext_auto_identifiers
             -- , Pandoc.Ext_raw_html   -- three extension give markdown_strict
@@ -103,6 +104,9 @@ markdownOptions = Pandoc.def { Pandoc.readerExtensions = exts }
             , Pandoc.Ext_inline_notes
             , Pandoc.Ext_citations           -- <-- this is the important extension for bibTex
             , Pandoc.Ext_implicit_figures  -- a figure alone in a para will have a caption
+            , Pandoc.Ext_header_attributes -- for {.unnumbered}
+            , Pandoc.Ext_lists_without_preceding_blankline
+            , Pandoc.Ext_superscript  -- start and closing ^
             ]
         , Pandoc.githubMarkdownExtensions
         ]
