@@ -107,6 +107,9 @@ markdownOptions = Pandoc.def { Pandoc.readerExtensions = exts }
             , Pandoc.Ext_header_attributes -- for {.unnumbered}
             , Pandoc.Ext_lists_without_preceding_blankline
             , Pandoc.Ext_superscript  -- start and closing ^
+            , Pandoc.Ext_subscript -- start and closing ~
+            -- , Pandoc.Ext_short_subsuperscripts  -- only start ^ and ~
+            , Pandoc.Ext_strikeout  -- require ~~ two! before and after
             ]
         , Pandoc.githubMarkdownExtensions
         ]
