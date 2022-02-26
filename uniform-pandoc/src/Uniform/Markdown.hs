@@ -25,7 +25,7 @@
 
 module Uniform.Markdown
   (markdownFileType
-  , MarkdownText, unMT 
+  , MarkdownText, unMT, makeMT
   , readMarkdown2
   , extMD
 --   , readMarkdownFile2docrep
@@ -63,6 +63,9 @@ newtype MarkdownText = MarkdownText Text
 -- | a wrapper around Markdonw text
 unMT :: MarkdownText -> Text
 unMT (MarkdownText a) = a --needed for other ops
+
+makeMT :: Text -> MarkdownText 
+makeMT = MarkdownText 
 
 instance Zeros MarkdownText where
   zero = MarkdownText zero
