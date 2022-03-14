@@ -74,6 +74,11 @@ test_fromJSON = do
                     return a2
         assertEqual (Right p1) res 
 
+test_getAtKeyInt =  
+        assertEqual (Just 30::Maybe Int) (getAtKey p2j "age" )
+
+
+
 -- only solution, other hang without msg  
 -- test_fromJSONk = do  -- fails with error msg
 --             -- important is callIO 
