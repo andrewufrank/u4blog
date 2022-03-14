@@ -27,7 +27,7 @@ module Uniform.Json_test where
 
 import GHC.Generics
 import         "HTF"  Test.Framework
-import           Uniform.Zero
+-- import           Uniform.Zero
 import           Data.Aeson
 -- import Data.Map 
 import           Uniform.Time

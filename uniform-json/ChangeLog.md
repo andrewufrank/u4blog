@@ -6,3 +6,4 @@
     v0.0.4 for aeson >2.0
     v0.0.5 for ghc 9.2.1, aeson >= 2 
     0.0.6 change in error to use ExceptionT
+    0.0.6.1 added getAtKey for int

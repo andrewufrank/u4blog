@@ -24,7 +24,8 @@ import         "HTF"  Test.Framework
 import     {-@ HTF_TESTS @-}       Uniform.Json_test
 -- import     {-@ HTF_TESTS @-}       Uniform.Yaml_test
 
-import           Uniform.Strings
+-- import           Uniform.Strings
+import UniformBase
 
 --import TestingFileIO
 
