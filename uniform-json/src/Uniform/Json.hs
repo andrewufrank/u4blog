@@ -96,7 +96,7 @@ result1 (Aeson.Success a) = return a
 -- a difernt solution
 -- | get a maybe value from a json value 
 gak :: Data.Aeson.Lens.AsValue s => s -> Text -> Maybe Value
-gak b k = (^?) b (key  $ k)
+gak b k = (^?) b (key   $ k)
 
 -- | get and set at a key
 class AtKey vk v where
