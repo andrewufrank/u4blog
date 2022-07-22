@@ -9,7 +9,7 @@ category:     Data Text JSON YAML Pandoc
 synopsis: handling of JSON and YAML in an uniform way
 description: |
     remove particular aspects of abstraction in json and yaml - with an eye to use it with pandoc
-    0.0.6.1 for lts-19.16 with aeson 2.0.3.0
+    0.0.6.1 for lts-19.16 with aeson 2.0.3.0 - 
 # source-repository: head
 # type: git
 # github: https://github.com/andrewufrank/uniform-json.git
