@@ -52,7 +52,8 @@ import Data.Aeson
 import Data.Aeson.Types 
 import Data.Aeson as Aeson
 import Data.Aeson.Lens (key, AsValue)
--- -- import Data.Aeson.Text 
+-- import Data.Aeson.Text -- was this missing ?
+import Data.Aeson.Key 
 import Data.Aeson.Encode.Pretty (encodePretty)
 import Data.Aeson.Lens -- um die underline argumente zu ermoeglichen 
 import qualified Data.HashMap.Lazy as HML
@@ -95,7 +96,7 @@ result1 (Aeson.Success a) = return a
 -- a difernt solution
 -- | get a maybe value from a json value 
 gak :: Data.Aeson.Lens.AsValue s => s -> Text -> Maybe Value
-gak b k = (^?) b (key k)
+gak b k = (^?) b (key  $ k)
 
 -- | get and set at a key
 class AtKey vk v where
@@ -107,14 +108,14 @@ class AtKey vk v where
   putAtKey :: Text -> v -> vk -> vk
 
 instance AtKey Value Text where
-  getAtKey meta2 k2 = meta2 ^? key k2 . _String
-  getAt2Key meta2 k1 k2 = meta2 ^? key k1 . key k2 . _String
-  putAtKey k2 txt meta2 = meta2 & _Object . at k2 ?~ String txt
+  getAtKey meta2 k2 = meta2 ^? key ( k2) . _String
+--   getAt2Key meta2 k1 k2 = meta2 ^? key k1 . key k2 . _String
+--   putAtKey k2 txt meta2 = meta2 & _Object . at k2 ?~ String txt
 
 instance AtKey Value Integer where
-  getAtKey meta2 k2 = meta2 ^? key k2 . _Integral
-  getAt2Key meta2 k1 k2 = meta2 ^? key k1 . key k2 . _Integral
-  putAtKey k2 txt meta2 = meta2 & _Object . at k2 ?~ toJSON txt 
+--   getAtKey meta2 k2 = meta2 ^? key k2 . _Integral
+--   getAt2Key meta2 k1 k2 = meta2 ^? key k1 . key k2 . _Integral
+--   putAtKey k2 txt meta2 = meta2 & _Object . at k2 ?~ toJSON txt 
 
 instance AtKey Value Int where
   getAtKey meta2 k2 = fmap fromInteger $ getAtKey meta2 k2
@@ -122,9 +123,9 @@ instance AtKey Value Int where
   putAtKey k2 v meta2 = putAtKey k2 (toInteger v) meta2  
 
 instance AtKey Value Bool where
-  getAtKey meta2 k2 = meta2 ^? key k2 . _Bool
-  getAt2Key meta2 k1 k2 = meta2 ^? key k1 . key k2 . _Bool
-  putAtKey k2 txt meta2 = meta2 & _Object . at k2 ?~ Bool txt
+--   getAtKey meta2 k2 = meta2 ^? key k2 . _Bool
+--   getAt2Key meta2 k1 k2 = meta2 ^? key k1 . key k2 . _Bool
+--   putAtKey k2 txt meta2 = meta2 & _Object . at k2 ?~ Bool txt
 
 class AtKey2 vk v where
   -- getAtKey :: vk -> Text -> Maybe v
@@ -137,7 +138,7 @@ class AtKey2 vk v where
 instance (ToJSON a) => AtKey2 Value a where
   -- getAtKey meta2 k2 = meta2 ^? key k2 . _Integral
   -- getAt2Key meta2 k1 k2 = meta2 ^? key k1 . key k2 . _Integral
-  putAtKey2 k2 txt meta2 = meta2 & _Object . at k2 ?~ toJSON txt
+--   putAtKey2 k2 txt meta2 = meta2 & _Object . at k2 ?~ toJSON txt
 
 mergeLeftPref ::[Value] -> Value
 -- ^ The (left-biased) union of two maps.
