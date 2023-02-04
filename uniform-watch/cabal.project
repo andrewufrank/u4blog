@@ -2,3 +2,4 @@ packages:
     *.cabal
 --    ../../uBase/uniformBase/*.cabal
 --    ../../../uniformBase/uniformSources/uniform-algebras/*.cabal
+    ../../fromOthersInstalled/twitch
