@@ -80,7 +80,7 @@ readYaml2value fp = do
 yaml2value :: YamlText -> Value
 -- convert a YamlText to a JSON value, error if not ok
 -- how to debug input erros?
-yaml2value yt = either (error . show) id vx
+yaml2value yt = either (error . show) Prelude.id vx
   where
     vx = Y.decodeEither' (t2b . unYAML $ yt) :: Either Y.ParseException Value
 
