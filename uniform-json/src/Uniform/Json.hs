@@ -51,11 +51,12 @@ import Control.Lens
 import Data.Aeson
 import Data.Aeson.Types 
 import Data.Aeson as Aeson
-import Data.Aeson.Lens (key, AsValue)
+-- import Data.Aeson.Lens (key, AsValue)
 -- import Data.Aeson.Text 
 import Data.Aeson.Encode.Pretty (encodePretty)
 import Data.Aeson.Lens
 import qualified Data.HashMap.Lazy as HML
+import qualified Data.Aeson.KeyMap as KM -- added for ghc 9.2
 import UniformBase
 -- import Uniform.Error hiding (at)
 -- import Uniform.Strings hiding (at)
@@ -93,17 +94,17 @@ result1 (Aeson.Success a) = return a
 
 -- a difernt solution
 -- | get a maybe value from a json value 
-gak :: Data.Aeson.Lens.AsValue s => s -> Text -> Maybe Value
+gak :: Data.Aeson.Lens.AsValue s => s -> Key -> Maybe Value
 gak b k = (^?) b (key k)
 
 -- | get and set at a key
 class AtKey vk v where
-  getAtKey :: vk -> Text -> Maybe v
+  getAtKey :: vk -> Key -> Maybe v
 
-  getAt2Key :: vk -> Text -> Text -> Maybe v
+  getAt2Key :: vk -> Key -> Key -> Maybe v
   -- ^ two keys: one after the other
 
-  putAtKey :: Text -> v -> vk -> vk
+  putAtKey :: Key -> v -> vk -> vk
 
 instance AtKey Value Text where
   getAtKey meta2 k2 = meta2 ^? key k2 . _String
@@ -121,12 +122,12 @@ instance AtKey Value Bool where
   putAtKey k2 txt meta2 = meta2 & _Object . at k2 ?~ Bool txt
 
 class AtKey2 vk v where
-  -- getAtKey :: vk -> Text -> Maybe v
-  -- getAt2Key :: vk -> Text -> Text -> Maybe v
+--   getAtKey :: vk -> Key -> Maybe v
+--   getAt2Key :: vk -> Key -> Text -> Maybe v
 
   -- ^ two keys: one after the other
 
-  putAtKey2 :: Text -> v -> vk -> vk
+  putAtKey2 :: Key -> v -> vk -> vk
 
 instance (ToJSON a) => AtKey2 Value a where
   -- getAtKey meta2 k2 = meta2 ^? key k2 . _Integral
@@ -138,7 +139,13 @@ mergeLeftPref ::[Value] -> Value
 -- all values must be objects, which can be prooduced with toJSON
 -- It prefers the first map when duplicate keys are encountered,
 -- http://hackage.haskell.org/package/hashmap-1.3.3/docs/Data-HashMap.html
-mergeLeftPref = Object . HML.unions .  map unObject
+-- mergeLeftPref = Object . HML.unions .  map unObject
+-- for ghc 9.2.1
+mergeLeftPref = Object .unions' .  map unObject
+
+unions' :: [KM.KeyMap Value]  -> KM.KeyMap Value
+unions' = KM.fromHashMap . HML.unions . map KM.toHashMap
+-- end
 
 mergeRightPref :: [Value] -> Value
 mergeRightPref = mergeLeftPref . reverse
