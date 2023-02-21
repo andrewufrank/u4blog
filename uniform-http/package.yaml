@@ -1,5 +1,5 @@
 name: uniform-http
-version: 0.0.2.8
+version: 0.1.5.1
 # cabal-version: >=1.22
 # build-type: Simple
 license: GPL
@@ -41,7 +41,7 @@ dependencies:
 # - uniform-error
 # - uniform-algebras
 # - uniform-fileio
-- uniformBase >= 0.1.4
+- uniformBase >= 0.1.5
 - uniform-json
 # - uniform-http
 

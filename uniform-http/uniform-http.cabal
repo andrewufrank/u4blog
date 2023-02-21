@@ -1,11 +1,11 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.34.6.
+-- This file has been generated from package.yaml by hpack version 0.35.2.
 --
 -- see: https://github.com/sol/hpack
 
 name:           uniform-http
-version:        0.0.2.8
+version:        0.1.5.1
 synopsis:       uniform text based operations to call http
 description:    http using text
                   0.0.2.3 added HttpVarParams
@@ -40,5 +40,5 @@ library
     , http-conduit
     , network-uri
     , uniform-json
-    , uniformBase >=0.1.4
+    , uniformBase >=0.1.5
   default-language: Haskell2010
