@@ -1,24 +1,15 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.34.6.
+-- This file has been generated from package.yaml by hpack version 0.35.0.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: ed04c20655c31ae3cb15d1737d55d7f6b0ac68b86c69a3f9a4e9d5058268a637
+-- hash: 6705ce66283447a8d34a6cbb06f1b8be453c97db4c66c1f2941a7a76802736ec
 
 name:           uniform-pandoc
-version:        0.0.2.4
+version:        0.1.5.1
 synopsis:       handling of   some pandoc stuff
 description:    remove particular aspects of abstraction 
-                0.0.2.1 for cabal may 2021 8.10.4
-                0.0.2.2 systematic bakeOneX2y function names
-                0.0.2.3 biblio-refs fixing, not yet change to citeproc-hs
-                          currently fixed to old version of pandoc-types 
-                          processPDF.hs replaced with uniform-latex2pdf
-                0.0.2.4 for ghc 9.2.1 (first for 8.10.7 limits on rpi64)
-                          uses pandoc (and the Pandoc.Citeproc code
-                          not pandoc-citeproc.hs)
-                0.0.2.5 adaption to use of ExceptionT
 category:       Uniform handling of   some pandoc stuff
 author:         Andrew Frank
 maintainer:     Andrew U. Frank <andrewufrank@gmail.com>
