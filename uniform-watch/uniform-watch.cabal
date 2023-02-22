@@ -5,10 +5,9 @@ cabal-version: 1.12
 -- see: https://github.com/sol/hpack
 
 name:           uniform-watch
-version:        0.0.1.3
+version:        0.1.5.1
 synopsis:       uniform wrapper for watch
 description:    watch wrapped for ErrIO
-                  0.0.1.3 for cabal
 category:       Watch, Uniform
 author:         Andrew Frank
 maintainer:     Andrew U. Frank <andrewufrank@gmail.com>
@@ -29,5 +28,5 @@ library
   build-depends:
       base >=4.7 && <5
     , twitch ==0.1.7.2.1
-    , uniformBase >=0.1.3
+    , uniformBase >=0.1.5.1
   default-language: Haskell2010
