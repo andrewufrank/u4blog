@@ -3,3 +3,5 @@
     0.0.1.2 changes for ExceptionT (statt ErrorT)
     0.0.1.3 changes for filtering md files to bake 
             changed function name to getFilesToBake
+0.1.5 branch for ghc 9.2.5
+0.1.5.1

@@ -1,5 +1,5 @@
 name: uniform-shake
-version: 0.0.1.3
+version: 0.1.5.1
 # cabal-version: >=1.22
 # build-type: Simple
 license: GPL
@@ -23,8 +23,8 @@ extra-source-files:
 dependencies:
 -  base
 - shake
-- uniformBase >=0.1.4
-- uniform-json >= 0.0.6
+- uniformBase >=0.1.5
+- uniform-json >= 0.1.5
 
 library:
   source-dirs: src
