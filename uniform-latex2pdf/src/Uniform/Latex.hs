@@ -110,6 +110,8 @@ preamble1   latpar =
       -- "\\setmonofont{CMU Typewriter Text}%{Consolas}",
       "\\usepackage[ngerman]{babel}"
     , "\\usepackage{graphicx}"
+    , "          \\setkeys{Gin}{width=.75\\linewidth,keepaspectratio}"
+    -- set defaults for includegraphics, to make pictures not too big in pdf
     , "\\usepackage{makeidx}"
     -- , "\\usepackage{natbib}"
     , "\\usepackage[backend=biber," --  %% Hilfsprogramm "biber" (statt "biblatex" oder "bibtex")
@@ -134,6 +136,7 @@ preamble1   latpar =
     ,   "\\author{" <> latAuthor latpar <> "}"
     -- does this produce nothing if the author field is empty? TODO
     ,   "\\date{}"  -- no date
+    , "\\graphicspath{{/home/frank/bakedHomepage}}"  -- to find image the same place than html web root
     , ""
     , "\\begin{document}"
     , ""
