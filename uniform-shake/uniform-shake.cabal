@@ -1,6 +1,6 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.35.0.
+-- This file has been generated from package.yaml by hpack version 0.35.2.
 --
 -- see: https://github.com/sol/hpack
 
@@ -8,8 +8,11 @@ name:           uniform-shake
 version:        0.1.5.1
 synopsis:       uniform wrapper for shake
 description:    shake top level functions using Path (not filepath)
-                version 2 to include in uniform ecosystem
+                version 2 to include in uniform ecosystem,
+                i.e. use text, Path,
 category:       Build, Uniform
+homepage:       https://github.com/git@github.com:andrewufrank/u4blog.git#readme
+bug-reports:    https://github.com/git@github.com:andrewufrank/u4blog.git/issues
 author:         Andrew Frank
 maintainer:     Andrew U. Frank <andrewufrank@gmail.com>
 license:        GPL
@@ -18,6 +21,11 @@ build-type:     Simple
 extra-source-files:
     README.md
     ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/git@github.com:andrewufrank/u4blog.git
+  subdir: uniform-shake
 
 library
   exposed-modules:
@@ -28,7 +36,7 @@ library
   hs-source-dirs:
       src
   build-depends:
-      base
+      base >=4.7 && <5
     , shake
     , uniform-json >=0.1.5
     , uniformBase >=0.1.5

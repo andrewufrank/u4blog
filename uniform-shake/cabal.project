@@ -1,10 +1,12 @@
 packages: 
     ./*.cabal
  
---    ../../uBase/uniformBase/*.cabal
---    ../../uBase/uniform-strings/*.cabal
---    ../../uBase/uniform-fileio/*.cabal
---    ../../uBase/uniform-error/*.cabal
+    ../../uBase/uniformBase/*.cabal
+    ../../uBase/uniform-algebras/*.cabal
+    ../../uBase/uniform-strings/*.cabal
+    ../../uBase/uniform-fileio/*.cabal
+    ../../uBase/uniform-error/*.cabal
+    ../../uBase/uniform-time/*.cabal
 
 -- /home/frank/Workspace11/uBase/uniformBase/uniformBase.cabal
 

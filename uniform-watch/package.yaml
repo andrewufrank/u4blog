@@ -4,12 +4,13 @@ version: 0.1.5.1
 # build-type: Simple
 license: GPL
 license-file: GPL_3
+github: git@github.com:andrewufrank/u4blog.git/uniform-watch
 maintainer: Andrew U. Frank <andrewufrank@gmail.com>
 author: Andrew Frank
 category: 'Watch, Uniform'
 synopsis: uniform wrapper for watch 
 description: |
-  watch wrapped for ErrIO
+  watch wrapped for ErrIO to report all errors 
 
 
 # source-repository head

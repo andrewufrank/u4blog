@@ -3,12 +3,12 @@ packages:
 
 -- add here the location of uniformBase for local use 
 
---    ../../uBase/uniformBase/*.cabal
---    ../../uBase/uniform-algebras/*.cabal
---    ../../uBase/uniform-strings/*.cabal
---    ../../uBase/uniform-error/*.cabal
---   ../../uBase/uniform-time/*.cabal
---    ../../uBase/uniform-fileio/*.cabal 
+    ../../uBase/uniformBase/*.cabal
+    ../../uBase/uniform-algebras/*.cabal
+    ../../uBase/uniform-strings/*.cabal
+    ../../uBase/uniform-error/*.cabal
+   ../../uBase/uniform-time/*.cabal
+    ../../uBase/uniform-fileio/*.cabal 
 
 -- removed for 9.2.1    ../../u4blog/uniform-webserver/*.cabal
 --    ../../u4blog/uniform-shake/*.cabal

@@ -4,13 +4,14 @@ version: 0.1.5.1
 # build-type: Simple
 license: GPL
 license-file: GPL_3
+github: git@github.com:andrewufrank/u4blog.git/uniform-latex2pdf
 maintainer: Andrew U. Frank <andrewufrank@gmail.com>
 author: Andrew Frank
 category: PDF Latex
-synopsis: convert a latex file to pdf 
+synopsis: convert a latex `tex` file to a pdf 
 description: |
   convert a latex file to pdf 
-  calling lualatex with the flags etc.
+  calling lualatex with the flags etc. necessary to include bibliography and footnotes
 
 
 
@@ -23,9 +24,9 @@ extra-source-files:
 - ChangeLog.md
 
 dependencies:
-- base
+- base >= 4.7 && < 5
 - uniformBase >=0.1.5
-- uniform-json
+- uniform-json >=0.1.5
 - process
 - silently
 # - aeson  # for generic read 

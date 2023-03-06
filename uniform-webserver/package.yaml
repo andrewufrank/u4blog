@@ -9,9 +9,8 @@ author: Andrew Frank
 category: 'Data, Text, Uniform'
 synopsis: uniform text based operations to call http
 description: |
-  http using text
-    0.0.10.2 for cabal
-    0.0.10.3 for ghc 9.2.1
+  http using text in all arguments and converting internally
+ 
 
 # source-repository head
 #     type: git
@@ -22,12 +21,12 @@ extra-source-files:
 - ChangeLog.md
 
 dependencies:
--  base
+-  base >= 4.7 && < 5
 # the next depend on memory, which is not yet avaiblable for 9.2.1
 - scotty
 - warp  # ==3.3.18
 - wai-middleware-static
-- uniformBase >=0.1.3
+- uniformBase >=0.1.5
 
 library:
   source-dirs: 

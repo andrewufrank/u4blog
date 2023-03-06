@@ -4,13 +4,15 @@ version: 0.1.5.1
 # build-type: Simple
 license: GPL
 license-file: GPL_3
+github: git@github.com:andrewufrank/u4blog.git/uniform-shake
 maintainer: Andrew U. Frank <andrewufrank@gmail.com>
 author: Andrew Frank
 category: 'Build, Uniform'
 synopsis: uniform wrapper for shake 
 description: |
     shake top level functions using Path (not filepath)
-    version 2 to include in uniform ecosystem
+    version 2 to include in uniform ecosystem,
+    i.e. use text, Path,
 
 # source-repository head
 #     type: git
@@ -21,7 +23,7 @@ extra-source-files:
 - ChangeLog.md
 
 dependencies:
--  base
+-  base >= 4.7 && < 5
 - shake
 - uniformBase >=0.1.5
 - uniform-json >= 0.1.5

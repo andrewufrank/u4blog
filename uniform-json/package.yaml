@@ -2,6 +2,7 @@ name:         uniform-json
 version:      0.1.5.1
 license:      GPL
 license-file: GPL_3
+github: git@github.com:andrewufrank/u4blog.git/uniform-json
 maintainer:   Andrew U. Frank <frank@geoinfo.tuwien.ac.at>
 author:       Andrew Frank
 copyright:    2021 Andrew U. Frank

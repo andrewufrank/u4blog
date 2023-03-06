@@ -7,13 +7,10 @@ cabal-version: 1.12
 name:           uniform-http
 version:        0.1.5.1
 synopsis:       uniform text based operations to call http
-description:    http using text
-                  0.0.2.3 added HttpVarParams
-                  0.0.2.4 change structure to export as Http
-                  0.0.2.6 add back callHTTP8get
-                  0.0.2.7 for cabal 8.10.4 may 2021
-                  0.0.2.8 moved filetypes for html here
+description:    http using text in all textual arguments and converts internally to whatever is required
 category:       Data, Text, Uniform
+homepage:       https://github.com/git@github.com:andrewufrank/u4blog.git#readme
+bug-reports:    https://github.com/git@github.com:andrewufrank/u4blog.git/issues
 author:         Andrew Frank
 maintainer:     Andrew U. Frank <andrewufrank@gmail.com>
 license:        GPL
@@ -22,6 +19,11 @@ build-type:     Simple
 extra-source-files:
     README.md
     ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/git@github.com:andrewufrank/u4blog.git
+  subdir: uniform-http
 
 library
   exposed-modules:
@@ -34,11 +36,11 @@ library
   hs-source-dirs:
       src
   build-depends:
-      base
+      base >=4.7 && <5
     , bytestring
     , http-client
     , http-conduit
     , network-uri
-    , uniform-json
+    , uniform-json >=0.1.5
     , uniformBase >=0.1.5
   default-language: Haskell2010

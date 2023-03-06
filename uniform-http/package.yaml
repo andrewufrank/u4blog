@@ -4,17 +4,14 @@ version: 0.1.5.1
 # build-type: Simple
 license: GPL
 license-file: GPL_3
+github: git@github.com:andrewufrank/u4blog.git/uniform-http
 maintainer: Andrew U. Frank <andrewufrank@gmail.com>
 author: Andrew Frank
 category: 'Data, Text, Uniform'
 synopsis: uniform text based operations to call http
 description: |
-  http using text
-    0.0.2.3 added HttpVarParams
-    0.0.2.4 change structure to export as Http
-    0.0.2.6 add back callHTTP8get
-    0.0.2.7 for cabal 8.10.4 may 2021
-    0.0.2.8 moved filetypes for html here
+  http using text in all textual arguments and converts internally to whatever is required
+
 
 # source-repository head
 #     type: git
@@ -25,7 +22,7 @@ extra-source-files:
 - ChangeLog.md
 
 dependencies:
-- base
+- base >= 4.7 && < 5
 - bytestring
 #             -- ,text
 # --            , HTTP
@@ -42,7 +39,7 @@ dependencies:
 # - uniform-algebras
 # - uniform-fileio
 - uniformBase >= 0.1.5
-- uniform-json
+- uniform-json >= 0.1.5
 # - uniform-http
 
 library:
