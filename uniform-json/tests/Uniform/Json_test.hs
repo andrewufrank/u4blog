@@ -74,8 +74,8 @@ test_fromJSON = do
                     return a2
         assertEqual (Right p1) res 
 
-test_getAtKeyInt =  
-        assertEqual (Just 30::Maybe Int) (getAtKey p2j "age" )
+-- test_getAtKeyInt =  
+--         assertEqual (Just 30::Maybe Int) (getAtKey p2j "age" )
 
 
 

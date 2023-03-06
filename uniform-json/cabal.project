@@ -1,8 +1,8 @@
 packages: 
     ./*.cabal
-    ../../uBase_singleGit/uniformBase/*.cabal
-    ../../uBase_singleGit/uniform-algebras/*.cabal
-    ../../uBase_singleGit/uniform-strings/*.cabal
-     ../../uBase_singleGit/uniform-error/*.cabal
-      ../../uBase_singleGit/uniform-time/*.cabal
-    ../../uBase_singleGit/uniform-fileio/*.cabal
+--    ../../uBase_singleGit/uniformBase/*.cabal
+--    ../../uBase_singleGit/uniform-algebras/*.cabal
+--    ../../uBase_singleGit/uniform-strings/*.cabal
+--     ../../uBase_singleGit/uniform-error/*.cabal
+--      ../../uBase_singleGit/uniform-time/*.cabal
+--   ../../uBase_singleGit/uniform-fileio/*.cabal

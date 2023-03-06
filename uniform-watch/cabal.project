@@ -8,4 +8,4 @@ packages:
     ../../uBase/uniform-time/*.cabal
 
 --    ../../../uniformBase/uniformSources/uniform-algebras/*.cabal
-    ../../fromOthersInstalled/twitch
+--    ../../fromOthersInstalled/twitch
