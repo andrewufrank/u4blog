@@ -10,8 +10,8 @@ synopsis:       convert a latex `tex` file to a pdf
 description:    convert a latex file to pdf 
                 calling lualatex with the flags etc. necessary to include bibliography and footnotes
 category:       PDF Latex
-homepage:       https://github.com/git@github.com:andrewufrank/u4blog.git#readme
-bug-reports:    https://github.com/git@github.com:andrewufrank/u4blog.git/issues
+homepage:       https://github.com/andrewufrank/u4blog.git#readme
+bug-reports:    https://github.com/andrewufrank/u4blog.git/issues
 author:         Andrew Frank
 maintainer:     Andrew U. Frank <andrewufrank@gmail.com>
 license:        GPL
@@ -23,7 +23,7 @@ extra-source-files:
 
 source-repository head
   type: git
-  location: https://github.com/git@github.com:andrewufrank/u4blog.git
+  location: https://github.com/andrewufrank/u4blog.git
   subdir: uniform-latex2pdf
 
 library

@@ -9,6 +9,8 @@ version:        0.1.5.1
 synopsis:       uniform text based operations to call http
 description:    http using text in all arguments and converting internally
 category:       Data, Text, Uniform
+homepage:       https://github.com/andrewufrank/u4blog.git#readme
+bug-reports:    https://github.com/andrewufrank/u4blog.git/issues
 author:         Andrew Frank
 maintainer:     Andrew U. Frank <andrewufrank@gmail.com>
 license:        GPL
@@ -17,6 +19,11 @@ build-type:     Simple
 extra-source-files:
     README.md
     ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/andrewufrank/u4blog.git
+  subdir: uniform-webserver
 
 library
   exposed-modules:

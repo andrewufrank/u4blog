@@ -4,7 +4,7 @@ version: 0.1.5.1
 # build-type: Simple
 license: GPL
 license-file: GPL_3
-github: git@github.com:andrewufrank/u4blog.git/uniform-latex2pdf
+github:  andrewufrank/u4blog.git/uniform-latex2pdf
 maintainer: Andrew U. Frank <andrewufrank@gmail.com>
 author: Andrew Frank
 category: PDF Latex

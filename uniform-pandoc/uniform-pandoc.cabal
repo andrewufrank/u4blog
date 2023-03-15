@@ -4,15 +4,15 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 2d9a95b3ba7424337cb39832bb4c0778264e754af7183c04d36b78e760c486be
+-- hash: 0e83138b039d397001e4c50005bde3c2ac7464bb5e8312196d101050dde7e08b
 
 name:           uniform-pandoc
 version:        0.1.5.1
 synopsis:       handling of   some pandoc stuff
 description:    remove particular aspects of abstraction 
 category:       Uniform handling of   some pandoc stuff
-homepage:       https://github.com/git@github.com:andrewufrank/u4blog.git#readme
-bug-reports:    https://github.com/git@github.com:andrewufrank/u4blog.git/issues
+homepage:       https://github.com/andrewufrank/u4blog.git#readme
+bug-reports:    https://github.com/andrewufrank/u4blog.git/issues
 author:         Andrew Frank
 maintainer:     Andrew U. Frank <andrewufrank@gmail.com>
 copyright:      2021 Andrew U. Frank
@@ -25,7 +25,7 @@ extra-source-files:
 
 source-repository head
   type: git
-  location: https://github.com/git@github.com:andrewufrank/u4blog.git
+  location: https://github.com/andrewufrank/u4blog.git
   subdir: uniform-pandoc
 
 library

@@ -4,15 +4,15 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 91c57d89d01ab321adfd3ad7f72a6b6fd8e0b13c316db871a6e0ee839077570b
+-- hash: 34dcfdb4ff5beb615c4ce7623d833836d578f59c408e48135dd0d49659fcce5f
 
 name:           uniform-json
 version:        0.1.5.1
 synopsis:       handling of JSON and YAML in an uniform way
 description:    remove particular aspects of abstraction in json and yaml - with an eye to use it with pandoc
 category:       Data Text JSON YAML Pandoc
-homepage:       https://github.com/git@github.com:andrewufrank/u4blog.git#readme
-bug-reports:    https://github.com/git@github.com:andrewufrank/u4blog.git/issues
+homepage:       https://github.com/andrewufrank/u4blog.git#readme
+bug-reports:    https://github.com/andrewufrank/u4blog.git/issues
 author:         Andrew Frank
 maintainer:     Andrew U. Frank <frank@geoinfo.tuwien.ac.at>
 copyright:      2021 Andrew U. Frank
@@ -25,7 +25,7 @@ extra-source-files:
 
 source-repository head
   type: git
-  location: https://github.com/git@github.com:andrewufrank/u4blog.git
+  location: https://github.com/andrewufrank/u4blog.git
   subdir: uniform-json
 
 library
