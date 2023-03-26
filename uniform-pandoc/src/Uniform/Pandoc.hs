@@ -28,6 +28,7 @@ module Uniform.Pandoc
   , module Uniform.PandocHTMLwriter
   , module Uniform.BibTex
   , module Uniform.Markdown
+  , module Uniform.Pandoc2pdf
   )
 where
 
@@ -38,6 +39,7 @@ import Uniform.Markdown
 
 import qualified Text.Pandoc                   as Pandoc
 import Text.Pandoc ( ReaderOptions, WriterOptions(..) )        
- 
+import Uniform.Pandoc2pdf  
+
 justToKeepWarningAway :: Int 
 justToKeepWarningAway = 0 

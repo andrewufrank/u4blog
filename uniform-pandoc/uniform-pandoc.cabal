@@ -4,10 +4,10 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 0e83138b039d397001e4c50005bde3c2ac7464bb5e8312196d101050dde7e08b
+-- hash: c7e2b58f356c45f2a8337964a3538e82a03b31ad319a471a967525c570ee5f43
 
 name:           uniform-pandoc
-version:        0.1.5.1
+version:        0.1.5.2
 synopsis:       handling of   some pandoc stuff
 description:    remove particular aspects of abstraction 
 category:       Uniform handling of   some pandoc stuff
@@ -34,6 +34,7 @@ library
       Uniform.HTMLout
       Uniform.Markdown
       Uniform.Pandoc
+      Uniform.Pandoc2pdf
       Uniform.PandocHTMLwriter
       Uniform.PandocImports
   other-modules:
@@ -43,6 +44,7 @@ library
   build-depends:
       aeson
     , base >=4.7 && <5
+    , bytestring
     , doclayout
     , doctemplates
     , pandoc >=2.11

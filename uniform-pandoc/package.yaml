@@ -1,5 +1,5 @@
 name:         uniform-pandoc 
-version:      0.1.5.1
+version:      0.1.5.2
 license:      GPL
 license-file: GPL_3
 github:  andrewufrank/u4blog.git/uniform-pandoc
@@ -29,6 +29,7 @@ dependencies:
 - doclayout  #for  html writer (both)
 # - lens 
 - aeson 
+- bytestring
 # - lens-aeson
 # - parsec
 # - containers
