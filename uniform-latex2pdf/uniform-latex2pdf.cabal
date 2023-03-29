@@ -5,7 +5,7 @@ cabal-version: 1.12
 -- see: https://github.com/sol/hpack
 
 name:           uniform-latex2pdf
-version:        0.1.5.1
+version:        0.1.5.2
 synopsis:       convert a latex `tex` file to a pdf
 description:    convert a latex file to pdf 
                 calling lualatex with the flags etc. necessary to include bibliography and footnotes

@@ -63,15 +63,16 @@ instance ToJSON LatexParam where
 -- TODO create a default/minimal preamble 
 -- and add preamble as parameter
 
-tex2latex :: LatexParam ->  Text -> Text
-{- ^ combine a snipped (produced from an md file) with a preamble to
- produce a compilable latex file.
- references are processed earlier (in  panrep)
- keps the metadata
--}
-tex2latex latpar snips = concat'
+tex2latex :: Path Abs Dir -> LatexParam ->  Text -> Text
+-- ^ combine a snipped (produced from an md file) with a preamble to
+--  produce a compilable latex file.
+--  references are processed earlier (in  panrep)
+--  keps the metadata
+-- needs the web root (dough dir) to find graphics
+
+tex2latex webroot latpar snips = concat'
         $ [ unlines' 
-                (preamble1 
+                (preamble1 webroot
                     -- (maybe ""  (s2t . toFilePath) $ latBibliographyP latpar)
                     -- (maybe "authoryear" id (latStyle latpar))
                     latpar
@@ -98,8 +99,9 @@ tex2latex latpar snips = concat'
 --             }
 -- todo  - macche einen file
 
-preamble1 ::   LatexParam -> [Text]
-preamble1   latpar =
+preamble1 ::   Path Abs Dir -> LatexParam -> [Text]
+-- pass the webroot (baked site) to set for graphics path 
+preamble1 webroot  latpar =
     [ -- "%%% eval: (setenv \"LANG\" \"de_CH.utf8\")",
     --   "\\documentclass[a4paper,10pt,notitlepage]{scrbook}"
       "\\documentclass[a4paper,10pt,notitlepage]{scrartcl}"
@@ -136,7 +138,7 @@ preamble1   latpar =
     ,   "\\author{" <> latAuthor latpar <> "}"
     -- does this produce nothing if the author field is empty? TODO
     ,   "\\date{}"  -- no date
-    , "\\graphicspath{{/home/frank/bakedHomepage}}"  -- to find image the same place than html web root
+    , "\\graphicspath{{"<>(s2t $ toFilePath webroot) <> "}}"  -- to find image the same place than html web root
     , ""
     , "\\begin{document}"
     , ""
@@ -180,7 +182,7 @@ writePDF2 debug fn fnres refDir = do
     -- process
 
     let infn =   getNakedFileName $ fn :: FilePath -- setExtension extTex fn :: Path Abs File
-    when (informAll debug) $ when (inform debug) $ putIOwords
+    when (inform debug) $ putIOwords
         [ "writePDF2 1 infn"
         , showT infn
         , "\n\t fnres"
