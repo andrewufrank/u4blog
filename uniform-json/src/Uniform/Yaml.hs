@@ -75,13 +75,14 @@ readYaml2value :: Path Abs File -> ErrIO Value
 -- error when syntax issue
 readYaml2value fp = do
   t <- read8 fp yamlFileType
-  return . yaml2value $ t
+  return . (yaml2value fp) $ t
 
-yaml2value :: YamlText -> Value
+yaml2value :: Path Abs File -> YamlText -> Value
 -- convert a YamlText to a JSON value, error if not ok
 -- how to debug input erros?
-yaml2value yt = either (error . show) Prelude.id vx
+yaml2value fp yt = either (errorT . show2) Prelude.id vx
   where
+    show2 a =   ["Yaml error in file (line count start 0)", showT fp, ":", showT a] 
     vx = Y.decodeEither' (t2b . unYAML $ yt) :: Either Y.ParseException Value
 
 readYaml2rec :: (FromJSON a, Show a) => Path Abs File -> ErrIO a 

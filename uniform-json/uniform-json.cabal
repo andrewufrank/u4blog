@@ -4,10 +4,10 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 34dcfdb4ff5beb615c4ce7623d833836d578f59c408e48135dd0d49659fcce5f
+-- hash: 095a485a37e98888760efed1bb583dcfc7299cdf67b51e97aa43d138db791f6a
 
 name:           uniform-json
-version:        0.1.5.1
+version:        0.1.5.2
 synopsis:       handling of JSON and YAML in an uniform way
 description:    remove particular aspects of abstraction in json and yaml - with an eye to use it with pandoc
 category:       Data Text JSON YAML Pandoc

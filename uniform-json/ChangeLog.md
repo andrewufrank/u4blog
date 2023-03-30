@@ -11,4 +11,5 @@
   0.0.6.1 for lts-19.16 with aeson 2.0.3.0 - 
       
 0.1.5 branch for ghc 9.2.5
-0.1.5.1    
+0.1.5.1
+0.1.5.2  add filename in error msg from yaml parse    
