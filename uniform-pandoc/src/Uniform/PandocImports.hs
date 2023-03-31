@@ -48,7 +48,7 @@ import Text.Pandoc.Highlighting (tango)
 import Text.Pandoc.Shared (stringify)
 import Uniform.Json
       
-import Uniform.Yaml  
+-- import Uniform.Yaml  
 import UniformBase
 -- import Data.Aeson.Types ( parseMaybe )
 
@@ -120,12 +120,12 @@ flattenMeta (Pandoc.Meta meta) = toJSON $ fmap go meta
     go (Pandoc.MetaInlines m) = toJSON $ stringify m
     go (Pandoc.MetaBlocks m) = toJSON $ stringify m
 
-readYaml2value :: Path Abs File -> ErrIO Value
--- | read a yaml file to a value
--- error when syntax issue
-readYaml2value fp = do
-  t <- read8 fp yamlFileType
-  return . yaml2value $ t
+-- readYaml2value :: Path Abs File -> ErrIO Value
+-- -- | read a yaml file to a value
+-- -- error when syntax issue
+-- readYaml2value fp = do
+--   t <- read8 fp yamlFileType
+--   return . yaml2value $ t
 
 latexOptions :: WriterOptions
 -- | reasonable extension - crucial!

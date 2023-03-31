@@ -22,8 +22,8 @@ dependencies:
 - base >= 4.7 && < 5
 - pandoc >= 2.11
 
-- uniformBase >=0.1.4
-- uniform-json >=0.0.6
+- uniformBase >=0.1.5.1
+- uniform-json >=0.1.5.2
 
 - doctemplates
 - doclayout  #for  html writer (both)
