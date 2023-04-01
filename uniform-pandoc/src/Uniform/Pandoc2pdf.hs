@@ -33,6 +33,8 @@ panrep2pdf  :: NoticeLevel -> Pan.Pandoc -> Path Abs File -> Extension ->  ErrIO
 -- return from runIO does something with error msg (and types)
 -- note: the pdf is written from the lazybytestream directly
 -- not using write8 
+-- Problem: does not find the images (and is not faster than the version writePDF2)
+-- not currently used
 
 panrep2pdf debug dr1 resFn ext = do 
     -- stuff done with write8 automatically

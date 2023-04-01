@@ -35,11 +35,13 @@ data LatexParam = LatexParam
     { latTitle ::  Text  
     , latAuthor :: Text 
     , latAbstract ::  Text
-    , latBibliographyP :: Text  -- the bibliio file 
+    , latBibliography  :: Text  -- the bibliio file 
             -- problem with multiple files? 
     , latStyle :: Text
             -- is not used 
     , latReferences :: Text  -- ^ used only for citeproc to produce html, not for biblatex to produce pdf 
+    -- , latReference_section_title :: Text -- ^ the text for the title of the ref section
+    -- selection by language
     , latBook :: Bool  -- is this a long text for a book/booklet
     , latContent :: [Text] -- ^ a list of the .md files which are collected into a multi-md pdf
     }
@@ -111,6 +113,7 @@ preamble1 webroot  latpar =
       -- "\\setmainfont{CMU Serif}%{Times New Roman}",
       -- "\\setmonofont{CMU Typewriter Text}%{Consolas}",
       "\\usepackage[ngerman]{babel}"
+    , "\\renewcaptionname{ngerman}{\\bibname}{Literatur}   %Bibliography"
     , "\\usepackage{graphicx}"
     , "          \\setkeys{Gin}{width=.75\\linewidth,keepaspectratio}"
     -- set defaults for includegraphics, to make pictures not too big in pdf
@@ -121,7 +124,7 @@ preamble1 webroot  latpar =
     ,   "natbib=true," --  %% Bereitstellen von natbib-kompatiblen Zitierkommandos
     ,   "hyperref=true," -- %% hyperref-Paket verwenden, um Links zu erstellen
     ,   "]{biblatex}"
-    , "\\addbibresource{" <>  latBibliographyP latpar <> "}"
+    , "\\addbibresource{" <>  latBibliography latpar <> "}"
                     -- <> ", jobname.bib
     -- , "\\addbibresource{/home/frank/Workspace11/ssg/docs/site/dough/resources/BibTexLatex.bib}"
     
@@ -159,12 +162,24 @@ postamble1 = ["", "", "\\printindex", "\\end{document}"] :: [Text]
 makebiblio ::   [Text] 
 makebiblio  =
     [ ""
-    , ""
+    , "test makebiblio"
     -- , "\\bibliographystyle{plainnat}"
     , "\\printbibliography"
     -- , "\\bibliography{" <>  biblio <> "}"
     , ""
     ]  
+
+-- https://tex.stackexchange.com/questions/82993/how-to-change-the-name-of-document-elements-like-figure-contents-bibliogr
+-- for an automatic adaption based on the language
+-- \renewcaptionname{ngerman}{\contentsname}{Inhalt}           %Table of contents
+-- \renewcaptionname{ngerman}{\listfigurename}{Abbildungen}    %Figures
+-- \renewcaptionname{ngerman}{\listtablename}{Tabellen}        %Tables
+-- \renewcaptionname{ngerman}{\figurename}{Abb.}               %Figure
+-- \renewcaptionname{ngerman}{\tablename}{Tab.}                %Table
+-- \renewcaptionname{ngerman}{\bibname}{Literatur}             %Bibliography
+--   \newcaptionname{ngerman}{\lstlistlistingname}{Quelltexte} %Table of listings 
+--   \newcaptionname{ngerman}{\lstlistingname}{Quelltext}      %Listing
+
 
 writePDF2 :: NoticeLevel -> Path Abs File -> Path Abs File -> Path Abs Dir -> ErrIO ()
 -- convert the text in the file given (a full latex, exetnsion "tex") into a pdf
