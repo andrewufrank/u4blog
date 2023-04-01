@@ -137,7 +137,8 @@ preamble1 webroot  latpar =
     ,   "hyperref=true," -- %% hyperref-Paket verwenden, um Links zu erstellen
     ,   "]{biblatex}"
     , "\\addbibresource{" <>  latBibliography latpar <> "}"
-                    -- <> ", jobname.bib
+    , "\\addbibresource{jobname.bib}"
+
     -- , "\\addbibresource{/home/frank/Workspace11/ssg/docs/site/dough/resources/BibTexLatex.bib}"
     
     -- , "\\newenvironment{abstract}{}{}" -- is this necessary
@@ -157,11 +158,11 @@ preamble1 webroot  latpar =
     , ""
     , "\\begin{document}"
     , ""
-    -- , "\\usepackage{filecontents}"
-    -- ,       "\\begin{filecontents}{\\jobname.bib}"
-    -- ,       latReferences latpar
-    -- ,       "\\end{filecontents}"
-    -- , ""
+    , "\\usepackage{filecontents}"
+    ,       "\\begin{filecontents}{\\jobname.bib}"
+    ,       latReferences latpar
+    ,       "\\end{filecontents}"
+    , ""
     , "\\maketitle"
 	, "\\begin{abstract}" <> latAbstract latpar <> "\\end{abstract}"
     , "\\bigskip" -- a blank line after the abstract
