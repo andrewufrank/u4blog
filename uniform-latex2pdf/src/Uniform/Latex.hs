@@ -123,7 +123,7 @@ preamble1 webroot  latpar =
       -- "\\setmainfont{CMU Serif}%{Times New Roman}",
       -- "\\setmonofont{CMU Typewriter Text}%{Consolas}",
       -- only useful for book laguage (in index) 
-    ,  "\\usepackage[" <> latLanguage latpar <> "ngerman]{babel}"
+    ,  "\\usepackage[" <> latLanguage latpar <> "]{babel}"
     , "\\renewcaptionname{ngerman}{\\bibname}{Literatur}   %Bibliography"
     , "\\renewcaptionname{english}{\\bibname}{References}   %Bibliography"
     , "\\usepackage{graphicx}"
@@ -209,7 +209,7 @@ writePDF2 debug fn fnres refDir = do
     -- process
 
     let infn =   getNakedFileName $ fn :: FilePath -- setExtension extTex fn :: Path Abs File
-    when (inform debug) $ putIOwords
+    when (informAll debug) $ putIOwords
         [ "writePDF2 1 infn"
         , showT infn
         , "\n\t fnres"
