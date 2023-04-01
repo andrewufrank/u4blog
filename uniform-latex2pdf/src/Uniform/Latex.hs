@@ -35,6 +35,7 @@ data LatexParam = LatexParam
     { latTitle ::  Text  
     , latAuthor :: Text 
     , latAbstract ::  Text
+    , latLanguage :: Text
     , latBibliography  :: Text  -- the bibliio file 
             -- problem with multiple files? 
     , latStyle :: Text
@@ -48,7 +49,7 @@ data LatexParam = LatexParam
     deriving (Eq, Ord, Read, Show, Generic)
 
 instance Zeros LatexParam where 
-    zero = LatexParam zero zero zero zero zero zero zero zero
+    zero = LatexParam zero zero zero zero zero zero zero zero zero
 
 instance FromJSON LatexParam where
   parseJSON = genericParseJSON defaultOptions {
@@ -101,6 +102,15 @@ tex2latex webroot latpar snips = concat'
 --             }
 -- todo  - macche einen file
 
+latexLangConversion :: Text -> Text 
+latexLangConversion inlang = 
+    case lang2 of 
+        "de" -> "ngerman"
+        "en" -> "english"
+        _ -> "english"
+    where 
+        lang2 = take' 2 inlang
+
 preamble1 ::   Path Abs Dir -> LatexParam -> [Text]
 -- pass the webroot (baked site) to set for graphics path 
 preamble1 webroot  latpar =
@@ -109,11 +119,13 @@ preamble1 webroot  latpar =
       "\\documentclass[a4paper,10pt,notitlepage]{scrartcl}"
       -- notitlepage makes title and abstract and text on same page
     , "\\usepackage{fontspec}"
-    , -- "\\setsansfont{CMU Sans Serif}%{Arial}",  -- not for xetex
+     -- "\\setsansfont{CMU Sans Serif}%{Arial}",  -- not for xetex
       -- "\\setmainfont{CMU Serif}%{Times New Roman}",
       -- "\\setmonofont{CMU Typewriter Text}%{Consolas}",
-      "\\usepackage[ngerman]{babel}"
+      -- only useful for book laguage (in index) 
+    ,  "\\usepackage[" <> latLanguage latpar <> "ngerman]{babel}"
     , "\\renewcaptionname{ngerman}{\\bibname}{Literatur}   %Bibliography"
+    , "\\renewcaptionname{english}{\\bibname}{References}   %Bibliography"
     , "\\usepackage{graphicx}"
     , "          \\setkeys{Gin}{width=.75\\linewidth,keepaspectratio}"
     -- set defaults for includegraphics, to make pictures not too big in pdf
@@ -162,7 +174,7 @@ postamble1 = ["", "", "\\printindex", "\\end{document}"] :: [Text]
 makebiblio ::   [Text] 
 makebiblio  =
     [ ""
-    , "test makebiblio"
+    , ""
     -- , "\\bibliographystyle{plainnat}"
     , "\\printbibliography"
     -- , "\\bibliography{" <>  biblio <> "}"
