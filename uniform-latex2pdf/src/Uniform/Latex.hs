@@ -18,16 +18,20 @@
 
 module Uniform.Latex
   ( module Uniform.Latex
-  , writePDF2
+--   , writePDF2
   ) where
 
-import qualified System.Exit as Sys
-import qualified System.Process as Sys
-import System.IO.Silently (silence)
-import Uniform.Json
+-- import qualified System.Exit as Sys
+-- import qualified System.Process as Sys
+-- import System.IO.Silently (silence)
+import Uniform.PandocImports
+import Text.DocTemplates as DocTemplates
+import Text.DocLayout (render)
+
+-- import Uniform.Json
 import UniformBase
-import Uniform.WritePDF 
--- import Data.Aeson
+-- import Uniform.WritePDF 
+import Data.Aeson
 -- import Data.Aeson.Types
 
 
@@ -67,34 +71,47 @@ instance ToJSON LatexParam where
 -- TODO create a default/minimal preamble 
 -- and add preamble as parameter
 
-tex2latex :: Path Abs Dir -> LatexParam ->  Text -> Text
+tex2latex :: NoticeLevel -> Text -> Path Abs Dir -> LatexParam ->  Text -> ErrIO Text
 -- ^ combine a snipped (produced from an md file) with a preamble to
 --  produce a compilable latex file.
 --  references are processed earlier (in  panrep)
 --  keps the metadata
 -- needs the web root (dough dir) to find graphics
 
-tex2latex webroot latpar snips = concat'
-        $ [ unlines' 
-                (preamble1 webroot
-                    -- (maybe ""  (s2t . toFilePath) $ latBibliographyP latpar)
-                    -- (maybe "authoryear" id (latStyle latpar))
-                    latpar
-                )
-          , snips -- concat' snips -- (map unTexSnip snips)
-          , unlines' $
-                -- if isNothing (latBibliographyP latpar)
-                --     then [""]
-                --     else
-                makebiblio 
+tex2latex debug templ webroot latpar snip = do 
+    putIOwords ["tex2latex start for fn", snip]
+    templ1<- liftIO $ compileTemplate mempty templ 
+    let templ3 = case templ1 of
+            Left msg -> errorT ["applyTemplate4 error", showT msg]
+            Right tmp2 -> tmp2
+    let latparJ = toJSON latpar
+    let doc1 =  renderTemplate templ3 latparJ
+    let doc2 = render Nothing doc1
+    putIOwords ["tex2latex result", showT doc2]
+    return doc2
+
+
+-- tex2latex webroot latpar snips = concat'
+--         $ [ unlines' 
+--                 (preamble1 webroot
+--                     -- (maybe ""  (s2t . toFilePath) $ latBibliographyP latpar)
+--                     -- (maybe "authoryear" id (latStyle latpar))
+--                     latpar
+--                 )
+--           , snips -- concat' snips -- (map unTexSnip snips)
+--           , unlines' $
+--                 -- if isNothing (latBibliographyP latpar)
+--                 --     then [""]
+--                 --     else
+--                 makebiblio 
                     
-                            -- (fromJustNote "tex2latex 2wrqwe" $ latStyle latpar)
-                            -- (case (latBibliographyP  latpar) of 
-                            --         Nothing -> error "tex2latex dwerdd00"
-                            --         Just a -> s2t . toFilePath $ a 
-                            -- )
-          , unlines' postamble1
-          ]
+--                             -- (fromJustNote "tex2latex 2wrqwe" $ latStyle latpar)
+--                             -- (case (latBibliographyP  latpar) of 
+--                             --         Nothing -> error "tex2latex dwerdd00"
+--                             --         Just a -> s2t . toFilePath $ a 
+--                             -- )
+--           , unlines' postamble1
+--           ]
 
 --   where 
 --     latpar2 = latpar{

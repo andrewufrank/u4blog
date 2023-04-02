@@ -27,9 +27,12 @@ dependencies:
 - base >= 4.7 && < 5
 - uniformBase >=0.1.5
 - uniform-json >=0.1.5
+- uniform-pandoc >=0.1.5.2
 - process
 - silently
-# - aeson  # for generic read 
+- doctemplates
+- doclayout
+- aeson  # for generic read 
 
 library:
   source-dirs: src
