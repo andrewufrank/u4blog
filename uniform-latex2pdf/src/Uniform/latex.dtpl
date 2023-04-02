@@ -1,0 +1,62 @@
+$-- template to produce a latex file 
+ 
+$-- preamble
+\documentclass[a4paper,10pt,notitlepage]{scrartcl}
+\usepackage{fontspec}
+\usepackage[english]{babel}
+$-- \renewcaptionname{ngerman}{\bibname}{Literatur}   %Bibliography
+$-- \renewcaptionname{$latLanguage$}{\bibname}{$latBiblioTitle$}   %Bibliography
+\usepackage{csquotes}
+
+\usepackage{graphicx}
+          \setkeys{Gin}{width=.75\linewidth,keepaspectratio}
+\usepackage{makeidx}
+\usepackage[backend=biber,
+    style=authoryear,
+    natbib=true,
+    hyperref=true,
+    ]{biblatex}
+
+$if(latBibliography)$\addbibresource{$latBibliography$}$endif$
+$if(latReferences)$\addbibresource{local.bib}$endif$
+
+\makeindex
+\usepackage[colorlinks]{hyperref}
+\usepackage{bookmark}
+\providecommand{\tightlist}{%
+\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+$-- content
+\title{$latTitle$}
+\author{$latAuthor$}
+\date{}  $-- no date??
+\graphicspath{{$latBakedDir$}}
+
+\begin{document}
+
+$if(latReferences)$
+  \usepackage{filecontents}
+  \begin{filecontents}{\local.bib}$latReferences$
+  \end{filecontents}
+$endif$
+
+\maketitle
+$if(latAbstract)$\begin{abstract}$latAbstract${abstract}
+    \bigskip
+    \end{abstract}
+$endif$
+
+$latContent$
+
+
+$-- $for(snips)$
+$--     \part{Produced web site is self-contained}
+$--     \begin{abstract}$snip.abstract$\end{abstract}
+$--  $endfor$
+
+\printbibliography
+
+Produced with `daino' (version $latDainoVersion$) from $latFn$
+
+\printindex
+\end{document}
