@@ -6,3 +6,5 @@
 0.1.5 branch for ghc 9.2.5
 0.1.5.1
 0.1.5.2 added webroot in the tex2latex
+0.1.5.3 changed to use pandoc Text.DocTemplates  
+     https://hackage.haskell.org/package/doctemplates    
