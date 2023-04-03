@@ -49,7 +49,7 @@ $if(latReferences)$
 $endif$
 
 \maketitle
-$if(latAbstract)$\begin{abstract}$latAbstract${abstract}
+$if(latAbstract)$\begin{abstract}$latAbstract$
     \bigskip
     \end{abstract}
 $endif$

@@ -50,6 +50,7 @@ data LatexParam = LatexParam
     , latBook :: Text  -- is this a long text for a book/booklet
     , latIndex :: IndexEntry
     , latContent :: Text -- ^ the content to fill 
+    -- , latThema :: Path Abs File 
     -- , latSnips :: [IndexEntry] -- ^ the snips 
     }
     deriving (Eq, Ord, Read, Show, Generic, ToJSON)
@@ -57,7 +58,7 @@ data LatexParam = LatexParam
 
 instance Zeros LatexParam where 
     zero = LatexParam zero zero zero zero zero zero zero zero zero zero 
-                zero zero zero zero
+                zero zero zero zero 
 
 -- instance FromJSON LatexParam where
 --   parseJSON = genericParseJSON defaultOptions {
@@ -94,16 +95,16 @@ data IndexEntry = IndexEntry
 instance ToJSON IndexEntry
 instance FromJSON IndexEntry
 
-tex2latex :: NoticeLevel ->   Path Abs Dir -> LatexParam ->   ErrIO Text
+tex2latex :: NoticeLevel ->   Path Abs Dir -> LatexParam -> Path Abs File ->   ErrIO Text
 -- ^ combine the latex template with the latexParam
 -- the latexParam are previously filled with the content snip 
 -- and the index entries 
 -- needs the web root (dough dir) to find graphics
 
-tex2latex debug   webroot latpar  = do 
-    putIOwords ["tex2latex start for latFn", latFn latpar]
-    let templFn = makeAbsFile "/home/frank/Workspace11/u4blog/uniform-latex2pdf/src/Uniform/latex.dtpl"
-    putIOwords ["tex2latex template fn", showT templFn]
+tex2latex debug   webroot latpar templFn = do 
+    when (inform debug) $ putIOwords ["tex2latex start for latFn", latFn latpar]
+    -- let templFn = makeAbsFile "/home/frank/Workspace11/u4blog/uniform-latex2pdf/src/Uniform/latex.dtpl"
+    when (informAll debug) $ putIOwords ["tex2latex template fn", showT templFn]
     -- templtxt <- readFile2 templFn
     -- putIOwords ["tex2latex template", templtxt]
     templ1<- liftIO $ compileTemplateFile (toFilePath templFn) 
@@ -113,10 +114,10 @@ tex2latex debug   webroot latpar  = do
             Right tmp2 -> tmp2
     -- let latpar2 = latpar{latContent = snip}   already filled     
     let latparJ = toJSON latpar
-    putIOwords ["tex2latex latparJ", showT latparJ]
+    when (inform debug) $ putIOwords ["tex2latex latparJ", showT latparJ]
     let doc1 =  renderTemplate templ3 latparJ
     let doc2 = render Nothing doc1
-    putIOwords ["tex2latex result",  doc2]
+    when (inform debug) $ putIOwords ["tex2latex result",  doc2]
     return doc2
 
 
