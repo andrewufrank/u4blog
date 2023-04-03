@@ -3,10 +3,12 @@ $-- template to produce a latex file
 $-- preamble
 \documentclass[a4paper,10pt,notitlepage]{scrartcl}
 \usepackage{fontspec}
-\usepackage[english]{babel}
+\usepackage[$latLanguage$]{babel}
 $-- \renewcaptionname{ngerman}{\bibname}{Literatur}   %Bibliography
 $-- \renewcaptionname{$latLanguage$}{\bibname}{$latBiblioTitle$}   %Bibliography
-\usepackage{csquotes}
+$-- automatical adaption
+
+\usepackage{csquotes}  $-- required for babel 
 
 \usepackage{graphicx}
           \setkeys{Gin}{width=.75\linewidth,keepaspectratio}
@@ -48,6 +50,11 @@ $endif$
 
 $latContent$
 
+$for(latIndex.fileEntries)$
+    \part{$it.title$}
+    \begin{abstract}$it.abstract$\end{abstract}
+
+$endfor$
 
 $-- $for(snips)$
 $--     \part{Produced web site is self-contained}

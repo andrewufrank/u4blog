@@ -11,4 +11,6 @@
   
 0.1.5 branch for ghc 9.2.5  
 0.1.5.1  
+0.1.5.2 removed pandoc2pdf which was used for an experiment to directly convert to pdf using the pandoc internal process. 
+        now use uniform-latex2pdf (which uses lualatex separately)
 
