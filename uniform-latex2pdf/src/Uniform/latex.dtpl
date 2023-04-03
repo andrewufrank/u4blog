@@ -1,7 +1,13 @@
 $-- template to produce a latex file 
  
 $-- preamble
-\documentclass[a4paper,10pt,notitlepage]{scrartcl}
+\documentclass[
+	  headings=standardclasses,		% to use serif font for titles 
+	  a4paper,10pt,notitlepage]{scrartcl}
+
+\addtokomafont{part}{\LARGE} % reduce size of part
+\addtokomafont{partnumber}{\small}
+
 \usepackage{fontspec}
 \usepackage[$latLanguage$]{babel}
 $-- \renewcaptionname{ngerman}{\bibname}{Literatur}   %Bibliography
@@ -64,7 +70,8 @@ $--  $endfor$
 
 \printbibliography
 
-Produced with `daino' (version $latDainoVersion$) from $latFn$
-
 \printindex
+
+{\scriptsize Produced with `daino' (version $latDainoVersion$) from $latFn$}
+
 \end{document}
