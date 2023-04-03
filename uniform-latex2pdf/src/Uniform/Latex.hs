@@ -80,6 +80,7 @@ data IndexEntry = IndexEntry
     , abstract :: Text
     , author :: Text
     , date :: Text
+    , content :: Text   -- in latex style, only filled bevore use
     -- , publish :: Maybe Text
     -- , indexPage :: Bool
     , dirEntries :: [IndexEntry] -- def []
@@ -93,14 +94,13 @@ data IndexEntry = IndexEntry
 instance ToJSON IndexEntry
 instance FromJSON IndexEntry
 
-tex2latex :: NoticeLevel ->   Path Abs Dir -> LatexParam ->  Text -> ErrIO Text
--- ^ combine a snipped (produced from an md file) with a preamble to
---  produce a compilable latex file.
---  references are processed earlier (in  panrep)
---  keps the metadata
+tex2latex :: NoticeLevel ->   Path Abs Dir -> LatexParam ->   ErrIO Text
+-- ^ combine the latex template with the latexParam
+-- the latexParam are previously filled with the content snip 
+-- and the index entries 
 -- needs the web root (dough dir) to find graphics
 
-tex2latex debug   webroot latpar snip = do 
+tex2latex debug   webroot latpar  = do 
     putIOwords ["tex2latex start for latFn", latFn latpar]
     let templFn = makeAbsFile "/home/frank/Workspace11/u4blog/uniform-latex2pdf/src/Uniform/latex.dtpl"
     putIOwords ["tex2latex template fn", showT templFn]
@@ -111,8 +111,8 @@ tex2latex debug   webroot latpar snip = do
     let templ3 = case templ1 of
             Left msg -> errorT ["applyTemplate4 error", s2t msg]
             Right tmp2 -> tmp2
-    let latpar2 = latpar{latContent = snip}       
-    let latparJ = toJSON latpar2
+    -- let latpar2 = latpar{latContent = snip}   already filled     
+    let latparJ = toJSON latpar
     putIOwords ["tex2latex latparJ", showT latparJ]
     let doc1 =  renderTemplate templ3 latparJ
     let doc2 = render Nothing doc1

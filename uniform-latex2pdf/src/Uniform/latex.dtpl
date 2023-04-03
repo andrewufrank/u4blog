@@ -53,6 +53,7 @@ $latContent$
 $for(latIndex.fileEntries)$
     \part{$it.title$}
     \begin{abstract}$it.abstract$\end{abstract}
+    $it.content$
 
 $endfor$
 
