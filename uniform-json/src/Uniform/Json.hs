@@ -111,6 +111,11 @@ instance AtKey Value Text where
   getAt2Key meta2 k1 k2 = meta2 ^? key k1 . key k2 . _String
   putAtKey k2 txt meta2 = meta2 & _Object . at k2 ?~ String txt
 
+-- instance AtKey Value [Text] where
+--   getAtKey meta2 k2 = lookup  k2 meta2
+-- --   getAt2Key meta2 k1 k2 = meta2 ^? key k1 . key k2 . _String
+-- --   putAtKey k2 txt meta2 = meta2 & _Object . at k2 ?~ String txt
+
 instance AtKey Value Integer where
   getAtKey meta2 k2 = meta2 ^? key k2 . _Integral
   getAt2Key meta2 k1 k2 = meta2 ^? key k1 . key k2 . _Integral
