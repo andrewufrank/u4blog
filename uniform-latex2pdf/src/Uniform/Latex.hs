@@ -104,7 +104,7 @@ tex2latex :: NoticeLevel ->   Path Abs Dir -> LatexParam -> Path Abs File ->   E
 tex2latex debug   webroot latpar templFn = do 
     when (inform debug) $ putIOwords ["tex2latex start for latFn", latFn latpar]
     -- let templFn = makeAbsFile "/home/frank/Workspace11/u4blog/uniform-latex2pdf/src/Uniform/latex.dtpl"
-    when (informAll debug) $ putIOwords ["tex2latex template fn", showT templFn]
+    when (inform debug) $ putIOwords ["tex2latex template fn", showT templFn]
     -- templtxt <- readFile2 templFn
     -- putIOwords ["tex2latex template", templtxt]
     templ1<- liftIO $ compileTemplateFile (toFilePath templFn) 
