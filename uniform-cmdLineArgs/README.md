@@ -2,7 +2,6 @@ A simplified method to produce a convenient (standard) command line argument par
 which is usable in the uniform framework .
 
 
-It uses the methods to start applicatiosn from convenience. 
+It uses the methods to start applications in the uniform style (i.e. as ErrIO ())
 
-TODO: split these and move somewhere better. Error?
-change to use https://github.com/ndmitchell/cmdargs#readme
+Can perhaps be improved by a change to use https://github.com/ndmitchell/cmdargs#readme.

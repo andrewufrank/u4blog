@@ -4,14 +4,12 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 1ecbfad65fc0bd4916bec380d552a69499028af38c035c810bb7bfedf04d1dec
+-- hash: 6ce6584306ef7fb6046021223374ce8b7197808dc782644a56e920519b05ee85
 
 name:           uniform-cmdLineArgs
 version:        0.1.5.1
 synopsis:       a convenient handling of command line arguments
 description:    deals with the command line arguments and fills with decent defaults
-                .
-                # needs cabal install HTF to load htfpp
 category:       CmdLineArgs
 homepage:       https://github.com/andrewufrank/u4blog.git#readme
 bug-reports:    https://github.com/andrewufrank/u4blog.git/issues

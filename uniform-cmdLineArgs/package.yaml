@@ -11,7 +11,7 @@ synopsis:     a convenient handling of command line arguments
 description: | 
   deals with the command line arguments and fills with decent defaults
 
-  # needs cabal install HTF to load htfpp
+# needs cabal install HTF to load htfpp
 
 # consider changing to use https://hackage.haskell.org/package/cmdargs-0.10.22
 # from neil mitchchel
