@@ -89,11 +89,12 @@ exitHandling exit_code filename step = do
     case exit_code of
         Sys.ExitSuccess -> return ()
         Sys.ExitFailure r -> do 
-                putIOwords ["callProcessWithCWD - failed - check for 1 log, for 2 blg " 
+                putIOwords ["callProcessWithCWD - error in pdf production"
+                -- " failed - check for 1 log, for 2 blg " 
                             , "show exit code", showT r, "step", showT step
-                            -- , "\n\tif lualatex: 1 is normal, check log file "
-                            -- , "\n\tif biber: 2 is normal, check blg file "
-                            -- , "\n\tfor output file", showT filename
+                            , "\n\tif lualatex: 1 is normal, check log file "
+                            , "\n\tif biber: 2 is normal, check blg file "
+                            , "\n\tfor output file", showT filename
                             ]
                 -- fail . show $ r
                 return ()  -- lualatex does not deal with error information well - check log file 

@@ -79,6 +79,7 @@ readYaml2value fp = do
 
 yaml2value :: Path Abs File -> YamlText -> Value
 -- convert a YamlText to a JSON value, error if not ok
+    -- first agument is filename for debug help
 -- how to debug input erros?
 yaml2value fp yt = either (errorT . show2) Prelude.id vx
   where
