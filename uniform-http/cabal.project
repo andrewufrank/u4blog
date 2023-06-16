@@ -10,10 +10,9 @@ packages:
 
 -- /home/frank/Workspace11/uBase/uniformBase/uniformBase.cabal
 
---    ../../u4blog/uniform-json/*.cabal
 
 --    ../../u4blog/uniform-webserver/*.cabal
 --    ../../u4blog/uniform-watch/*.cabal
 
---    ../../u2to/uniform-convenience/*.cabal
+--    ../../u4blog/uniform-convenience/*.cabal
 

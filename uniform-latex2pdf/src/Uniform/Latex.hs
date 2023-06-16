@@ -47,9 +47,9 @@ data LatexParam = LatexParam
     , latReferences :: Text  -- ^ used only for citeproc to produce html, not for biblatex to produce pdf 
     -- , latReference_section_title :: Text -- ^ the text for the title of the ref section
     -- selection by language
-    , latBook :: Text  -- is this a long text for a book/booklet
-    , latIndex :: IndexEntry
-    , latContent :: Text -- ^ the content to fill 
+    , latBook :: Text  --  bookbig or booklet
+    , latIndex :: IndexEntry -- of current file, copied from set up before
+    , latContent :: Text -- ^ the content to fill, put at end 
     -- , latThema :: Path Abs File 
     -- , latSnips :: [IndexEntry] -- ^ the snips 
     }

@@ -1,18 +1,29 @@
-$-- template to produce a latex file - 
+$-- template to produce a latex file 
  
 $-- preamble
 \documentclass[
 	  headings=standardclasses,		% to use serif font for titles 
-	  a4paper,10pt,notitlepage]{scrartcl}
+$--                  unnecessary, probably implied     hyperref={colorlinks},
+	  a4paper,
+	  10pt,
+      toc=flat,	 
+	  notitlepage 
+  ] $if(latBook{scrartcl}
 
 \addtokomafont{part}{\LARGE} % reduce size of part
-\addtokomafont{partnumber}{\small}
+\addtokomafont{partnumber}{\LARGE}
 
 \usepackage{fontspec}
 \usepackage[$latLanguage$]{babel}
 $-- \renewcaptionname{ngerman}{\bibname}{Literatur}   %Bibliography
 $-- \renewcaptionname{$latLanguage$}{\bibname}{$latBiblioTitle$}   %Bibliography
 $-- automatical adaption
+
+\usepackage{bookmark}
+
+$-- numbering thru all of the book
+\counterwithin{section}{part}
+\renewcommand{\thepart}{\arabic{part}}
 
 \usepackage{csquotes}  $-- required for babel 
 
@@ -29,10 +40,18 @@ $if(latBibliography)$\addbibresource{$latBibliography$}$endif$
 $if(latReferences)$\addbibresource{local.bib}$endif$
 
 \makeindex
-\usepackage[colorlinks]{hyperref}
-\usepackage{bookmark}
+
 \providecommand{\tightlist}{%
 \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+$-- \usepackage[colorlinks]{hyperref}
+\usepackage{xcolor}
+\hypersetup{
+    colorlinks,
+    linkcolor={red!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}
+}
 
 $-- content
 \title{$latTitle$}
@@ -44,6 +63,7 @@ $-- content
 
 \begin{document}
 
+
 $if(latReferences)$
   \usepackage{filecontents}
   \begin{filecontents}{\local.bib}$latReferences$
@@ -51,19 +71,40 @@ $if(latReferences)$
 $endif$
 
 \maketitle
+
+
 $if(latAbstract)$\begin{mdframed}$latAbstract$
     \bigskip
     \end{mdframed}
 $endif$
 
+\tableofcontents
+\newpage
+
 $latContent$
 
-$for(latIndex.fileEntries)$
+$for(latIndex.fileEntries)$   $-- for the booklet level of collections
     \part{$it.title$}
     \begin{mdframed}$it.abstract$\end{mdframed}
     $it.content$
+$endfor$
+
+
+$for(latIndex.dirEntries)$   $-- for the bookbig level of collections
+    \part{$latIndex.dirEntries.title$}
+    \begin{mdframed}$latIndex.dirEntries.abstract$\end{mdframed}
+    $latIndex.dirEntries.content$
+
+
+    $for(latIndex.dirEntries.fileEntries)$   $-- the files in the parts in bookbig
+        \part{$latIndex.dirEntries.fileEntries.title$}
+        \begin{mdframed}$latIndex.dirEntries.fileEntries.abstract$\end{mdframed}
+        $latIndex.dirEntries.fileEntries.content$
+    $endfor$
 
 $endfor$
+
+endcontentTest
 
 $-- $for(snips)$
 $--     \part{Produced web site is self-contained}
@@ -74,6 +115,7 @@ $--  $endfor$
 
 \printindex
 
-{\scriptsize Produced with `daino' (version $latDainoVersion$) from $latFn$}
+\vspace*{\fill}
+{\scriptsize Produced with `daino' ($latDainoVersion$) from $latFn$}
 
 \end{document}

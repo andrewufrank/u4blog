@@ -7,4 +7,5 @@
 0.1.5.1
 0.1.5.2 added webroot in the tex2latex
 0.1.5.3 changed to use pandoc Text.DocTemplates  
-     https://hackage.haskell.org/package/doctemplates    
+     https://hackage.haskell.org/package/doctemplates  
+0.1.5.4 bookbig and booklet in latex differentiated
