@@ -13,4 +13,5 @@
 0.1.5.1  
 0.1.5.2 removed pandoc2pdf which was used for an experiment to directly convert to pdf using the pandoc internal process. 
         now use uniform-latex2pdf (which uses lualatex separately)
+0.1.5.3 include Ext_latex_macros to to parse latex math
 

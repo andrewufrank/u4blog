@@ -2,16 +2,21 @@ $-- template to produce a latex file
  
 $-- preamble
 \documentclass[
-	  headings=standardclasses,		% to use serif font for titles 
+$--	  headings=standardclasses,		% to use serif font for titles 
 $--                  unnecessary, probably implied     hyperref={colorlinks},
 	  a4paper,
 	  10pt,
       toc=flat,	 
 	  notitlepage 
-  ] $if(latBook{scrartcl}
+        ] 
+        $if(latBookBig)$ {scrbook} % testbook $latBook$
+        $elseif(latBooklet)$ {scrreport} % testbooklet $latBooklet$
+        $else$ {scrartcl}  % testeins $latBookBig$ testzwei $latBooklet$
+        $endif$
 
 \addtokomafont{part}{\LARGE} % reduce size of part
 \addtokomafont{partnumber}{\LARGE}
+\setkomafont{sectioning}{\bfseries}  % serif font for titles
 
 \usepackage{fontspec}
 \usepackage[$latLanguage$]{babel}
@@ -22,8 +27,10 @@ $-- automatical adaption
 \usepackage{bookmark}
 
 $-- numbering thru all of the book
-\counterwithin{section}{part}
+\counterwithin{chapter}{part}
+\counterwithin{section}{chapter}
 \renewcommand{\thepart}{\arabic{part}}
+\setcounter{secnumdepth}{\subsubsectionnumdepth} % numbering for subsubsections
 
 \usepackage{csquotes}  $-- required for babel 
 
@@ -84,7 +91,7 @@ $endif$
 $latContent$
 
 $for(latIndex.fileEntries)$   $-- for the booklet level of collections
-    \part{$it.title$}
+    \chapter{$it.title$}
     \begin{mdframed}$it.abstract$\end{mdframed}
     $it.content$
 $endfor$
@@ -97,7 +104,7 @@ $for(latIndex.dirEntries)$   $-- for the bookbig level of collections
 
 
     $for(latIndex.dirEntries.fileEntries)$   $-- the files in the parts in bookbig
-        \part{$latIndex.dirEntries.fileEntries.title$}
+        \chapter{$latIndex.dirEntries.fileEntries.title$}
         \begin{mdframed}$latIndex.dirEntries.fileEntries.abstract$\end{mdframed}
         $latIndex.dirEntries.fileEntries.content$
     $endfor$
@@ -105,11 +112,6 @@ $for(latIndex.dirEntries)$   $-- for the bookbig level of collections
 $endfor$
 
 endcontentTest
-
-$-- $for(snips)$
-$--     \part{Produced web site is self-contained}
-$--     \begin{abstract}$snip.abstract$\end{abstract}
-$--  $endfor$
 
 \printbibliography
 

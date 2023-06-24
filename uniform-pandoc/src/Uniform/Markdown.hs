@@ -101,6 +101,8 @@ markdownOptions = Pandoc.def { Pandoc.readerExtensions = exts }
             , Pandoc.Ext_auto_identifiers
             -- , Pandoc.Ext_raw_html   -- three extension give markdown_strict
             , Pandoc.Ext_raw_tex   --Allow raw TeX (other than math)
+            , Pandoc.Ext_latex_macros -- allow tex for math
+            , Pandoc.Ext_tex_math_dollars 
             , Pandoc.Ext_shortcut_reference_links
             , Pandoc.Ext_spaced_reference_links
             , Pandoc.Ext_footnotes  -- all footnotes

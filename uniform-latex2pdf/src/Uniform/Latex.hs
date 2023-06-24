@@ -47,7 +47,8 @@ data LatexParam = LatexParam
     , latReferences :: Text  -- ^ used only for citeproc to produce html, not for biblatex to produce pdf 
     -- , latReference_section_title :: Text -- ^ the text for the title of the ref section
     -- selection by language
-    , latBook :: Text  --  bookbig or booklet
+    -- , latBook :: Text  --  bookbig or booklet -- is   not used
+    , latBookBig, latBooklet :: Text -- must be null for the non-used
     , latIndex :: IndexEntry -- of current file, copied from set up before
     , latContent :: Text -- ^ the content to fill, put at end 
     -- , latThema :: Path Abs File 
@@ -58,7 +59,7 @@ data LatexParam = LatexParam
 
 instance Zeros LatexParam where 
     zero = LatexParam zero zero zero zero zero zero zero zero zero zero 
-                zero zero zero zero 
+                zero zero zero zero zero  
 
 -- instance FromJSON LatexParam where
 --   parseJSON = genericParseJSON defaultOptions {

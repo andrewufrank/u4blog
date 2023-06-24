@@ -38,11 +38,14 @@ import Text.Pandoc
     WriterOptions
       ( writerCiteMethod,
         writerExtensions,
-        writerHighlightStyle
+        writerHighlightStyle,
+        writerHTMLMathMethod
+        
       )
     , def
     , writeLaTeX,
   )
+-- import Text.Pandoc.Options (HTMLMathMethod)
 import qualified Text.Pandoc as Pandoc
 import Text.Pandoc.Highlighting (tango)
 import Text.Pandoc.Shared (stringify)
@@ -133,12 +136,15 @@ latexOptions =
   def
     { writerHighlightStyle = Just tango,
       writerCiteMethod = Natbib,
+      writerHTMLMathMethod = Pandoc.KaTeX "https://cdn.jsdelivr.net/npm/katex@0.16.8/+esm",  -- :: HTMLMathMethod 
       -- Citeproc                        -- use citeproc to render them
       --           | Natbib                        -- output natbib cite commands
       --           | Biblatex                      -- output biblatex cite commands
       writerExtensions =
         Pandoc.extensionsFromList
           [ Pandoc.Ext_raw_tex --Allow raw TeX (other than math)
+          , Pandoc.Ext_latex_macros -- latex math 
+
           -- , Pandoc.Ext_shortcut_reference_links
           -- , Pandoc.Ext_spaced_reference_links
           -- , Pandoc.Ext_citations     
