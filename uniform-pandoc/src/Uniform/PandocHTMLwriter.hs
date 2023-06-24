@@ -50,7 +50,7 @@ html5Options :: WriterOptions
 html5Options =
     def
         { writerHighlightStyle = Just tango
-        , writerHTMLMathMethod = Pandoc.KaTeX "https://cdn.jsdelivr.net/npm/katex@0.16.8/+esm"  -- :: HTMLMathMethod
+        , writerHTMLMathMethod = Pandoc.MathML -- :: HTMLMathMethod
         , writerExtensions = writerExtensions def
         }
 
