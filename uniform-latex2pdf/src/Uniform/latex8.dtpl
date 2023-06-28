@@ -86,7 +86,7 @@ $latAbstract$
 $endif$
 
 \tableofcontents
-\newpage
+$if(latBook)$\newpage$endif$
 
 $latContent$
 
