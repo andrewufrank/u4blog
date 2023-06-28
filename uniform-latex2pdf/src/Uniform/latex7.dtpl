@@ -1,0 +1,79 @@
+$-- template to produce a latex file 
+ 
+$-- preamble
+\documentclass[
+	  headings=standardclasses,		% to use serif font for titles 
+	  a4paper,10pt,notitlepage]{scrartcl}
+
+\addtokomafont{part}{\LARGE} % reduce size of part
+\addtokomafont{partnumber}{\small}
+
+\usepackage{fontspec}
+\usepackage[$latLanguage$]{babel}
+$-- \renewcaptionname{ngerman}{\bibname}{Literatur}   %Bibliography
+$-- \renewcaptionname{$latLanguage$}{\bibname}{$latBiblioTitle$}   %Bibliography
+$-- automatical adaption
+
+\usepackage{csquotes}  $-- required for babel 
+
+\usepackage{graphicx}
+          \setkeys{Gin}{width=.75\linewidth,keepaspectratio}
+\usepackage{makeidx}
+\usepackage[backend=biber,
+    style=authoryear,
+    natbib=true,
+    hyperref=true,
+    ]{biblatex}
+
+$if(latBibliography)$\addbibresource{$latBibliography$}$endif$
+$if(latReferences)$\addbibresource{local.bib}$endif$
+
+\makeindex
+\usepackage[colorlinks]{hyperref}
+\usepackage{bookmark}
+\providecommand{\tightlist}{%
+\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+$-- content
+\title{$latTitle$}
+\author{$latAuthor$}
+\date{}  $-- no date??
+\graphicspath{{$latBakedDir$}}
+
+\usepackage[]{mdframed}
+
+\begin{document}
+
+$if(latReferences)$
+  \usepackage{filecontents}
+  \begin{filecontents}{\local.bib}$latReferences$
+  \end{filecontents}
+$endif$
+
+\maketitle
+$if(latAbstract)$\begin{mdframed}$latAbstract$
+    \bigskip
+    \end{mdframed}
+$endif$
+
+$latContent$
+
+$for(latIndex.fileEntries)$
+    \part{$it.title$}
+    \begin{mdframed}$it.abstract$\end{mdframed}
+    $it.content$
+
+$endfor$
+
+$-- $for(snips)$
+$--     \part{Produced web site is self-contained}
+$--     \begin{abstract}$snip.abstract$\end{abstract}
+$--  $endfor$
+
+\printbibliography
+
+\printindex
+
+{\scriptsize Produced with `daino' (version $latDainoVersion$) from $latFn$}
+
+\end{document}

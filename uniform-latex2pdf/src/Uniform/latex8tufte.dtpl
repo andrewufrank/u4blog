@@ -65,70 +65,68 @@ $-- content
 \publisher{Gerastree editions}
 \usepackage[]{mdframed}
 
+% -- -- --- ----------  ----             ----        ---------------
 \begin{document}
 
-$if(latReferences)$
+$if(bookprint)$ % bookprint line 71
     % r.1 blank page
     \blankpage
-%    v.2 epigraphs
-    \openepigraph{%
-SomeText
-}{AF%, {\itshape My Works}
-}
+    % v.2 epigraphs
+    \openepigraph{SomeText}
+                {AF%, {\itshape My Works}
+    }
     \vfill
     \newpage\thispagestyle{empty}
 $endif$
 
-$if(latReferences)$
+$if(latReferences)$ % lat references
   \usepackage{filecontents}
   \begin{filecontents}{\local.bib}$latReferences$
   \end{filecontents}
 $endif$
 
-$if(bookprint)$
-% r.3 full title page
-\maketitle
+$if(bookprint)$ % bookprint line 88
+    % r.3 full title page
+    \maketitle
 
-% v.4 copyright page
-\newpage
-\begin{fullwidth}
-~\vfill
-\thispagestyle{empty}
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{\baselineskip}
-Copyright \copyright\ \the\year\ \thanklessauthor
+    % v.4 copyright page
+    \newpage
+    \begin{fullwidth}
+    ~\vfill
+    \thispagestyle{empty}
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{\baselineskip}
+    Copyright \copyright\ \the\year\ \thanklessauthor
 
-\par\smallcaps{Published by \thanklesspublisher}
+    \par\smallcaps{Published by \thanklesspublisher}
 
-\par\smallcaps{daino.gerastree.at}
+    \par\smallcaps{daino.gerastree.at}
 
-\par Licensed under the Apache License, Version 2.0\index{license}
+    \par Licensed under the Apache License, Version 2.0\index{license}
 
-\par\textit{First printing, \monthyear}
-\end{fullwidth}
+    \par\textit{First printing, \monthyear}
+    \end{fullwidth}
 $endif$
 
 %\listoffigures
 
 %\listoftables
 
-$if(bookprint)$
-% r.7 dedication
-\cleardoublepage
-~\vfill
-\begin{doublespace}
-\noindent\fontsize{18}{22}\selectfont\itshape
-\nohyphenation
-Dedicated to my friends.
-\end{doublespace}
-\vfill
-\vfill
-
-
-% r.9 introduction
-\cleardoublepage
+$if(bookprint)$ % bookprint line 115
+    % r.7 dedication
+    \cleardoublepage
+    ~\vfill
+    \begin{doublespace}
+    \noindent\fontsize{18}{22}\selectfont\itshape
+    \nohyphenation
+    Dedicated to my friends.
+    \end{doublespace}
+    \vfill
+    \vfill
+    % r.9 introduction
+    \cleardoublepage
 $else$ 
-    \begin{titlepage}
+    %\begin{titlepage}
         %\centering
         %\includegraphics[width=0.15\textwidth]{example-image-1x1}\par\vspace{1cm}
         %{\textsc{$latTitle$}  }
@@ -136,33 +134,37 @@ $else$
         %{\Large \textsc{$latTitle$} 
         \vspace{1.5cm}
         {\huge\bfseries Title: ($latTitle$) \par}
-        \vspace{2cm}
+        \vspace{1cm}
         {\Large\itshape Author: ($latAuthor$) \par}
-        \vfill
+        %\vfill
         %supervised by\par
         %Dr.~Mark \textsc{Brown}
 
-        \vfill
+        %\vfill
 
-    $if(latAbstract)$\begin{mdframed}\sloppy\medskip
-    $latAbstract$
-        \medskip
-        \end{mdframed}
-    $endif$
+        $if(latAbstract)$  % lat abstract
+            \begin{mdframed}\sloppy
+            \medskip
+            $latAbstract$
+            \medskip
+            \end{mdframed}
+        $endif$
 
-    % Bottom of the page
+        % Bottom of the page
         {\large \today\par}
-    \end{titlepage}
+    %\end{titlepage}
 $endif$
 
 
 \tableofcontents
-\newpage
-$if(latBook)$-- start content -- $endif$
+
+$if(latBook)$
+    \newpage         %-- start content -- 
+$endif$
 
 $latContent$
 
-$for(latIndex.fileEntries)$   $-- for the booklet level of collections
+$for(latIndex.fileEntries)$   % booklet level of collections
     \chapter{$it.title$}
     \begin{mdframed}\sloppy\medskip
     $it.abstract$\end{mdframed}
@@ -170,14 +172,14 @@ $for(latIndex.fileEntries)$   $-- for the booklet level of collections
 $endfor$
 
 
-$for(latIndex.dirEntries)$   $-- for the bookbig level of collections
+$for(latIndex.dirEntries)$   % bookbig level of collections
     \part{$latIndex.dirEntries.title$}
     \begin{mdframed}\sloppy\medskip
     $latIndex.dirEntries.abstract$\end{mdframed}
     $latIndex.dirEntries.content$
 
 
-    $for(latIndex.dirEntries.fileEntries)$   $-- the files in the parts in bookbig
+    $for(latIndex.dirEntries.fileEntries)$   % -- the files in the parts in bookbig
         \chapter{$latIndex.dirEntries.fileEntries.title$}
         \begin{mdframed}\sloppy\medskip
         $latIndex.dirEntries.fileEntries.abstract$\end{mdframed}
