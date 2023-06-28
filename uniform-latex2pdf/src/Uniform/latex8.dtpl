@@ -67,6 +67,17 @@ $-- content
 
 \begin{document}
 
+$if(latReferences)$
+    % r.1 blank page
+    \blankpage
+%    v.2 epigraphs
+    \openepigraph{%
+SomeText
+}{AF%, {\itshape My Works}
+}
+    \vfill
+    \newpage\thispagestyle{empty}
+$endif$
 
 $if(latReferences)$
   \usepackage{filecontents}
@@ -74,19 +85,80 @@ $if(latReferences)$
   \end{filecontents}
 $endif$
 
+$if(bookprint)$
+% r.3 full title page
 \maketitle
 
+% v.4 copyright page
+\newpage
+\begin{fullwidth}
+~\vfill
+\thispagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{\baselineskip}
 Copyright \copyright\ \the\year\ \thanklessauthor
 
+\par\smallcaps{Published by \thanklesspublisher}
 
-$if(latAbstract)$\begin{mdframed}\sloppy\medskip
-$latAbstract$
-    \medskip
-    \end{mdframed}
+\par\smallcaps{daino.gerastree.at}
+
+\par Licensed under the Apache License, Version 2.0\index{license}
+
+\par\textit{First printing, \monthyear}
+\end{fullwidth}
 $endif$
 
+%\listoffigures
+
+%\listoftables
+
+$if(bookprint)$
+% r.7 dedication
+\cleardoublepage
+~\vfill
+\begin{doublespace}
+\noindent\fontsize{18}{22}\selectfont\itshape
+\nohyphenation
+Dedicated to my friends.
+\end{doublespace}
+\vfill
+\vfill
+
+
+% r.9 introduction
+\cleardoublepage
+$else$ 
+    \begin{titlepage}
+        %\centering
+        %\includegraphics[width=0.15\textwidth]{example-image-1x1}\par\vspace{1cm}
+        %{\textsc{$latTitle$}  }
+        %\vspace{1cm}
+        %{\Large \textsc{$latTitle$} 
+        \vspace{1.5cm}
+        {\huge\bfseries Title: ($latTitle$) \par}
+        \vspace{2cm}
+        {\Large\itshape Author: ($latAuthor$) \par}
+        \vfill
+        %supervised by\par
+        %Dr.~Mark \textsc{Brown}
+
+        \vfill
+
+    $if(latAbstract)$\begin{mdframed}\sloppy\medskip
+    $latAbstract$
+        \medskip
+        \end{mdframed}
+    $endif$
+
+    % Bottom of the page
+        {\large \today\par}
+    \end{titlepage}
+$endif$
+
+
 \tableofcontents
-$if(latBook)$\newpage$endif$
+\newpage
+$if(latBook)$-- start content -- $endif$
 
 $latContent$
 
