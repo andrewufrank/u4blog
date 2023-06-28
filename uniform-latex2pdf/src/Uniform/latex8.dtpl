@@ -1,22 +1,12 @@
-$-- template to produce a latex file 
+$-- template to produce a latex file with the tufte style 
  
 $-- preamble
-\documentclass[
-$--	  headings=standardclasses,		% to use serif font for titles 
-$--                  unnecessary, probably implied     hyperref={colorlinks},
-	  a4paper,
-	  10pt,
-      toc=flat,	 
-	  notitlepage 
-        ] 
-        $if(latBookBig)$ {scrbook} % testbook $latBook$
-        $elseif(latBooklet)$ {scrreport} % testbooklet $latBooklet$
-        $else$ {scrartcl}  % testeins $latBookBig$ testzwei $latBooklet$
+\documentclass
+        $if(latBookBig)$ {tufte-book} % testbook $latBook$
+        $elseif(latBooklet)$ {tufte-book} % testbooklet $latBooklet$
+        $else$ {tufte-handout}  % testeins $latBookBig$ testzwei $latBooklet$
         $endif$
 
-\addtokomafont{part}{\LARGE} % reduce size of part
-\addtokomafont{partnumber}{\LARGE}
-\setkomafont{sectioning}{\bfseries}  % serif font for titles
 
 \usepackage{fontspec}
 \usepackage[$latLanguage$]{babel}
@@ -24,27 +14,35 @@ $-- \renewcaptionname{ngerman}{\bibname}{Literatur}   %Bibliography
 $-- \renewcaptionname{$latLanguage$}{\bibname}{$latBiblioTitle$}   %Bibliography
 $-- automatical adaption
 
-\usepackage{bookmark}
+\usepackage{microtype} 
+\renewcommand{\allcapsspacing}[1]{\textls[200]{#1}}% 
+\renewcommand{\smallcapsspacing}[1]{\textls[50]{#1}}%
+
+
+$-- \usepackage{bookmark}
 
 $-- numbering thru all of the book
-\counterwithin{chapter}{part}
-\counterwithin{section}{chapter}
-\renewcommand{\thepart}{\arabic{part}}
-\setcounter{secnumdepth}{\subsubsectionnumdepth} % numbering for subsubsections
+$-- \counterwithin{chapter}{part}
+$-- \counterwithin{section}{chapter}
+$-- \renewcommand{\thepart}{\arabic{part}}
+$-- \setcounter{secnumdepth}{\subsubsectionnumdepth} % numbering for subsubsections
 
 \usepackage{csquotes}  $-- required for babel 
 
 \usepackage{graphicx}
-          \setkeys{Gin}{width=.75\linewidth,keepaspectratio}
-\usepackage{makeidx}
-\usepackage[backend=biber,
-    style=authoryear,
-    natbib=true,
-    hyperref=true,
-    ]{biblatex}
+$--          \setkeys{Gin}{width=.75\linewidth,keepaspectratio}
+             \setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
+\graphicspath{{$latBakedDir$}}
 
-$if(latBibliography)$\addbibresource{$latBibliography$}$endif$
-$if(latReferences)$\addbibresource{local.bib}$endif$
+\usepackage{makeidx}
+$-- \usepackage[backend=biber,
+$--     style=authoryear,
+$--     natbib=true,
+$--     hyperref=true,
+$--     ]{biblatex}
+
+$--  $if(latBibliography)$\addbibresource{$latBibliography$}$endif$
+$--  $if(latReferences)$\addbibresource{local.bib}$endif$
 
 \makeindex
 
@@ -63,9 +61,8 @@ $-- \usepackage[colorlinks]{hyperref}
 $-- content
 \title{$latTitle$}
 \author{$latAuthor$}
-\date{}  $-- no date??
-\graphicspath{{$latBakedDir$}}
-
+\date{2023}  $-- no date??
+\publisher{Gerastree editions}
 \usepackage[]{mdframed}
 
 \begin{document}
@@ -79,9 +76,12 @@ $endif$
 
 \maketitle
 
+Copyright \copyright\ \the\year\ \thanklessauthor
 
-$if(latAbstract)$\begin{mdframed}$latAbstract$
-    \bigskip
+
+$if(latAbstract)$\begin{mdframed}\sloppy\medskip
+$latAbstract$
+    \medskip
     \end{mdframed}
 $endif$
 
@@ -92,20 +92,23 @@ $latContent$
 
 $for(latIndex.fileEntries)$   $-- for the booklet level of collections
     \chapter{$it.title$}
-    \begin{mdframed}$it.abstract$\end{mdframed}
+    \begin{mdframed}\sloppy\medskip
+    $it.abstract$\end{mdframed}
     $it.content$
 $endfor$
 
 
 $for(latIndex.dirEntries)$   $-- for the bookbig level of collections
     \part{$latIndex.dirEntries.title$}
-    \begin{mdframed}$latIndex.dirEntries.abstract$\end{mdframed}
+    \begin{mdframed}\sloppy\medskip
+    $latIndex.dirEntries.abstract$\end{mdframed}
     $latIndex.dirEntries.content$
 
 
     $for(latIndex.dirEntries.fileEntries)$   $-- the files in the parts in bookbig
         \chapter{$latIndex.dirEntries.fileEntries.title$}
-        \begin{mdframed}$latIndex.dirEntries.fileEntries.abstract$\end{mdframed}
+        \begin{mdframed}\sloppy\medskip
+        $latIndex.dirEntries.fileEntries.abstract$\end{mdframed}
         $latIndex.dirEntries.fileEntries.content$
     $endfor$
 
@@ -113,11 +116,13 @@ $endfor$
 
 endcontentTest
 
-\printbibliography
-
+$-- \printbibliography
+\bibliography{$latBibliography$} 
+$-- bracuht noch references case
+\bibliographystyle{plainnat}
 \printindex
 
 \vspace*{\fill}
-{\scriptsize Produced with `daino' ($latDainoVersion$) from $latFn$}
+{\scriptsize Produced with `daino' ($latDainoVersion$) from $latFn$ with latex8tufte.dtpl }
 
 \end{document}
