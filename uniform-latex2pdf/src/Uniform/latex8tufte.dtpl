@@ -69,6 +69,7 @@ $-- content descriptionm
 % -- -- --- ----------  ----             ----        ---------------
 \begin{document}
  
+\frontmatter
 
 $if(bookprint)$ % bookprint line 71
     % r.1 blank page
@@ -135,9 +136,9 @@ $else$
         %\vspace{1cm}
         %{\Large \textsc{$latTitle$} 
         \vspace{1.5cm}
-        {\huge\bfseries ($latTitle$) \par}
+        {\huge\bfseries{$latTitle$} \par}
         \vspace{1cm}
-        $if(latAuthor)${\Large\itshape ($latAuthor$) \par}$endif$
+        $if(latAuthor)${\Large\itshape $latAuthor$ \par}$endif$
         %\vfill
         %supervised by\par
         %Dr.~Mark \textsc{Brown}
@@ -162,13 +163,14 @@ $if(latBookBig)$
     \tableofcontents
 $elseif(latBooklet)$
     \begingroup
-    \let\clearpage\relax
+    %\let\clearpage\relax
     \tableofcontents
     \endgroup
 $else$
     \begingroup
     \let\clearpage\relax
     \tableofcontents
+    \vspace{2cm}
     \endgroup
 $endif$
 
@@ -183,6 +185,7 @@ $elseif(latBooklet)$
 $endif$
 
 % testtestContentanfang--------
+\mainmatter
 $latContent$
 
 %testtestContentende--------
@@ -211,6 +214,7 @@ $for(latIndex.dirEntries)$   % bookbig level of collections
 
 $endfor$
 
+\backmatter
 % ====================== endcontentTestTest
 
 $-- \printbibliography
@@ -224,7 +228,7 @@ $-- bracuht noch references case
 \vspace*{\fill}
 \scriptsize Produced with `daino' ($latDainoVersion$) from $latFn$ with latex8tufte.dtpl 
 
-\scriptsize arguments testhandout BookBig: $latBookBig$ Booklet: $latBooklet$ 
+\scriptsize arguments  $latBookBig$  $latBooklet$ 
 $-- book: $latBook$ 
 
 
