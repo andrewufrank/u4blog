@@ -61,29 +61,29 @@ writePDF2 debug fn fnres refDir = do
         "lualatex"
         [out1, "-interaction=nonstopmode",  infn]
         refDir
-    exitHandling exit_code1 infn 1
+    exitHandling exit_code1 infn "lualatex first run"
 
     exit_code2 <- callProcessWithCWD True -- (not (inform debug))  -- silenced or not 
         "biber"
         [ infn]
         refDir
-    exitHandling exit_code2 infn 2
+    exitHandling exit_code2 infn "biber"
 
     exit_code3 <- callProcessWithCWD True -- (not (inform debug))  -- silenced or not 
         "makeindex"
         ["-q", infn]
         refDir
-    exitHandling exit_code3 infn 3
+    exitHandling exit_code3 infn "makeindex"
 
     exit_code3 <- callProcessWithCWD True -- (not (inform debug))  -- silenced or not 
         "lualatex"
         [out1, "-interaction=nonstopmode",  infn]
         refDir
-    exitHandling exit_code3 infn 4
+    exitHandling exit_code3 infn "lualatex second run"
 
     when (inform debug) $ putIOwords ["writePDF2 end for", showT out1]
 
-exitHandling :: Sys.ExitCode -> FilePath -> Int -> ErrIO ()
+exitHandling :: Sys.ExitCode -> FilePath -> Text -> ErrIO ()
 exitHandling exit_code filename step = do
     -- the count indicated the step count 
     case exit_code of

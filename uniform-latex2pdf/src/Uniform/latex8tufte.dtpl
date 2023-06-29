@@ -2,13 +2,15 @@ $-- template to produce a latex file with the tufte style
  
 $-- preamble
 \documentclass[a4paper,openany] %openright to force parts and chapter to start right
-        $if(latBookBig)$ {tufte-book} % testbook $latBook$
-        $elseif(latBooklet)$ {tufte-book} % testbooklet $latBooklet$
-        $else$ {tufte-handout}  % testeins $latBookBig$ testzwei $latBooklet$
+        $if(latBookBig)$ {tufte-book}  %testbook $latBookBig$
+        $elseif(latBooklet)$ {tufte-book}  %testbooklet $latBooklet$
+        $else$ {tufte-handout}  %testhandout $latBookBig$ testzwei $latBooklet$
         $endif$
 
+% not used: $latBook$  % should be true for bookbig and booklet
 
 \usepackage{fontspec}
+\usepackage{csquotes}  $-- required for babel 
 \usepackage[$latLanguage$]{babel}
 $-- \renewcaptionname{ngerman}{\bibname}{Literatur}   %Bibliography
 $-- \renewcaptionname{$latLanguage$}{\bibname}{$latBiblioTitle$}   %Bibliography
@@ -27,7 +29,6 @@ $-- \counterwithin{section}{chapter}
 $-- \renewcommand{\thepart}{\arabic{part}}
 $-- \setcounter{secnumdepth}{\subsubsectionnumdepth} % numbering for subsubsections
 
-\usepackage{csquotes}  $-- required for babel 
 
 \usepackage{graphicx}
 $--          \setkeys{Gin}{width=.75\linewidth,keepaspectratio}
@@ -75,6 +76,9 @@ $-- content
 
 % -- -- --- ----------  ----             ----        ---------------
 \begin{document}
+ 
+ 
+arguments testhandout big: $latBookBig$ let: $latBooklet$ book: $latBook$ 
 
 $if(bookprint)$ % bookprint line 71
     % r.1 blank page
@@ -163,14 +167,25 @@ $else$
     %\end{titlepage}
 $endif$
 
-
+testest -- begingroup
+\begingroup
+\let\clearpage\relax
 \tableofcontents
+\endgroup
+testest -- begingroup
 
-$if(latBook)$
-    \newpage         %-- start content -- 
+$-- \tableofcontents  add page break if requred
+
+$if(latBookBig)$
+    \newpage         -- testtest bookbig newpage -- 
+$elseif(latBooklet)$
+    \newpage    -- testtest booklet newpage 
 $endif$
 
+testtestContentanfang--------
 $latContent$
+
+testtestContentende--------
 
 $for(latIndex.fileEntries)$   % booklet level of collections
     \chapter{$it.title$}
@@ -196,16 +211,19 @@ $for(latIndex.dirEntries)$   % bookbig level of collections
 
 $endfor$
 
-endcontentTest
+====================== endcontentTestTest
 
 $-- \printbibliography
 %\bibliography{$latBibliography$} 
 $-- bracuht noch references case
 %\bibliographystyle{plainnat}
+
 \printbibliography
 \printindex
 
 \vspace*{\fill}
 {\scriptsize Produced with `daino' ($latDainoVersion$) from $latFn$ with latex8tufte.dtpl }
+
+===================== enddocument testtest
 
 \end{document}
