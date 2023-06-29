@@ -31,7 +31,9 @@ module Uniform.PandocImports
 where
 
 import Text.Pandoc
-  ( CiteMethod (Natbib),
+  ( 
+    -- CiteMethod (Biblatex),
+        -- Natbib),
     Meta,
     MetaValue,
     Pandoc (..),
@@ -135,7 +137,7 @@ latexOptions :: WriterOptions
 latexOptions =
   def
     { writerHighlightStyle = Just tango,
-      writerCiteMethod = Natbib,
+      writerCiteMethod = Pandoc.Biblatex,
       writerHTMLMathMethod = Pandoc.KaTeX "https://cdn.jsdelivr.net/npm/katex@0.16.8/+esm",  -- :: HTMLMathMethod 
       -- Citeproc                        -- use citeproc to render them
       --           | Natbib                        -- output natbib cite commands
