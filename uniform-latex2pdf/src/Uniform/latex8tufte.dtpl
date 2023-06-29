@@ -1,13 +1,12 @@
 $-- template to produce a latex file with the tufte style 
  
-$-- preamble
 \documentclass[a4paper,openany] %openright to force parts and chapter to start right
         $if(latBookBig)$ {tufte-book}  %testbook $latBookBig$
         $elseif(latBooklet)$ {tufte-book}  %testbooklet $latBooklet$
         $else$ {tufte-handout}  %testhandout $latBookBig$ testzwei $latBooklet$
         $endif$
 
-% not used: $latBook$  % should be true for bookbig and booklet
+$-- not used: $latBook$  % should be true for bookbig and booklet
 
 \usepackage{fontspec}
 \usepackage{csquotes}  $-- required for babel 
@@ -32,26 +31,19 @@ $-- \setcounter{secnumdepth}{\subsubsectionnumdepth} % numbering for subsubsecti
 
 \usepackage{graphicx}
 $--          \setkeys{Gin}{width=.75\linewidth,keepaspectratio}
-             \setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
+    \setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
 \graphicspath{{$latBakedDir$}}
 
 \usepackage{makeidx}
-$-- \usepackage[style=verbose, autocite=footnote, backend=biber]{biblatex}
-
- \usepackage[backend=biber,
-$--
+\usepackage[backend=biber,
      style=authoryear,
      autocite=footnote,
 $--     natbib=true,
-$--
      hyperref=true,
-$--
      ]{biblatex}
 
-$--
-  $if(latBibliography)$\addbibresource{$latBibliography$}$endif$
-$--
-  $if(latReferences)$\addbibresource{local.bib}$endif$
+$if(latBibliography)$\addbibresource{$latBibliography$}$endif$
+$if(latReferences)$\addbibresource{local.bib}$endif$
 
 \makeindex
 
@@ -67,7 +59,7 @@ $-- \usepackage[colorlinks]{hyperref}
     urlcolor={blue!80!black}
 }
 
-$-- content
+$-- content descriptionm
 \title{$latTitle$}
 \author{$latAuthor$}
 \date{2023}  $-- no date??
@@ -77,8 +69,6 @@ $-- content
 % -- -- --- ----------  ----             ----        ---------------
 \begin{document}
  
- 
-arguments testhandout big: $latBookBig$ let: $latBooklet$ book: $latBook$ 
 
 $if(bookprint)$ % bookprint line 71
     % r.1 blank page
@@ -145,13 +135,12 @@ $else$
         %\vspace{1cm}
         %{\Large \textsc{$latTitle$} 
         \vspace{1.5cm}
-        {\huge\bfseries Title: ($latTitle$) \par}
+        {\huge\bfseries ($latTitle$) \par}
         \vspace{1cm}
-        {\Large\itshape Author: ($latAuthor$) \par}
+        $if(latAuthor)${\Large\itshape ($latAuthor$) \par}$endif$
         %\vfill
         %supervised by\par
         %Dr.~Mark \textsc{Brown}
-
         %\vfill
 
         $if(latAbstract)$  % lat abstract
@@ -167,25 +156,36 @@ $else$
     %\end{titlepage}
 $endif$
 
-testest -- begingroup
-\begingroup
-\let\clearpage\relax
-\tableofcontents
-\endgroup
-testest -- begingroup
+% testest -- begingroup
+$if(latBookBig)$
+    \clearpage
+    \tableofcontents
+$elseif(latBooklet)$
+    \begingroup
+    \let\clearpage\relax
+    \tableofcontents
+    \endgroup
+$else$
+    \begingroup
+    \let\clearpage\relax
+    \tableofcontents
+    \endgroup
+$endif$
+
+% testest -- begingroup
 
 $-- \tableofcontents  add page break if requred
 
 $if(latBookBig)$
-    \newpage         -- testtest bookbig newpage -- 
+    \newpage         % -- testtest bookbig newpage -- 
 $elseif(latBooklet)$
-    \newpage    -- testtest booklet newpage 
+    \newpage    % -- testtest booklet newpage 
 $endif$
 
-testtestContentanfang--------
+% testtestContentanfang--------
 $latContent$
 
-testtestContentende--------
+%testtestContentende--------
 
 $for(latIndex.fileEntries)$   % booklet level of collections
     \chapter{$it.title$}
@@ -211,7 +211,7 @@ $for(latIndex.dirEntries)$   % bookbig level of collections
 
 $endfor$
 
-====================== endcontentTestTest
+% ====================== endcontentTestTest
 
 $-- \printbibliography
 %\bibliography{$latBibliography$} 
@@ -222,8 +222,12 @@ $-- bracuht noch references case
 \printindex
 
 \vspace*{\fill}
-{\scriptsize Produced with `daino' ($latDainoVersion$) from $latFn$ with latex8tufte.dtpl }
+\scriptsize Produced with `daino' ($latDainoVersion$) from $latFn$ with latex8tufte.dtpl 
 
-===================== enddocument testtest
+\scriptsize arguments testhandout BookBig: $latBookBig$ Booklet: $latBooklet$ 
+$-- book: $latBook$ 
+
+
+% ===================== enddocument testtest
 
 \end{document}
