@@ -35,14 +35,22 @@ $--          \setkeys{Gin}{width=.75\linewidth,keepaspectratio}
 \graphicspath{{$latBakedDir$}}
 
 \usepackage{makeidx}
-$-- \usepackage[backend=biber,
-$--     style=authoryear,
-$--     natbib=true,
-$--     hyperref=true,
-$--     ]{biblatex}
+$-- \usepackage[style=verbose, autocite=footnote, backend=biber]{biblatex}
 
-$--  $if(latBibliography)$\addbibresource{$latBibliography$}$endif$
-$--  $if(latReferences)$\addbibresource{local.bib}$endif$
+ \usepackage[backend=biber,
+$--
+     style=authoryear,
+     autocite=footnote,
+$--     natbib=true,
+$--
+     hyperref=true,
+$--
+     ]{biblatex}
+
+$--
+  $if(latBibliography)$\addbibresource{$latBibliography$}$endif$
+$--
+  $if(latReferences)$\addbibresource{local.bib}$endif$
 
 \makeindex
 
@@ -191,9 +199,10 @@ $endfor$
 endcontentTest
 
 $-- \printbibliography
-\bibliography{$latBibliography$} 
+%\bibliography{$latBibliography$} 
 $-- bracuht noch references case
-\bibliographystyle{plainnat}
+%\bibliographystyle{plainnat}
+\printbibliography
 \printindex
 
 \vspace*{\fill}
