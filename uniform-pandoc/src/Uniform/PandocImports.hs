@@ -51,6 +51,8 @@ import Text.Pandoc
 import qualified Text.Pandoc as Pandoc
 import Text.Pandoc.Highlighting (tango)
 import Text.Pandoc.Shared (stringify)
+-- import     Text.Pandoc.Highlighting.Extensions
+-- is easier automatically included in the defaults
 import Uniform.Json
       
 -- import Uniform.Yaml  

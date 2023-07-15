@@ -31,12 +31,12 @@ where
 import Uniform.Json
 import UniformBase
 
--- import Uniform.PandocImports (  unPandocM )
+import Uniform.PandocImports (  unPandocM )
 import Text.Pandoc
 
-import Text.Pandoc.Highlighting (tango)
+import Text.Pandoc.Highlighting  
 import qualified Text.Pandoc as Pandoc
-import Uniform.PandocImports
+-- import Uniform.PandocImports
 import Text.DocLayout (render)
 import Text.DocTemplates as DocTemplates
 
@@ -51,7 +51,44 @@ html5Options =
     def
         { writerHighlightStyle = Just tango
         , writerHTMLMathMethod = Pandoc.MathML -- :: HTMLMathMethod
-        , writerExtensions = writerExtensions def
+        -- , writerExtensions = -- writerExtensions def
+                --  WriterOptions { writerTemplate         = Nothing
+                --       , writerVariables        = mempty
+                --       , writerTabStop          = 4
+                --       , writerTableOfContents  = False
+                --       , writerIncremental      = False
+                --       , writerHTMLMathMethod   = PlainMath
+                --       , writerNumberSections   = False
+                --       , writerNumberOffset     = [0,0,0,0,0,0]
+                --       , writerSectionDivs      = False
+                --       , writerExtensions       = emptyExtensions
+                --       , writerReferenceLinks   = False
+                --       , writerDpi              = 96
+                --       , writerWrapText         = WrapAuto
+                --       , writerColumns          = 72
+                --       , writerEmailObfuscation = NoObfuscation
+                --       , writerIdentifierPrefix = ""
+                --       , writerCiteMethod       = Citeproc
+                      , writerHtmlQTags        = True -- changed af
+                    --   , writerSlideLevel       = Nothing
+                    --   , writerTopLevelDivision = TopLevelDefault
+                    --   , writerListings         = False
+                    --   , writerHighlightStyle   = Just pygments
+                    --   , writerSetextHeaders    = False
+                    --   , writerListTables       = False
+                    --   , writerEpubSubdirectory = "EPUB"
+                    --   , writerEpubMetadata     = Nothing
+                    --   , writerEpubFonts        = []
+                    --   , writerEpubTitlePage    = True
+                    --   , writerSplitLevel       = 1
+                    --   , writerChunkTemplate    = "%s-%i.html"
+                    --   , writerTOCDepth         = 3
+                    --   , writerReferenceDoc     = Nothing
+                    --   , writerReferenceLocation = EndOfDocument
+                    -- --   , writerSyntaxMap        = defaultSyntaxMap
+                    --   , writerPreferAscii      = False
+                    --   }
+
         }
 
 -- | apply the template 

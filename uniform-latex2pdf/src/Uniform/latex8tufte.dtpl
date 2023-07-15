@@ -1,6 +1,6 @@
 $-- template to produce a latex file with the tufte style 
  
-\documentclass[a4paper,openany] %openright to force parts and chapter to start right
+\documentclass[a4paper,openany,nobib] %openright to force parts and chapter to start right
         $if(latBookBig)$ {tufte-book}  %testbook $latBookBig$
         $elseif(latBooklet)$ {tufte-book}  %testbooklet $latBooklet$
         $else$ {tufte-handout}  %testhandout $latBookBig$ testzwei $latBooklet$
@@ -8,6 +8,15 @@ $-- template to produce a latex file with the tufte style
 
 $-- not used: $latBook$  % should be true for bookbig and booklet
 
+\titleclass{\subsubsection}{straight}
+\titleformat{\subsubsection}%
+  [hang]% shape
+  {\normalfont\large\itshape}% format applied to label+text
+  {\thesubsubsection}% label
+  {1em}% horizontal separation between label and title body
+  {}% before the title body
+  []% after the title body
+  
 \usepackage{fontspec}
 \usepackage{csquotes}  $-- required for babel 
 \usepackage[$latLanguage$]{babel}
@@ -18,8 +27,15 @@ $-- automatical adaption
 \usepackage{microtype} 
 \renewcommand{\allcapsspacing}[1]{\textls[200]{#1}}% 
 \renewcommand{\smallcapsspacing}[1]{\textls[50]{#1}}%
+\renewcommand{\textsc}[1]{\smallcapsspacing{\textsmallcaps{#1}}}
 
-
+$-- copied from tufte-common.def, change ## to # 
+% \renewcommand{\allcapsspacing}[1]{\textls[200]{##1}}%
+%  \renewcommand{\smallcapsspacing}[1]{\textls[50]{##1}}%
+  \renewcommand{\allcaps}[1]{\allcapsspacing{\MakeTextUppercase{#1}}}%
+  \renewcommand{\smallcaps}[1]{\smallcapsspacing{\scshape\MakeTextLowercase{#1}}}%
+%  \renewcommand{\textsc}[1]{\smallcapsspacing{\textsmallcaps{##1}}}%
+$--
 $-- \usepackage{bookmark}
 
 $-- numbering thru all of the book
@@ -33,6 +49,10 @@ $-- \setcounter{secnumdepth}{\subsubsectionnumdepth} % numbering for subsubsecti
 $--          \setkeys{Gin}{width=.75\linewidth,keepaspectratio}
     \setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
 \graphicspath{{$latBakedDir$}}
+
+\usepackage{longtable}
+\usepackage{booktabs}
+
 
 \usepackage{makeidx}
 \usepackage[backend=biber,
@@ -69,7 +89,7 @@ $-- content descriptionm
 % -- -- --- ----------  ----             ----        ---------------
 \begin{document}
  
-\frontmatter
+%\frontmatter  %not defined in tufte-latex?
 
 $if(bookprint)$ % bookprint line 71
     % r.1 blank page
@@ -163,7 +183,7 @@ $if(latBookBig)$
     \tableofcontents
 $elseif(latBooklet)$
     \begingroup
-    %\let\clearpage\relax
+    \let\clearpage\relax
     \tableofcontents
     \endgroup
 $else$
@@ -181,11 +201,12 @@ $-- \tableofcontents  add page break if requred
 $if(latBookBig)$
     \newpage         % -- testtest bookbig newpage -- 
 $elseif(latBooklet)$
-    \newpage    % -- testtest booklet newpage 
+    %\newpage    % -- testtest booklet newpage 
+    \vspace{2cm}
 $endif$
 
 % testtestContentanfang--------
-\mainmatter
+%\mainmatter
 $latContent$
 
 %testtestContentende--------
@@ -214,7 +235,7 @@ $for(latIndex.dirEntries)$   % bookbig level of collections
 
 $endfor$
 
-\backmatter
+%\backmatter
 % ====================== endcontentTestTest
 
 $-- \printbibliography
