@@ -1,11 +1,14 @@
-$-- template to produce a latex file with the tufte style 
-% tex produced with latex8tufte
+$-- template to produce a latex file with the tufte style fixed notes-in-notes
+% template used latexTufte81.dtpl
 
+% requires removed limiation on subsubpara in tufte-common.def 
+ 
 \documentclass[a4paper,openany,nobib] %openright to force parts and chapter to start right
         $if(latBookBig)$ {tufte-book}  %testbook $latBookBig$
         $elseif(latBooklet)$ {tufte-book}  %testbooklet $latBooklet$
-        $else$ {tufte-handout}  %testhandout $latBookBig$ testzwei `$latBooklet$
+        $else$ {tufte-handout}  %testhandout $latBookBig$ testzwei $latBooklet$
         $endif$
+% produced with latext8tufte v1
 
 $-- not used: $latBook$  % should be true for bookbig and booklet
 
@@ -54,6 +57,31 @@ $--          \setkeys{Gin}{width=.75\linewidth,keepaspectratio}
 \usepackage{longtable}
 \usepackage{booktabs}
 
+\makeatletter       % the code to avoid footnote-in-footnotes from citations
+\renewcommand\@footnotetext[2][0pt]{%
+  \marginpar{%
+    \hbox{}\vspace*{#1}%
+    \def\baselinestretch {\setspace@singlespace}%
+    \reset@font\footnotesize%
+    \@tufte@margin@par% use parindent and parskip settings for marginal text
+    \vspace*{-1\baselineskip}\noindent%
+    \protected@edef\@currentlabel{%
+       \csname p@footnote\endcsname\@thefnmark%
+    }%
+    \color@begingroup%
+       \@makefntext{%
+         \toggletrue{blx@footnote}%
+         \ignorespaces #2%
+       }%
+    \color@endgroup%
+  }%
+}%
+
+\makeatother
+
+\usepackage{fancyvrb}   % to define Verbatim environment 
+%\VerbatimFootnotes      % allow footnotes inside 
+                        % creates missing fancyvrb.sty
 
 \usepackage{makeidx}
 \usepackage[backend=biber,
@@ -62,6 +90,7 @@ $--          \setkeys{Gin}{width=.75\linewidth,keepaspectratio}
 $--     natbib=true,
      hyperref=true,
      ]{biblatex}
+
 
 $if(latBibliography)$\addbibresource{$latBibliography$}$endif$
 $if(latReferences)$\addbibresource{local.bib}$endif$
@@ -79,6 +108,7 @@ $-- \usepackage[colorlinks]{hyperref}
     citecolor={blue!50!black},
     urlcolor={blue!80!black}
 }
+\urlstyle{same}% uses the style from where it is used
 
 $-- content descriptionm
 \title{$latTitle$}
@@ -248,7 +278,7 @@ $-- bracuht noch references case
 \printindex
 
 \vspace*{\fill}
-\scriptsize Produced with `daino' ($latDainoVersion$) from \url{$latFn$} with latex8tufte.dtpl 
+\scriptsize Produced with `daino' ($latDainoVersion$) from \url{$latFn$} with latexTufte81.dtpl 
 
 \scriptsize arguments  $latBookBig$  $latBooklet$ 
 $-- book: $latBook$ 

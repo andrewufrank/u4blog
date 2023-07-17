@@ -1,5 +1,6 @@
 $-- template to produce a latex file 
- 
+% produced with latex7.dtpl
+
 $-- preamble
 \documentclass[
 	  headings=standardclasses,		% to use serif font for titles 
@@ -30,6 +31,7 @@ $if(latReferences)$\addbibresource{local.bib}$endif$
 
 \makeindex
 \usepackage[colorlinks]{hyperref}
+\urlstyle{same}% uses the style from where it is used
 \usepackage{bookmark}
 \providecommand{\tightlist}{%
 \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
@@ -74,6 +76,8 @@ $--  $endfor$
 
 \printindex
 
-{\scriptsize Produced with `daino' (version $latDainoVersion$) from $latFn$}
+{\scriptsize Produced with `daino'  (version $latDainoVersion$) 
+using template laex7.dtpl from file \url{$latFn$}
+}
 
 \end{document}

@@ -120,6 +120,7 @@ markdownOptions = Pandoc.def { Pandoc.readerExtensions = exts }
         , Pandoc.githubMarkdownExtensions
         ]
 
+
 -- instance ToJSON Text
 -- writeLaTeX :: PandocMonad m => WriterOptions -> Pandoc -> m Text
 

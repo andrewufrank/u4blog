@@ -16,4 +16,7 @@
 0.1.5.3 include Ext_latex_macros to to parse latex math
 0.1.5.4 change cite method from natbib to biblatex
             add Ext_smart for Smart quotes, apostrophes, ellipses, dashes
+            add footnotes in footnotes fix 
+            add fancyvrb
+            
 
