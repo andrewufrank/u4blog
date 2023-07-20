@@ -39,7 +39,7 @@ $-- copied from tufte-common.def, change ## to #
   \renewcommand{\allcaps}[1]{\allcapsspacing{\MakeTextUppercase{#1}}}%
   \renewcommand{\smallcaps}[1]{\smallcapsspacing{\scshape\MakeTextLowercase{#1}}}%
 %  \renewcommand{\textsc}[1]{\smallcapsspacing{\textsmallcaps{##1}}}%
-$--
+$--setc
 $-- \usepackage{bookmark}
 
 $-- numbering thru all of the book
@@ -91,11 +91,25 @@ $--     natbib=true,
      hyperref=true,
      ]{biblatex}
 
+\makeatother
+
+% to add the chapter and part in the header
+\fancypagestyle{mystyle}{%
+	\fancyhf{}%
+	\renewcommand{\chaptermark}[1]{\markboth{##1}{}}%
+	\renewcommand{\sectionmark}[1]{\markleft{##1}{}}%
+	\fancyhead[L]{\thepage\quad\smallcaps{\newlinetospace{\leftmark}}}% 
+	\fancyhead[R]{\smallcaps{\newlinetospace{\rightmark}}\quad\thepage}%
+}
+
+
 
 $if(latBibliography)$\addbibresource{$latBibliography$}$endif$
 $if(latReferences)$\addbibresource{local.bib}$endif$
 
 \makeindex
+
+\setcounter{tocdepth}{4}  %to make several levels in table of content, works
 
 \providecommand{\tightlist}{%
 \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
@@ -119,7 +133,8 @@ $-- content descriptionm
 
 % -- -- --- ----------  ----             ----        ---------------
 \begin{document}
- 
+\pagestyle{mystyle} % to use mystyle 
+
 %\frontmatter  %not defined in tufte-latex?
 
 $if(bookprint)$ % bookprint line 71
