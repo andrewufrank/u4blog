@@ -115,9 +115,11 @@ markdownOptions = Pandoc.def { Pandoc.readerExtensions = exts }
             , Pandoc.Ext_subscript -- start and closing ~
             -- , Pandoc.Ext_short_subsuperscripts  -- only start ^ and ~
             , Pandoc.Ext_strikeout  -- require ~~ two! before and after
+            , Pandoc.Ext_smart -- Smart quotes, apostrophes, ellipses, dashes
             ]
         , Pandoc.githubMarkdownExtensions
         ]
+
 
 -- instance ToJSON Text
 -- writeLaTeX :: PandocMonad m => WriterOptions -> Pandoc -> m Text

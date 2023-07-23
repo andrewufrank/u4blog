@@ -31,7 +31,9 @@ module Uniform.PandocImports
 where
 
 import Text.Pandoc
-  ( CiteMethod (Natbib),
+  ( 
+    -- CiteMethod (Biblatex),
+        -- Natbib),
     Meta,
     MetaValue,
     Pandoc (..),
@@ -49,6 +51,8 @@ import Text.Pandoc
 import qualified Text.Pandoc as Pandoc
 import Text.Pandoc.Highlighting (tango)
 import Text.Pandoc.Shared (stringify)
+-- import     Text.Pandoc.Highlighting.Extensions
+-- is easier automatically included in the defaults
 import Uniform.Json
       
 -- import Uniform.Yaml  
@@ -135,7 +139,7 @@ latexOptions :: WriterOptions
 latexOptions =
   def
     { writerHighlightStyle = Just tango,
-      writerCiteMethod = Natbib,
+      writerCiteMethod = Pandoc.Biblatex,
       writerHTMLMathMethod = Pandoc.KaTeX "https://cdn.jsdelivr.net/npm/katex@0.16.8/+esm",  -- :: HTMLMathMethod 
       -- Citeproc                        -- use citeproc to render them
       --           | Natbib                        -- output natbib cite commands

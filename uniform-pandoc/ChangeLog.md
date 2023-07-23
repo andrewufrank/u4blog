@@ -14,4 +14,9 @@
 0.1.5.2 removed pandoc2pdf which was used for an experiment to directly convert to pdf using the pandoc internal process. 
         now use uniform-latex2pdf (which uses lualatex separately)
 0.1.5.3 include Ext_latex_macros to to parse latex math
+0.1.5.4 change cite method from natbib to biblatex
+            add Ext_smart for Smart quotes, apostrophes, ellipses, dashes
+            add footnotes in footnotes fix 
+            add fancyvrb
+            
 
