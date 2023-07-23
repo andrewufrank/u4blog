@@ -44,7 +44,9 @@ writePDF2 debug fn fnres refDir = do
 
     -- process
 
-    let infn =   getNakedFileName $ fn :: FilePath -- setExtension extTex fn :: Path Abs File
+    let infn =  toFilePath fn 
+    -- put full path into message
+    --  getNakedFileName $ fn :: FilePath -- setExtension extTex fn :: Path Abs File
     when (inform debug) $ putIOwords
         [ "writePDF2 1 infn"
         , showT infn
