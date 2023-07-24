@@ -126,10 +126,11 @@ instance AtKey Value Bool where
   getAt2Key meta2 k1 k2 = meta2 ^? key k1 . key k2 . _Bool
   putAtKey k2 txt meta2 = meta2 & _Object . at k2 ?~ Bool txt
 
-instance AtKey Value Value where
-  getAtKey meta2 k2 = meta2 ^? key k2  
-  getAt2Key meta2 k1 k2 = meta2 ^? key k1 . key k2  
---   putAtKey k2 txt meta2 = meta2 & _Object . at k2 ?~ Bool txt
+-- instance AtKey Value Value where
+--   getAtKey meta2 k2 = meta2 ^? key k2  
+--   getAt2Key meta2 k1 k2 = meta2 ^? key k1 . key k2  
+-- --   putAtKey k2 txt meta2 = meta2 & _Object . at k2 ?~ Bool txt
+-- not successful fix for abstracts formatting
 
 class AtKey2 vk v where
 --   getAtKey :: vk -> Key -> Maybe v
@@ -162,6 +163,7 @@ mergeRightPref = mergeLeftPref . reverse
 
 instance NiceStrings Value where
   shownice = bb2t . bl2b . encodePretty
+  showNice = shownice
 
 unObject :: Value -> Object
 unObject (Object x) = x
