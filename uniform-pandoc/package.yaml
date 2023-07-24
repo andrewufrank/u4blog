@@ -21,6 +21,7 @@ extra-source-files:
 dependencies:
 - base >= 4.7 && < 5
 - pandoc == 3.1.6
+- pandoc-types
 
 - uniformBase >=0.1.5.1
 - uniform-json >=0.1.5.2
@@ -33,7 +34,7 @@ dependencies:
 - bibtex
 # - lens-aeson
 # - parsec
-# - containers
+- containers
 # - process
 # - shake
 

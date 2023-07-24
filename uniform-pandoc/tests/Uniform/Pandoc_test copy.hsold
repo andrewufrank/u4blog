@@ -30,7 +30,7 @@ import UniformBase
 -- import Text.DocLayout (render)
 -- import Text.DocTemplates as DocTemplates
 
-test_g = assertEqual (getDoNotReplace zero) zero
+
  
 -- works only with json values now 
 -- templ1, res4 :: Text 

@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: e33c2bb1045c1bd942a531dea18e7937afea75904ca38656bb02d2a75d6ddae3
+-- hash: 5f8938468ca0afe08f66341c8a58c9ce6e2f07489ae4cedc7ca5cf81640953b1
 
 name:           uniform-pandoc
 version:        0.1.6.1
@@ -46,9 +46,11 @@ library
     , base >=4.7 && <5
     , bibtex
     , bytestring
+    , containers
     , doclayout
     , doctemplates
     , pandoc ==3.1.6
+    , pandoc-types
     , uniform-json >=0.1.5.2
     , uniformBase >=0.1.5.1
   default-language: Haskell2010
@@ -70,9 +72,11 @@ test-suite pandoctest
     , base >=4.7 && <5
     , bibtex
     , bytestring
+    , containers
     , doclayout
     , doctemplates
     , pandoc ==3.1.6
+    , pandoc-types
     , uniform-convenience
     , uniform-json >=0.1.5.2
     , uniform-pandoc

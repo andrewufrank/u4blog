@@ -25,37 +25,79 @@
 
 module Uniform.PandocImports
   ( module Uniform.PandocImports,
-    Pandoc (..)
+    Pandoc (..),
+    Meta(..)
   )
 where
 
 import Text.Pandoc
   ( 
-    Meta,
+    Meta(..),
     MetaValue, nullMeta,
     Pandoc (..),
-    WriterOptions
-      ( writerCiteMethod,
-        writerExtensions,
-        writerHighlightStyle,
-        writerHTMLMathMethod
-      )
-    , def
-    , writeLaTeX,
+    -- WriterOptions
+    --   ( writerCiteMethod,
+    --     writerExtensions,
+    --     writerHighlightStyle,
+    --     writerHTMLMathMethod
+    --   )
+    -- , def
+    -- , writeLaTeX,
   )
 import qualified Text.Pandoc as Pandoc
+import Text.Pandoc 
 import Text.Pandoc.Shared (stringify)
+import Text.Pandoc.Shared
+import Text.Pandoc.Builder 
 import Uniform.Json
 import UniformBase
 
 --  functions to extract values from the meta record 
 -- containing the YAML Header values
 
-getDoNotReplace :: Pandoc -> Text 
+getDoNotReplace :: Pandoc -> Maybe MetaValue 
 -- get the string in the Yaml with words which must be preserved
 -- a comma separated list 
-getDoNotReplace pan = zero 
+getDoNotReplace pan = 
+        Pandoc.lookupMeta "DoNotReplace" (getMeta pan)
 
+getFromYaml  :: Text -> Pandoc -> Maybe MetaValue 
+-- get the MetaValue in the Yaml  at the key
+getFromYaml key pan = 
+        Pandoc.lookupMeta key (getMeta pan)
+
+getTextFromYaml4 :: Text -> Text -> Pandoc ->  MetaValue
+--get the Metavalue (with  default)
+getTextFromYaml4 def key pan = maybe (MetaString def) (id) 
+        $ getFromYaml key pan 
+        
+getTextFromYaml5 :: Text -> Text -> Pandoc ->  Text
+--get the Metavalue (with  default)
+getTextFromYaml5 def key pan = 
+    fromJustNoteT [("getTextFromYaml5"::Text), key] .
+    metaValueToText . maybe (MetaString def) (id) 
+        $ getFromYaml key pan 
+        
+metaValueToText :: MetaValue -> Maybe Text
+metaValueToText (MetaString t) = Just t
+metaValueToText (MetaInlines ils) = Just $ stringify ils
+metaValueToText (MetaBlocks bls) = Just $ stringify bls
+metaValueToText (MetaList xs) = unwords' <$> mapM metaValueToText xs
+metaValueToText _ = Nothing
+
+meta2pandoc :: Meta -> Pandoc 
+meta2pandoc m = Pandoc m [] 
+
+addMetaField2 :: ToMetaValue a => Text -> a -> Meta -> Meta
+addMetaField2  key val meta = addMetaField key val meta
+
+addMetaField2pandoc :: ToMetaValue a => Text -> a -> Pandoc -> Pandoc 
+addMetaField2pandoc key val (Pandoc m b) = Pandoc m2 b 
+    where   m2 = addMetaField2 key val m 
+
+writeLaTeX2 ::    Pandoc -> ErrIO Text
+-- gives a texsnip Text
+writeLaTeX2 pan = unPandocM $ writeLaTeX latexOptions pan 
 
 instance Zeros Pandoc where
   zero =  Pandoc nullMeta zero
@@ -66,33 +108,6 @@ instance Zeros Text.Pandoc.Meta where
 -- | Handle possible pandoc failure within the PandocIO Monad
 unPandocM :: Pandoc.PandocIO a -> ErrIO a
 unPandocM op1 = callPandoc op1
---   do
---     res <-
---       callIO $
---         Pandoc.runIO op1
---     either
---       ( \e -> do
---           throwErrorT [e]
---       )
---       return
---       res
---     `catchError` ( \e -> do
---                      throwErrorT [e]
---                  )
-
--- callPandoc :: Pandoc.PandocIO a -> ErrIO a
--- callPandoc op1 = 
---     callIO $ Pandoc.runIO op1
---     >>= 
---     either (\e -> throwError . showT $  e)  return  
---   `catchError` (\e -> throwError . showT $ e)
-
--- callPandoc1 :: Pandoc.PandocIO a -> ErrIO a
--- callPandoc1 op1 = 
---     callIO $ Pandoc.runIO op1
---     >>= 
---     either ( throwError . showT  )  return  
---  `catchError` (throwError . showT)
 
 callPandoc :: Pandoc.PandocIO a -> ErrIO a
 callPandoc op1 = do
@@ -121,8 +136,8 @@ flattenMeta (Pandoc.Meta meta) = toJSON $ fmap go meta
     go (Pandoc.MetaList m) = toJSONList $ fmap go m
     go (Pandoc.MetaBool m) = toJSON m
     go (Pandoc.MetaString m) = toJSON m
-    -- go (Pandoc.MetaInlines m) = toJSON $ stringify m
-    -- go (Pandoc.MetaBlocks m) = toJSON $ stringify m
+    go (Pandoc.MetaInlines m) = toJSON $ stringify m
+    go (Pandoc.MetaBlocks m) = toJSON $ stringify m
 
 -- readYaml2value :: Path Abs File -> ErrIO Value
 -- -- | read a yaml file to a value

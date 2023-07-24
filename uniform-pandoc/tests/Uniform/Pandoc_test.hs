@@ -19,8 +19,16 @@ module Uniform.Pandoc_test where
 import Test.Framework
 -- import qualified Data.Map as M 
 ---- using uniform:
-import Uniform.Json 
-import Uniform.Pandoc 
+import Uniform.Json hiding (fromList)
+import Uniform.PandocImports 
+import Uniform.Markdown 
+import Uniform.TexWriter
+import Text.Pandoc
+import Text.Pandoc.Definition
+import Text.Pandoc.Writers
+import Text.DocTemplates as DocTemplates
+import Text.DocLayout (render)
+import Data.Map 
 -- import Uniform.Filenames 
 -- import Uniform2.Filetypes4sites should not be imported here
 
@@ -31,104 +39,87 @@ import UniformBase
 import Text.DocLayout (render)
 import Text.DocTemplates as DocTemplates
 
--- works only with json values now 
--- templ1, res4 :: Text 
--- templ1 = "some $words$ are replaced $if(x1)$the text for x1 $x1$ $endif$."
--- -- vals1 :: M.Map Text Text 
--- vals1 = fromList vals0  -- Data.HashMap 
--- vals0 = [("words","Woerter"), ("x1","erstes x")] :: [(String,Text)]
--- -- vals2 = fromList [("words","Woerter"), ("x1","erstes x")]  
--- res4 = "some Woerter are replaced the text for x1 erstes x ."
-
--- test_template1 = do 
---     res <- runErr $ do 
---             tp <- compileTemplate mempty templ1
---             t :: Text <- render Nothing . renderTemplate templ1 [vals1]
---             return t
---     assertEqual (Right res4) res 
---
-
--- test_templateJson= do 
---     res <- runErr $ do 
---             t :: Text <- applyTemplate4 True template2 [toJSON emp1]
---             return t
---     assertEqual (Right "Hi, John. You make 100.\n") res 
-
--- -- for test with JSON 
--- data Employee = Employee { firstName :: String
---                          , lastName  :: String
---                          , salary    :: Maybe Int } deriving (Show)
--- instance ToJSON Employee where
---   toJSON e = object [ "name" .= object [ "first" .= firstName e
---                                        , "last"  .= lastName e ]
---                     , "salary" .= salary e ]
-
--- template2 :: Text
--- template2 = "Hi, $name.first$. $if(salary)$You make $salary$.$else$No salary data.$endif$\n"
--- template3 = "$for(employee)$Hi, $employee.name.first$. $if(employee.salary)$You make $employee.salary$.$else$No salary data.$endif$$sep$\n$endfor$"
--- emp1 = Employee "John" "Doe" (Just 100)
-
--- data Job = Job {dept :: String, boss :: String} deriving (Show, Generic)
--- instance ToJSON Job
-
--- job1 = Job "Accounting" "Peter"
--- m2 = mergeLeftPref [toJSON emp1, toJSON job1]
--- template4 = "Hi, $name.first$. $if(salary)$You make $salary$.$else$No salary data.$endif$ You work for $boss$.\n"
-
--- test_templateJ2= do 
---     res <- runErr $ do 
---             t :: Text <- applyTemplate4 True template4 [toJSON emp1, toJSON job1]
---             return t
---     assertEqual (Right  "Hi, John. You make 100. You work for Peter.\n") res 
--- m2 is Object (fromList [("boss",String "Peter"),("dept",String "Accounting"),("name",Object (fromList [("first",String "John"),("last",String "Doe")])),("salary",Number 100.0)])
-
--- test_readWritePandoc = do 
---     res5 <- runErr $ do 
---         let pfn1 = makeAbsFile "/home/frank/Workspace8/uniform/uniform-pandoc/tests/data/someTextShort.pandoc" 
-
---         let pfn2 = makeAbsFile "/home/frank/Workspace8/uniform/uniform-pandoc/tests/data/someTextShort2.pandoc" 
-
---         pan1 :: Pandoc <- read8 pfn1 pandocFileType 
---         -- let p1 = unwrap7 pan1 :: Pandoc 
-
---         write8 pfn2  pandocFileType pan1
---         pan2 <- read8 pfn2 pandocFileType
---         return (pan1, pan2)
---     putIOwords ["test_readWrite", "\n res1\n", showT res5, "\n"]
---     let Right (target3, res3) = res5
---     assertEqual target3 res3
+-- test getFromYaml value on abstract
+test_ka = assertEqual (Just abs1) $ getFromYaml "abstract" pandocY
+-- test getFromYaml with default as metavlaue, but value is present
+test_fa = assertEqual abs1 $
+             getTextFromYaml4 "oneAbstract" "abstract" pandocY
+-- get as Text 
+test_faT = assertEqual "The long struggle" $
+             getTextFromYaml5 "oneAbstract" "abstract" pandocY
 
 
--- test_writeTexSnip2short = testVar0FileIO "uniform-pandoc" 
---         shortFile
---         "test_writeTexSnip2short" writeTexSnip4 
--- test_writeTexSnip2reg = testVar0FileIO "uniform-pandoc" 
---         regFile
---         "test_writeTexSnip2reg" writeTexSnip4 
--- test_writeTexSnip2complex = testVar0FileIO "uniform-pandoc" 
---         complexFile
---         "test_writeTexSnip2complex" writeTexSnip4 
--- test_writeTexSnip2withRef = testVar0FileIO "uniform-pandoc" 
---         withRef
---         "test_writeTexSnip2withRef" writeTexSnip4 
+abs1:: MetaValue
+abs1 =  MetaInlines [Str "The", Space, Str "long", Space, Str "struggle"]
 
--- testVar0FileIO :: (Zeros b, Eq b, Show b, Read b, ShowTestHarness b)
-            -- => Text -> a -> FilePath -> (a-> ErrIO b) -> IO ()
--- writeTexSnip4 pfn1  = do       
---         pan1 :: Panrep <- read8 pfn1 panrepFileType 
---         -- let p1 = unwrap7 pan1 :: Pandoc 
---         tex1   <- writeTexSnip2 . panpan $ pan1 
---         write8 pfn1 texSnipFileType (TexSnip (panyam pan1) tex1)
---         return tex1
+-- check conversion of metavalue to text 
+test_mvt = assertEqual abs1t $ metaValueToText abs1
 
--- test_pdf1 = testVar0File "uniform-pandoc" shortFile 
---                 "test_writePDF2short" writePDF4 
+abs1t = Just "The long struggle"
+fn1 =  makeAbsFile "/home/frank/Workspace11/u4blog/uniform-pandoc/tests/data/startValues/someTextWithYAML.md"
 
--- writePDF4 pfn1  = do       
---         let fnin = replaceExtension pfn1 extTex 
---         let fnout = replaceExtension pfn1 extPDF 
---         -- let p1 = unwrap7 pan1 :: Pandoc 
---         res <- writePDF2 True fnin fnout 
---         putIOwords ["writePDF4 res", showT res]
---         return res
--- instance ShowTestHarness TexSnip 
+-- ad a value to meta
+key1 = "indexEntry" :: Text 
+test_addMeta = assertEqual testval1 $
+            getTextFromYaml5 "def" key1 .
+            meta2pandoc .    addMetaField2 key1 (testval1 :: Text) $ metaY 
+
+-- check that the value is stored and can be retrieved
+testval1 = "A test Text value" :: Text 
+test_addPandoc = assertEqual (Just . MetaString $ testval1) $ 
+            getFromYaml key1 . addMetaField2pandoc key1 testval1 $ pandocY
+
+-- does only look at the block, not using the header
+test_texsnip1 = do 
+    res1 <- runErr $ do 
+        tex1 <- writeTexSnip2 pandocY
+        return tex1
+    -- let Right (target3, res3) = res5
+    assertEqual (Right zero) res1
+
+-- produces texsnip
+test_tex1 = do 
+    res1 <- runErr $ do 
+        tex1 <- writeLaTeX2 pandocY
+        return tex1
+    -- let Right (target3, res3) = res5
+    assertEqual (Right zero) res1
+
+-- what is different to tex1?
+test_latex1 = do 
+    res1 <- runErr $ do 
+        tex1 <- writeLaTeX2 pandocY
+        return tex1
+    -- let Right (target3, res3) = res5
+    assertEqual (Right zero) res1
+
+-- try to produce a standalone latex Tex file - not working!
+test_latex2 = do 
+    res1 <- runErr .  unPandocM $ do 
+        tpl <-   compileDefaultTemplate "latex"
+        let doc1 =  renderTemplate tpl (getMeta pandocY)
+        let doc2 = render Nothing doc1
+        return doc2
+    -- let Right (target3, res3) = res5
+    assertEqual (Right zero) res1
+
+test_readmd = do 
+    res1 <- runErr $ do 
+        mdfile <- read8 fn1 markdownFileType 
+        pd <- readMarkdown2 mdfile
+        return True
+    -- let Right (target3, res3) = res5
+    assertEqual (Right True) res1
+
+
+
+metaY :: Meta 
+metaY = Meta {unMeta = fromList [("abstract",MetaInlines [Str "The",Space,Str "long",Space,Str "struggle"]),("date",MetaInlines [Str "2020-06-16"]),("keywords",MetaInlines [Str "Haskell",Space,Str "IDE"]),("title",MetaInlines [Str "a",Space,Str "new",Space,Str "start"])]}
+
+pandocY = Pandoc (Meta {unMeta = fromList 
+    [("abstract",MetaInlines [Str "The",Space,Str "long",Space,Str "struggle"]),("date",MetaInlines [Str "2020-06-16"]),("keywords",MetaInlines [Str "Haskell",Space,Str "IDE"]),("title",MetaInlines [Str "a",Space,Str "new",Space,Str "start"])]})
+     [Header 1 ("hl1_text",[],[]) [Str "hl1_text"],
+        Para [Str "Nonsense",Space,Str "sentence."]
+    -- , Header 1 ("gives",[],[]) [Str "gives"],Para [Str "$someTextWithYAML.md",Space,Str "Meta",Space,Str "{unMeta",Space,Str "=",Space,Str "fromList",Space,Str "[(",Quoted DoubleQuote [Str "abstract"],Str ",MetaInlines",Space,Str "[Str",Space,Quoted DoubleQuote [Str "The"],Str ",Space,Str",Space,Quoted DoubleQuote [Str "long"],Str ",Space,Str",Space,Quoted DoubleQuote [Str "struggle"],Str "]),(",Quoted DoubleQuote [Str "date"],Str ",MetaInlines",Space,Str "[Str",Space,Quoted DoubleQuote [Str "2020-06-16"],Str "]),(",Quoted DoubleQuote [Str "keywords"],Str ",MetaInlines",Space,Str "[Str",Space,Quoted DoubleQuote [Str "Haskell"],Str ",Space,Str",Space,Quoted DoubleQuote [Str "IDE"],Str "]),(",Quoted DoubleQuote [Str "title"],Str ",MetaInlines",Space,Str "[Str",Space,Quoted DoubleQuote [Str "a"],Str ",Space,Str",Space,Quoted DoubleQuote [Str "new"],Str ",Space,Str",Space,Quoted DoubleQuote [Str "start"],Str "])]}"
+    ]
+    
