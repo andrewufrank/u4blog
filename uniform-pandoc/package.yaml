@@ -1,5 +1,5 @@
 name:         uniform-pandoc 
-version:      0.1.5.4
+version:      0.1.6.1
 license:      GPL
 license-file: GPL_3
 github:  andrewufrank/u4blog.git/uniform-pandoc
@@ -20,7 +20,7 @@ extra-source-files:
 
 dependencies:
 - base >= 4.7 && < 5
-- pandoc >= 2.11
+- pandoc == 3.1.6
 
 - uniformBase >=0.1.5.1
 - uniform-json >=0.1.5.2
@@ -30,6 +30,7 @@ dependencies:
 # - lens 
 - aeson 
 - bytestring
+- bibtex
 # - lens-aeson
 # - parsec
 # - containers
@@ -39,20 +40,20 @@ dependencies:
 library:
   source-dirs: 
   - src   
-# the '.' finds the library in their folders with LibName
+      # the '.' finds the library in their folders with LibName
 
-# tests:
-#   pandoctest:
-#     main:                Testing.hs
-#     source-dirs:         tests
-#     ghc-options:
-#     - -threaded
-#     - -rtsopts
-#     - -with-rtsopts=-N
-#     dependencies:
-#     - HTF
-#     - uniform-pandoc
-#     - uniform-convenience
+tests:
+  pandoctest:
+    main:                Testing.hs
+    source-dirs:         tests
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - HTF
+    - uniform-pandoc
+    - uniform-convenience
 
     # - ssg
     # - uniform-convenience

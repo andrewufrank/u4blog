@@ -3,7 +3,7 @@
 -- Module      :  Uniform.PandocImports
 -- | read and write pandoc files (intenal rep of pandoc written to disk)
 -- von hier Pandoc spezifisches imortieren
--- nich exportieren nach aussen
+-- nichts exportieren nach aussen
 --
 -- das ist, was von pandoc zum import gebraucht wird
 -------------------------------
@@ -26,43 +26,39 @@
 module Uniform.PandocImports
   ( module Uniform.PandocImports,
     Pandoc (..)
-    , writeTexSnip2
   )
 where
 
 import Text.Pandoc
   ( 
-    -- CiteMethod (Biblatex),
-        -- Natbib),
     Meta,
-    MetaValue,
+    MetaValue, nullMeta,
     Pandoc (..),
     WriterOptions
       ( writerCiteMethod,
         writerExtensions,
         writerHighlightStyle,
         writerHTMLMathMethod
-        
       )
     , def
     , writeLaTeX,
   )
--- import Text.Pandoc.Options (HTMLMathMethod)
 import qualified Text.Pandoc as Pandoc
-import Text.Pandoc.Highlighting (tango)
 import Text.Pandoc.Shared (stringify)
--- import     Text.Pandoc.Highlighting.Extensions
--- is easier automatically included in the defaults
 import Uniform.Json
-      
--- import Uniform.Yaml  
 import UniformBase
--- import Data.Aeson.Types ( parseMaybe )
 
-  --  zero = Pandoc.Null
+--  functions to extract values from the meta record 
+-- containing the YAML Header values
+
+getDoNotReplace :: Pandoc -> Text 
+-- get the string in the Yaml with words which must be preserved
+-- a comma separated list 
+getDoNotReplace pan = zero 
+
 
 instance Zeros Pandoc where
-  zero = Pandoc zero zero
+  zero =  Pandoc nullMeta zero
 
 instance Zeros Text.Pandoc.Meta where
   zero = mempty
@@ -116,6 +112,7 @@ fromJSONValue = parseMaybe parseJSON
 
 -- | Flatten a Pandoc 'Meta' into a well-structured JSON object,  
 -- adapted from https://hackage.haskell.org/package/slick-1.1.1.0/docs/src/Slick.Pandoc.html#flattenMeta
+-- does squish bulleted list and other markdown in YAML
 flattenMeta :: Pandoc.Meta -> Value
 flattenMeta (Pandoc.Meta meta) = toJSON $ fmap go meta
   where
@@ -124,8 +121,8 @@ flattenMeta (Pandoc.Meta meta) = toJSON $ fmap go meta
     go (Pandoc.MetaList m) = toJSONList $ fmap go m
     go (Pandoc.MetaBool m) = toJSON m
     go (Pandoc.MetaString m) = toJSON m
-    go (Pandoc.MetaInlines m) = toJSON $ stringify m
-    go (Pandoc.MetaBlocks m) = toJSON $ stringify m
+    -- go (Pandoc.MetaInlines m) = toJSON $ stringify m
+    -- go (Pandoc.MetaBlocks m) = toJSON $ stringify m
 
 -- readYaml2value :: Path Abs File -> ErrIO Value
 -- -- | read a yaml file to a value
@@ -134,34 +131,5 @@ flattenMeta (Pandoc.Meta meta) = toJSON $ fmap go meta
 --   t <- read8 fp yamlFileType
 --   return . yaml2value $ t
 
-latexOptions :: WriterOptions
--- | reasonable extension - crucial!
-latexOptions =
-  def
-    { writerHighlightStyle = Just tango,
-      writerCiteMethod = Pandoc.Biblatex,
-      writerHTMLMathMethod = Pandoc.KaTeX "https://cdn.jsdelivr.net/npm/katex@0.16.8/+esm",  -- :: HTMLMathMethod 
-      -- Citeproc                        -- use citeproc to render them
-      --           | Natbib                        -- output natbib cite commands
-      --           | Biblatex                      -- output biblatex cite commands
-      writerExtensions =
-        Pandoc.extensionsFromList
-          [ Pandoc.Ext_raw_tex --Allow raw TeX (other than math)
-          , Pandoc.Ext_latex_macros -- latex math 
 
-          -- , Pandoc.Ext_shortcut_reference_links
-          -- , Pandoc.Ext_spaced_reference_links
-          -- , Pandoc.Ext_citations     
-          , Pandoc.Ext_implicit_figures -- a figure alone will have a caption !!      
-          -- <-- this is the important extension for bibTex
-          ]
-    }
-
-
-
-writeTexSnip2 :: Pandoc -> ErrIO Text
--- write a latex file from a pandoc doc
-writeTexSnip2 pandocRes = do
-  p <- unPandocM $ writeLaTeX latexOptions pandocRes
-  return p
 

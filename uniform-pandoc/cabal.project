@@ -16,6 +16,7 @@ packages:
 --    ../../u4blog/uniform-latex2pdf/*.cabal
     ../../u4blog/uniform-json/*.cabal
 
---    ../../u2to/uniform-convenience/*.cabal
+    ../../u2to/uniform-convenience/*.cabal
 --    ../../u2to/uniform-cmdLineArgs/*.cabal
- 
+
+-- tests: --enable-tests 

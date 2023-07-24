@@ -28,6 +28,7 @@ module Uniform.Pandoc
   , module Uniform.PandocHTMLwriter
   , module Uniform.BibTex
   , module Uniform.Markdown
+  , module Uniform.TexWriter
 --   , module Uniform.Pandoc2pdf
   )
 where
@@ -36,6 +37,7 @@ import Uniform.PandocImports
 import Uniform.PandocHTMLwriter
 import Uniform.BibTex
 import Uniform.Markdown
+import Uniform.TexWriter
 
 import qualified Text.Pandoc                   as Pandoc
 import Text.Pandoc ( ReaderOptions, WriterOptions(..) )        

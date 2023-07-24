@@ -4,10 +4,10 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 7ececfcd14489fd0b03cc6c35759a16e56933c9c6aa7fadea4faf07e0d5d429d
+-- hash: e33c2bb1045c1bd942a531dea18e7937afea75904ca38656bb02d2a75d6ddae3
 
 name:           uniform-pandoc
-version:        0.1.5.4
+version:        0.1.6.1
 synopsis:       handling of   some pandoc stuff
 description:    remove particular aspects of abstraction 
 category:       Uniform handling of   some pandoc stuff
@@ -36,6 +36,7 @@ library
       Uniform.Pandoc
       Uniform.PandocHTMLwriter
       Uniform.PandocImports
+      Uniform.TexWriter
   other-modules:
       Paths_uniform_pandoc
   hs-source-dirs:
@@ -43,10 +44,37 @@ library
   build-depends:
       aeson
     , base >=4.7 && <5
+    , bibtex
     , bytestring
     , doclayout
     , doctemplates
-    , pandoc >=2.11
+    , pandoc ==3.1.6
     , uniform-json >=0.1.5.2
+    , uniformBase >=0.1.5.1
+  default-language: Haskell2010
+
+test-suite pandoctest
+  type: exitcode-stdio-1.0
+  main-is: Testing.hs
+  other-modules:
+      Uniform.BibTex_test
+      Uniform.HTMLout_test
+      Uniform.Pandoc_test
+      Paths_uniform_pandoc
+  hs-source-dirs:
+      tests
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      HTF
+    , aeson
+    , base >=4.7 && <5
+    , bibtex
+    , bytestring
+    , doclayout
+    , doctemplates
+    , pandoc ==3.1.6
+    , uniform-convenience
+    , uniform-json >=0.1.5.2
+    , uniform-pandoc
     , uniformBase >=0.1.5.1
   default-language: Haskell2010
