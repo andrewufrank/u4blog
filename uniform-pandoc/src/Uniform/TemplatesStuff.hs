@@ -40,6 +40,14 @@ import qualified Text.Pandoc as Pandoc
 import Text.DocLayout (render)
 import qualified Text.DocTemplates as DocTemplates
 
+instance Zeros (Template Text) where 
+        zero = mempty -- Empty :: Template Text
+
+getDefaultTemplateLatex = unPandocM $ getDefaultTemplate "latex"
+getDefaultTemplateHTML = unPandocM $ getDefaultTemplate "html"
+
+compileDefaultTempalteHTML = unPandocM $ compileDefaultTemplate "html"
+
 compileTemplateFile :: Bool    -- ^ debug output
     -> Text -- ^ the template as text
     -> ErrIO (Template Text)

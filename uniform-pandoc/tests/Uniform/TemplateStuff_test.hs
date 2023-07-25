@@ -39,58 +39,79 @@ import Uniform.Test.TestHarness
 import Uniform.MetaStuff_test 
 -- import Uniform.Markdown_test 
 import Uniform.MetaStuff
+import Uniform.TemplatesStuff
 -- import Uniform.Error           hiding (  (<.>)  )  -- (</>)
 import UniformBase
 import Text.DocLayout (render)
-import Text.DocTemplates as DocTemplates
 
--- does only look at the block, not using the header
-test_texsnip1 = do 
+
+test_templ_html = do 
     res1 <- runErr $ do 
-        tex1 <- writeTexSnip2 pandocY
-        putIOwords ["tex1 \n", tex1]
-        return tex1
+        htpl <- getDefaultTemplateHTML 
+         
+        putIOwords ["htpl2 \n", htpl]
+        return "htpl"
     -- let Right (target3, res3) = res5
-    assertEqual (Right zero) res1
-        -- gives
-        -- tex1 
-        --  \hypertarget{hl1_text}{%
-        -- \section{hl1\_text}\label{hl1_text}}
+    assertEqual (Right "zero") res1
 
-        -- Nonsense sentence.
-
--- produce html 
--- with my old code:
-
-
-
--- get a string (Text)
-test_htmlString = do 
-    res1 <- runErr . unPandocM $ do 
-        html1 :: Text <- writeHtml5String html5Options pandocY
-        -- tex1 <- writeLaTeX2 pandocY
-        putIOwords ["html1 \n", html1]
-        return html1
+test_templ_comp_html = do 
+    res1 <- runErr $ do 
+        htpl2 <- unPandocM $ compileDefaultTemplate "html"
+        -- htpl2 <- compileTemplateFile False htpl
+        -- putIOwords ["htpl2 \n", showT htpl2]
+        return "template"
     -- let Right (target3, res3) = res5
-    assertEqual (Right zero) res1
-        -- gives
-        --  <h1 id="hl1_text">hl1_text</h1>
-        -- <p>Nonsense sentence.</p>
+    assertEqual (Right "zero") res1
 
--- shows blaze result
-test_html = do 
-    res1 <- runErr . unPandocM $ do 
-        html1  <- writeHtml5  html5Options pandocY
-        let t1 = s2t . unpack $ renderHtml html1 :: Text
-        -- tex1 <- writeLaTeX2 pandocY
-        putIOwords ["html1 \n",  t1]
-        return t1
-    -- let Right (target3, res3) = res5
-    assertEqual (Right zero) res1
-            -- gives same as before
-            -- html1 
-            -- <h1 id="hl1_text">hl1_text</h1>
-            -- <p>Nonsense sentence.</p>
+ 
+
+-- -- does only look at the block, not using the header
+-- test_texsnip1 = do 
+--     res1 <- runErr $ do 
+--         tex1 <- writeTexSnip2 pandocY
+--         putIOwords ["tex1 \n", tex1]
+--         return tex1
+--     -- let Right (target3, res3) = res5
+--     assertEqual (Right zero) res1
+--         -- gives
+--         -- tex1 
+--         --  \hypertarget{hl1_text}{%
+--         -- \section{hl1\_text}\label{hl1_text}}
+
+--         -- Nonsense sentence.
+
+-- -- produce html 
+-- -- with my old code:
+
+
+
+-- -- get a string (Text)
+-- test_htmlString = do 
+--     res1 <- runErr . unPandocM $ do 
+--         html1 :: Text <- writeHtml5String html5Options pandocY
+--         -- tex1 <- writeLaTeX2 pandocY
+--         putIOwords ["html1 \n", html1]
+--         return html1
+--     -- let Right (target3, res3) = res5
+--     assertEqual (Right zero) res1
+--         -- gives
+--         --  <h1 id="hl1_text">hl1_text</h1>
+--         -- <p>Nonsense sentence.</p>
+
+-- -- shows blaze result
+-- test_html = do 
+--     res1 <- runErr . unPandocM $ do 
+--         html1  <- writeHtml5  html5Options pandocY
+--         let t1 = s2t . unpack $ renderHtml html1 :: Text
+--         -- tex1 <- writeLaTeX2 pandocY
+--         putIOwords ["html1 \n",  t1]
+--         return t1
+--     -- let Right (target3, res3) = res5
+--     assertEqual (Right zero) res1
+--             -- gives same as before
+--             -- html1 
+--             -- <h1 id="hl1_text">hl1_text</h1>
+--             -- <p>Nonsense sentence.</p>
 
 
 -- for tex
