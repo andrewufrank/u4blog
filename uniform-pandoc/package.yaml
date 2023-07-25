@@ -35,6 +35,8 @@ dependencies:
 # - lens-aeson
 # - parsec
 - containers
+- blaze-html
+- text
 # - process
 # - shake
 

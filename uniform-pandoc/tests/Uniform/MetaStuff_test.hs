@@ -14,7 +14,7 @@
 -- {-# LANGUAGE TypeSynonymInstances  #-}
 -- {-# OPTIONS_GHC -fno-warn-missing-methods #-}
 
-module Uniform.Pandoc_test where
+module Uniform.MetaStuff_test where
 
 import Test.Framework
 -- import qualified Data.Map as M 
@@ -23,16 +23,20 @@ import Uniform.Json hiding (fromList)
 import Uniform.PandocImports 
 import Uniform.Markdown 
 import Uniform.TexWriter
+import Uniform.PandocHTMLwriter
 import Text.Pandoc
 import Text.Pandoc.Definition
 import Text.Pandoc.Writers
 import Text.DocTemplates as DocTemplates
 import Text.DocLayout (render)
+import Data.Text.Lazy (unpack)
+import Text.Blaze.Html.Renderer.Text (renderHtml)
 import Data.Map 
 -- import Uniform.Filenames 
 -- import Uniform2.Filetypes4sites should not be imported here
 
 import Uniform.Test.TestHarness
+import Uniform.MetaStuff
 -- import Uniform.Markdown_test 
 -- import Uniform.Error           hiding (  (<.>)  )  -- (</>)
 import UniformBase
@@ -69,39 +73,9 @@ testval1 = "A test Text value" :: Text
 test_addPandoc = assertEqual (Just . MetaString $ testval1) $ 
             getFromYaml key1 . addMetaField2pandoc key1 testval1 $ pandocY
 
--- does only look at the block, not using the header
-test_texsnip1 = do 
-    res1 <- runErr $ do 
-        tex1 <- writeTexSnip2 pandocY
-        return tex1
-    -- let Right (target3, res3) = res5
-    assertEqual (Right zero) res1
 
--- produces texsnip
-test_tex1 = do 
-    res1 <- runErr $ do 
-        tex1 <- writeLaTeX2 pandocY
-        return tex1
-    -- let Right (target3, res3) = res5
-    assertEqual (Right zero) res1
 
--- what is different to tex1?
-test_latex1 = do 
-    res1 <- runErr $ do 
-        tex1 <- writeLaTeX2 pandocY
-        return tex1
-    -- let Right (target3, res3) = res5
-    assertEqual (Right zero) res1
-
--- try to produce a standalone latex Tex file - not working!
-test_latex2 = do 
-    res1 <- runErr .  unPandocM $ do 
-        tpl <-   compileDefaultTemplate "latex"
-        let doc1 =  renderTemplate tpl (getMeta pandocY)
-        let doc2 = render Nothing doc1
-        return doc2
-    -- let Right (target3, res3) = res5
-    assertEqual (Right zero) res1
+-- basics to get the data 
 
 test_readmd = do 
     res1 <- runErr $ do 
@@ -110,8 +84,6 @@ test_readmd = do
         return True
     -- let Right (target3, res3) = res5
     assertEqual (Right True) res1
-
-
 
 metaY :: Meta 
 metaY = Meta {unMeta = fromList [("abstract",MetaInlines [Str "The",Space,Str "long",Space,Str "struggle"]),("date",MetaInlines [Str "2020-06-16"]),("keywords",MetaInlines [Str "Haskell",Space,Str "IDE"]),("title",MetaInlines [Str "a",Space,Str "new",Space,Str "start"])]}

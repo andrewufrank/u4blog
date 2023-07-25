@@ -1,7 +1,0 @@
-cradle:
-  stack:
-    - path: "./src"
-      component: "hie-bios:lib"
-    - path: "./exe"
-      component: "hie-bios:exe:hie-bios"
-    # More components

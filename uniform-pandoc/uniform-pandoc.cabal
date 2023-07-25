@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 5f8938468ca0afe08f66341c8a58c9ce6e2f07489ae4cedc7ca5cf81640953b1
+-- hash: 6f37582223676515efa21f9d8761cc2fe8a8f9870332f292ae8b201dd876a300
 
 name:           uniform-pandoc
 version:        0.1.6.1
@@ -33,9 +33,11 @@ library
       Uniform.BibTex
       Uniform.HTMLout
       Uniform.Markdown
+      Uniform.MetaStuff
       Uniform.Pandoc
       Uniform.PandocHTMLwriter
       Uniform.PandocImports
+      Uniform.TemplatesStuff
       Uniform.TexWriter
   other-modules:
       Paths_uniform_pandoc
@@ -45,12 +47,14 @@ library
       aeson
     , base >=4.7 && <5
     , bibtex
+    , blaze-html
     , bytestring
     , containers
     , doclayout
     , doctemplates
     , pandoc ==3.1.6
     , pandoc-types
+    , text
     , uniform-json >=0.1.5.2
     , uniformBase >=0.1.5.1
   default-language: Haskell2010
@@ -61,7 +65,8 @@ test-suite pandoctest
   other-modules:
       Uniform.BibTex_test
       Uniform.HTMLout_test
-      Uniform.Pandoc_test
+      Uniform.MetaStuff_test
+      Uniform.TemplateStuff_test
       Paths_uniform_pandoc
   hs-source-dirs:
       tests
@@ -71,12 +76,14 @@ test-suite pandoctest
     , aeson
     , base >=4.7 && <5
     , bibtex
+    , blaze-html
     , bytestring
     , containers
     , doclayout
     , doctemplates
     , pandoc ==3.1.6
     , pandoc-types
+    , text
     , uniform-convenience
     , uniform-json >=0.1.5.2
     , uniform-pandoc

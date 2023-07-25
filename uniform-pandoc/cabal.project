@@ -1,5 +1,6 @@
 packages: 
     ./*.cabal
+-- tests: True
 
 -- add here the location of uniformBase for local use 
 

@@ -21,9 +21,9 @@
             #-}
 
 module Uniform.Pandoc
-  ( module Uniform.Pandoc 
 
-  , module Uniform.PandocImports
+  ( module Uniform.PandocImports
+  -- module Uniform.Pandoc 
     , ReaderOptions
   , module Uniform.PandocHTMLwriter
   , module Uniform.BibTex
@@ -43,5 +43,3 @@ import qualified Text.Pandoc                   as Pandoc
 import Text.Pandoc ( ReaderOptions, WriterOptions(..) )        
 -- import Uniform.Pandoc2pdf  was used to directly convert with pandoc to pdf
 
-justToKeepWarningAway :: Int 
-justToKeepWarningAway = 0 

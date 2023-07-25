@@ -10,3 +10,4 @@
      https://hackage.haskell.org/package/doctemplates  
 0.1.5.4 bookbig and booklet in latex differentiated
 0.1.5.5 add Ext_latex_macros to parse latex math
+0.1.5.6 fixed missing directory in message latex production
