@@ -29,6 +29,7 @@ source-repository head
 library
   exposed-modules:
       Uniform.Latex
+      Uniform.TexFileTypes
       Uniform.WritePDF
   other-modules:
       Paths_uniform_latex2pdf
