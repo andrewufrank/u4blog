@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.35.2.
+-- This file has been generated from package.yaml by hpack version 0.35.3.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: b96c19c2990aed5d811d8b431703c357de7f0912e52894f5766f5e6044b59560
+-- hash: 9964173fbc7993b8a93563d6e8f32453f82d8d4775251bfb9d59bc2789b50aa1
 
 name:           uniform-pandoc
 version:        0.1.6.1
@@ -57,6 +57,7 @@ library
     , text
     , uniform-http
     , uniform-json >=0.1.5.2
+    , uniform-latex2pdf >=0.1.5.7
     , uniformBase >=0.1.5.1
   default-language: Haskell2010
 
@@ -88,6 +89,7 @@ test-suite pandoctest
     , uniform-convenience
     , uniform-http
     , uniform-json >=0.1.5.2
+    , uniform-latex2pdf >=0.1.5.7
     , uniform-pandoc
     , uniformBase >=0.1.5.1
   default-language: Haskell2010

@@ -1,5 +1,5 @@
 name: uniform-latex2pdf
-version: 0.1.5.6
+version: 0.1.5.7
 # cabal-version: >=1.22
 # build-type: Simple
 license: GPL
@@ -27,7 +27,7 @@ dependencies:
 - base >= 4.7 && < 5
 - uniformBase >=0.1.5
 - uniform-json >=0.1.5
-- uniform-pandoc >=0.1.5.2
+# - uniform-pandoc >=0.1.5.2
 # - pandoc-highlighting-extensions
 - process
 - silently

@@ -1,0 +1,12 @@
+\documentclass[a4paper,$fontsize$,notitlepage]{$documentclass$}
+
+
+\title{$title$}
+\author{$author$}
+\date{}
+
+\begin{document}
+
+ \begin{abstract}$abstract$\end{abstract}
+ 
+\end{document}

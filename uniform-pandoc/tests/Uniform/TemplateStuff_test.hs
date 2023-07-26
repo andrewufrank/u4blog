@@ -44,7 +44,7 @@ import Uniform.TemplatesStuff
 -- import Uniform.Error           hiding (  (<.>)  )  -- (</>)
 import UniformBase
 import Uniform.HttpFiles
-
+import Uniform.TexFileTypes
 
 test_templ_html = do 
     res1 <- runErr $ do 
@@ -55,24 +55,84 @@ test_templ_html = do
     -- let Right (target3, res3) = res5
     assertEqual (Right "htpl") res1
 
-fn2 =  makeAbsFile "/home/frank/testhtml1"
+test_templ_latex = do 
+    res1 <- runErr $ do 
+        htpl <- getDefaultTemplateLatex 
+         
+        putIOwords ["htpl2 \n", htpl]
+        return "htpl"
+    -- let Right (target3, res3) = res5
+    assertEqual (Right "htplx") res1
+
+fnhtml =  makeAbsFile "/home/frank/testhtml1"
 
 test_templ_comp_html = do 
     res1 <- runErr $ do 
         htpl2 <- unPandocM $ compileDefaultTemplate "html"
         let cont1 = defField "abstract" ("A1"::Text) mempty :: Context Text 
-        let cont2 = defField "title" ("T1" :: Text) cont1  :: Context Text
+        let cont2 = defField "fontsize" ("12pt" :: Text)
+                    .  defField "documentclass" ("article"::Doc Text) 
+                    . defField "title" ("T1" :: Text) $ cont1  :: Context Text
+        -- putIOwords ["cont2", showT cont2 ]           
         let tpl1 = renderTemplate htpl2 cont2  :: Doc Text
+        -- putIOwords ["tpl1 \n", showT tpl1]
         let res1 = render (Just 50) tpl1  -- line length, can be Nothing
 
-        putIOwords ["res1 \n", showT res1]
+        -- putIOwords ["res1 \n", showT res1]
         let resHtml = HTMLout res1 
-        write8   fn2 htmloutFileType resHtml
+        -- write8   fnhtml htmloutFileType resHtml
         return "template"
     -- let Right (target3, res3) = res5
     assertEqual (Right "template") res1
 
- 
+fnlatex =  makeAbsFile "/home/frank/testlatex1"
+
+test_templ_comp_latex = do 
+    res1 <- runErr $ do 
+        htpl2 <- unPandocM $ compileDefaultTemplate "latex"
+        let cont1 = defField "abstract" ("A1"::Text) mempty :: Context Text 
+        let cont2 = defField "title" ("T1" :: Text) cont1  :: Context Text
+        let cont2 = defField "fontsize" ("12pt" :: Text)
+                    .  defField "documentclass" ("article"::Doc Text) 
+                    . defField "title" ("T1" :: Text) $ cont1  :: Context Text
+        putIOwords ["latex cont2", showT cont2 ]           
+        let tpl1 = renderTemplate htpl2 cont2  :: Doc Text
+        putIOwords ["tpl1 \n", showT tpl1]
+        let res1 = render (Just 50) tpl1  -- line length, can be Nothing
+
+        -- putIOwords ["res1 \n", showT res1]
+        let reslatex = Latex res1 
+        write8   fnlatex texFileType reslatex
+        return "template"
+    -- let Right (target3, res3) = res5
+    assertEqual (Right "template") res1
+
+fnminilatex =  makeAbsFile "/home/frank/Workspace11/u4blog/uniform-pandoc/resources/minimalLatex.dtpl"
+fnminires =  makeAbsFile "/home/frank/tests/testmini"
+
+
+
+test_templ_comp_minilatex = do 
+    res1 <- runErr $ do 
+        htpl2 <- compileTemplateFile2 False fnminilatex
+        let cont1 = defField "abstract" ("A1"::Text) mempty :: Context Text 
+        let cont2 = defField "title" ("T1" :: Text) cont1  :: Context Text
+        let cont2 = defField "fontsize" ("12pt" :: Text)
+                    .  defField "documentclass" ("article"::Doc Text) 
+                    . defField "title" ("T1" :: Text) $ cont1  :: Context Text
+        putIOwords ["minilatex cont2", showT cont2 ]           
+        let tpl1 = renderTemplate htpl2 cont2  :: Doc Text
+        putIOwords ["tpl1 \n", showT tpl1]
+        let res1 = render (Just 50) tpl1  -- line length, can be Nothing
+
+        -- putIOwords ["res1 \n", showT res1]
+        let reslatex = Latex res1 
+        write8   fnminires texFileType reslatex
+        return "template"
+    -- let Right (target3, res3) = res5
+    assertEqual (Right "template") res1
+
+
         -- -- htpl2 <- compileTemplateFile False htpl
 
 -- -- does only look at the block, not using the header

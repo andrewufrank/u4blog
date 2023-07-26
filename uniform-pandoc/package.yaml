@@ -25,6 +25,7 @@ dependencies:
 
 - uniformBase >=0.1.5.1
 - uniform-json >=0.1.5.2
+- uniform-latex2pdf >= 0.1.5.7
 - uniform-http
 - doctemplates
 - doclayout  #for  html writer (both)
@@ -37,6 +38,7 @@ dependencies:
 - containers
 - blaze-html
 - text
+
 # - process
 # - shake
 
@@ -57,6 +59,8 @@ tests:
     - HTF
     - uniform-pandoc
     - uniform-convenience
+  
+ 
 
     # - ssg
     # - uniform-convenience

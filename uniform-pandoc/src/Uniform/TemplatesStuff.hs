@@ -54,10 +54,10 @@ getDefaultTemplateHTML = unPandocM $ getDefaultTemplate "html"
 compileDefaultTempalteHTML = unPandocM $ compileDefaultTemplate "html"
 compileDefaultTempalteLatex = unPandocM $ compileDefaultTemplate "latex"
 
-compileTemplateFile :: Bool    -- ^ debug output
+compileTemplateText :: Bool    -- ^ debug output
     -> Text -- ^ the template as text
     -> ErrIO (Template Text)
-compileTemplateFile debug tplText = do     
+compileTemplateText debug tplText = do     
     templ1 <- liftIO $ DocTemplates.compileTemplate mempty tplText
     -- err1 :: Either String (Doc Text) <- liftIO $ DocTemplates.applyTemplate mempty (unwrap7 templText) (unDocValue val)
     let templ3 = case templ1 of
@@ -65,6 +65,13 @@ compileTemplateFile debug tplText = do
             Right tmp2 -> tmp2
     when debug $ putIOwords ["compileTemplateFile templ3",  showT templ3]
     return templ3
+
+compileTemplateFile2 debug tplfn = do 
+    tp <- readFile2 tplfn 
+    ctpl <- compileTemplateText debug tp 
+    return ctpl 
+
+
 
 -- | apply the template 
 -- concentrating the specific pandoc ops 
@@ -74,7 +81,7 @@ applyTemplate4 ::  Bool -- ^
   -- possibly Map (Text, Text) from Data.Map 
   -> ErrIO Text -- ^ the resulting html text 
 applyTemplate4 debug t1 vals = do
-    templ3 <- compileTemplateFile debug t1
+    templ3 <- compileTemplateText debug t1
     -- when debug $ 
     putIOwords ["applyTemplate3 temp2",  showT templ3]
     -- renderTemplate :: (TemplateTarget a, ToContext a b) => Template a -> b -> Doc a

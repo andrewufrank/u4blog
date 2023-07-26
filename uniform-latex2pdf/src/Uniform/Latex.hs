@@ -22,7 +22,7 @@ module Uniform.Latex
 --   , writePDF2
   ) where
 
-import Uniform.PandocImports
+-- import Uniform.PandocImports
 import Text.DocTemplates as DocTemplates
 import Text.DocLayout (render)
 

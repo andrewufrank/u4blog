@@ -22,9 +22,9 @@ module Uniform.TexFileTypes
 --   , writePDF2
   ) where
 
-import Uniform.PandocImports
-import Text.DocTemplates as DocTemplates
-import Text.DocLayout (render)
+-- import Uniform.PandocImports
+-- import Text.DocTemplates as DocTemplates
+-- import Text.DocLayout (render)
 
 import UniformBase
 import Data.Aeson
