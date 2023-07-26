@@ -31,13 +31,12 @@ import UniformBase
 -- import Uniform.Markdown_test
 -- import Uniform.Error           hiding (  (<.>)  )  -- (</>)
 
-templName = makeAbsFile "/home/frank/Workspace8/uniform/uniform-pandoc/tests/data/resources/master4.dtpl"
-
+templName = makeAbsFile "/home/frank/Workspace11/u4blog/uniform-pandoc/resources/master4.dtpl"
 test_readTempl = do
   r1 <- runErr $ do
     r :: Text <- readFile2 templName
     -- r <- read8 templName dtmplFileType
-    putIOwords ["test_readTempl", take' 300 . showT $ r]
+    -- putIOwords ["test_readTempl", take' 300 . showT $ r]
     -- used for compile is a text!
 
     -- let r2 = read (t2s r) :: Dtemplate
@@ -45,5 +44,5 @@ test_readTempl = do
     -- r3 :: Dtemplate <- read8 templName dtmplFileType
     -- putIOwords ["test_readTempl read8", take' 300 . showT $ r2]
 
-    return r
-  assertEqual True False
+    return True
+  assertEqual (Right True) r1

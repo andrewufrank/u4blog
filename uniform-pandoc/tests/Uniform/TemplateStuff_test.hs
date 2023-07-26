@@ -49,8 +49,7 @@ import Uniform.TexFileTypes
 test_templ_html = do 
     res1 <- runErr $ do 
         htpl <- getDefaultTemplateHTML 
-         
-        putIOwords ["htpl2 \n", htpl]
+        -- putIOwords ["htpl2 \n", htpl]
         return "htpl"
     -- let Right (target3, res3) = res5
     assertEqual (Right "htpl") res1
@@ -58,11 +57,10 @@ test_templ_html = do
 test_templ_latex = do 
     res1 <- runErr $ do 
         htpl <- getDefaultTemplateLatex 
-         
-        putIOwords ["htpl2 \n", htpl]
+        -- putIOwords ["htpl2 \n", htpl]
         return "htpl"
     -- let Right (target3, res3) = res5
-    assertEqual (Right "htplx") res1
+    assertEqual (Right "htpl") res1
 
 fnhtml =  makeAbsFile "/home/frank/testhtml1"
 
@@ -95,9 +93,9 @@ test_templ_comp_latex = do
         let cont2 = defField "fontsize" ("12pt" :: Text)
                     .  defField "documentclass" ("article"::Doc Text) 
                     . defField "title" ("T1" :: Text) $ cont1  :: Context Text
-        putIOwords ["latex cont2", showT cont2 ]           
+        -- putIOwords ["latex cont2", showT cont2 ]           
         let tpl1 = renderTemplate htpl2 cont2  :: Doc Text
-        putIOwords ["tpl1 \n", showT tpl1]
+        -- putIOwords ["tpl1 \n", showT tpl1]
         let res1 = render (Just 50) tpl1  -- line length, can be Nothing
 
         -- putIOwords ["res1 \n", showT res1]
@@ -120,9 +118,9 @@ test_templ_comp_minilatex = do
         let cont2 = defField "fontsize" ("12pt" :: Text)
                     .  defField "documentclass" ("article"::Doc Text) 
                     . defField "title" ("T1" :: Text) $ cont1  :: Context Text
-        putIOwords ["minilatex cont2", showT cont2 ]           
+        -- putIOwords ["minilatex cont2", showT cont2 ]           
         let tpl1 = renderTemplate htpl2 cont2  :: Doc Text
-        putIOwords ["tpl1 \n", showT tpl1]
+        -- putIOwords ["tpl1 \n", showT tpl1]
         let res1 = render (Just 50) tpl1  -- line length, can be Nothing
 
         -- putIOwords ["res1 \n", showT res1]
@@ -139,38 +137,40 @@ block1 = Plain [Str "hl1_text",Space,Emph [Str "For"],Space,Strong [Str "Title"]
 test_ast2md = do
     res1 <- runErr $ do 
         r <- writeAST3md def (Pandoc nullMeta [block1])
-        putIOwords ["abs1 as md", showT r]
+        -- putIOwords ["abs1 as md", showT r]
         return r
-    assertEqual (Right "long abstract\n") res1
-
+    assertEqual (Right mdans2) res1
+mdans1 = "long abstract\n"
+mdans2 = "hl1\\_text *For* **Title**\n"
 test_ast2html = do
     res1 <- runErr $ do 
         -- r :: _ <- writeAST3html def (Pandoc nullMeta [block1])
         r :: Text <- writeHtml5String2 (Pandoc nullMeta [block1])
         -- let r2 = render Nothing r
-        putIOwords ["abs1 as md",  r]
+        -- putIOwords ["abs1 as md",  r]
         return r
-    assertEqual (Right "long abstract") res1
+    assertEqual (Right hans2) res1
+hans1 = "long abstract"
+hans2 = "hl1_text <em>For</em> <strong>Title</strong>"
 
 test_html = do
     res1 <- runErr $ do 
         -- r :: _ <- writeAST3html def (Pandoc nullMeta [block1])
         r :: Text <- writeHtml5String2 (Pandoc nullMeta [block1])
         -- let r2 = render Nothing r
-        putIOwords ["abs1 as html",  r]
+        -- putIOwords ["abs1 as html",  r]
         return r
-    assertEqual (Right "long abstract") res1
-    -- "hl1_text <em>For</em> <strong>Title</strong>"
+    assertEqual (Right hans2) res1
 
 test_tex = do
     res1 <- runErr $ do 
         -- r :: _ <- writeAST3html def (Pandoc nullMeta [block1])
         r :: Text <- writeTexSnip2 (Pandoc nullMeta [block1])
         -- let r2 = render Nothing r
-        putIOwords ["abs1 as tex",  r]
+        -- putIOwords ["abs1 as tex",  r]
         return r
-    assertEqual (Right "long abstract") res1
-    -- "hl1\\_text \\emph{For} \\textbf{Title}"
+    assertEqual (Right tans2 ) res1
+tans2 =  "hl1\\_text \\emph{For} \\textbf{Title}"
         -- -- htpl2 <- compileTemplateFile False htpl
 
 -- -- does only look at the block, not using the header
