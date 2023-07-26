@@ -1,6 +1,7 @@
+tests: True
 packages: 
     ./*.cabal
--- tests: True
+
 
 -- add here the location of uniformBase for local use 
 
@@ -20,4 +21,4 @@ packages:
     ../../u2to/uniform-convenience/*.cabal
 --    ../../u2to/uniform-cmdLineArgs/*.cabal
 
--- tests: --enable-tests 
+ 

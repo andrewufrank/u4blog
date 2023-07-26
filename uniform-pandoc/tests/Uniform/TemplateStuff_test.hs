@@ -27,6 +27,7 @@ import Uniform.PandocHTMLwriter
 import Text.Pandoc
 import Text.Pandoc.Definition
 import Text.Pandoc.Writers
+import Text.Pandoc.Writers.Shared 
 import Text.DocTemplates as DocTemplates
 import Text.DocLayout (render)
 import Data.Text.Lazy (unpack)
@@ -42,7 +43,7 @@ import Uniform.MetaStuff
 import Uniform.TemplatesStuff
 -- import Uniform.Error           hiding (  (<.>)  )  -- (</>)
 import UniformBase
-import Text.DocLayout (render)
+import Uniform.HttpFiles
 
 
 test_templ_html = do 
@@ -52,18 +53,27 @@ test_templ_html = do
         putIOwords ["htpl2 \n", htpl]
         return "htpl"
     -- let Right (target3, res3) = res5
-    assertEqual (Right "zero") res1
+    assertEqual (Right "htpl") res1
+
+fn2 =  makeAbsFile "/home/frank/testhtml1"
 
 test_templ_comp_html = do 
     res1 <- runErr $ do 
         htpl2 <- unPandocM $ compileDefaultTemplate "html"
-        -- htpl2 <- compileTemplateFile False htpl
-        -- putIOwords ["htpl2 \n", showT htpl2]
+        let cont1 = defField "abstract" ("A1"::Text) mempty :: Context Text 
+        let cont2 = defField "title" ("T1" :: Text) cont1  :: Context Text
+        let tpl1 = renderTemplate htpl2 cont2  :: Doc Text
+        let res1 = render (Just 50) tpl1  -- line length, can be Nothing
+
+        putIOwords ["res1 \n", showT res1]
+        let resHtml = HTMLout res1 
+        write8   fn2 htmloutFileType resHtml
         return "template"
     -- let Right (target3, res3) = res5
-    assertEqual (Right "zero") res1
+    assertEqual (Right "template") res1
 
  
+        -- -- htpl2 <- compileTemplateFile False htpl
 
 -- -- does only look at the block, not using the header
 -- test_texsnip1 = do 

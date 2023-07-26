@@ -34,6 +34,11 @@ import UniformBase
 import Uniform.PandocImports (  unPandocM )
 import Text.Pandoc
 
+
+
+
+
+
 -- import Text.Pandoc.Highlighting  
 import qualified Text.Pandoc as Pandoc
 -- import Uniform.PandocImports
@@ -47,6 +52,7 @@ getDefaultTemplateLatex = unPandocM $ getDefaultTemplate "latex"
 getDefaultTemplateHTML = unPandocM $ getDefaultTemplate "html"
 
 compileDefaultTempalteHTML = unPandocM $ compileDefaultTemplate "html"
+compileDefaultTempalteLatex = unPandocM $ compileDefaultTemplate "latex"
 
 compileTemplateFile :: Bool    -- ^ debug output
     -> Text -- ^ the template as text
@@ -81,7 +87,7 @@ applyTemplate4 debug t1 vals = do
 
 writeAST2md :: Pandoc -> ErrIO Text
 
--- | write the AST to markdown
+-- | write the AST to markdown (def + set extHeaders False)
 writeAST2md dat = do
     r <- unPandocM $ do
         r1 <-
@@ -93,12 +99,12 @@ writeAST2md dat = do
 
 writeAST3md :: Pandoc.WriterOptions -> Pandoc -> ErrIO Text
 
--- | write the AST to markdown
+-- | write the AST to markdown with options
 writeAST3md options dat = do
     r <- unPandocM $ do
         r1 <-
             Pandoc.writeMarkdown
-                options -- Pandoc.def { Pandoc.writerSetextHeaders = False }
+                options  
                 dat
         return r1
     return r

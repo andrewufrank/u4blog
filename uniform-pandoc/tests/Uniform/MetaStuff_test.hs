@@ -49,19 +49,17 @@ test_ka = assertEqual (Just abs1) $ getFromYaml "abstract" pandocY
 test_fa = assertEqual abs1 $
              getTextFromYaml4 "oneAbstract" "abstract" pandocY
 -- get as Text 
-test_faT = assertEqual "The long struggle" $
+test_faT = assertEqual "long abstract" $
              getTextFromYaml5 "oneAbstract" "abstract" pandocY
 
 
 abs1:: MetaValue
-abs1 =  MetaInlines [Str "The", Space, Str "long", Space, Str "struggle"]
+abs1 =  MetaInlines [Str "long", Space, Str "abstract"]
 
 -- check conversion of metavalue to text 
 test_mvt = assertEqual abs1t $ metaValueToText abs1
 
-abs1t = Just "The long struggle"
-fn1 =  makeAbsFile "/home/frank/Workspace11/u4blog/uniform-pandoc/tests/data/startValues/someTextWithYAML.md"
-
+abs1t = Just "long abstract"
 -- ad a value to meta
 key1 = "indexEntry" :: Text 
 test_addMeta = assertEqual testval1 $
@@ -76,22 +74,24 @@ test_addPandoc = assertEqual (Just . MetaString $ testval1) $
 
 
 -- basics to get the data 
+fn1 =  makeAbsFile "/home/frank/Workspace11/u4blog/uniform-pandoc/tests/data/startValues/someTextWithYAML.md"
+-- -- uniform-pandoc/tests/data/startValues/someTextWithYAML.md
 
 test_readmd = do 
     res1 <- runErr $ do 
         mdfile <- read8 fn1 markdownFileType 
         pd <- readMarkdown2 mdfile
+        -- putIOwords ["pd \n", showT pd, "\n--"]
         return True
-    -- let Right (target3, res3) = res5
-    assertEqual (Right True) res1
+    assertEqual (Right True) res1   -- set to False to produce output
 
 metaY :: Meta 
-metaY = Meta {unMeta = fromList [("abstract",MetaInlines [Str "The",Space,Str "long",Space,Str "struggle"]),("date",MetaInlines [Str "2020-06-16"]),("keywords",MetaInlines [Str "Haskell",Space,Str "IDE"]),("title",MetaInlines [Str "a",Space,Str "new",Space,Str "start"])]}
+metaY = Meta {unMeta = fromList 
+    [("abstract",MetaInlines [Str "The",Space,Str "long",Space,Str "struggle"]),("date",MetaInlines [Str "2020-06-16"])
+    ,("keywords",MetaInlines [Str "Haskell",Space,Str "IDE"]),("title",MetaInlines [Str "a",Space,Str "new",Space,Str "start"])
+    ]}
 
-pandocY = Pandoc (Meta {unMeta = fromList 
-    [("abstract",MetaInlines [Str "The",Space,Str "long",Space,Str "struggle"]),("date",MetaInlines [Str "2020-06-16"]),("keywords",MetaInlines [Str "Haskell",Space,Str "IDE"]),("title",MetaInlines [Str "a",Space,Str "new",Space,Str "start"])]})
-     [Header 1 ("hl1_text",[],[]) [Str "hl1_text"],
-        Para [Str "Nonsense",Space,Str "sentence."]
-    -- , Header 1 ("gives",[],[]) [Str "gives"],Para [Str "$someTextWithYAML.md",Space,Str "Meta",Space,Str "{unMeta",Space,Str "=",Space,Str "fromList",Space,Str "[(",Quoted DoubleQuote [Str "abstract"],Str ",MetaInlines",Space,Str "[Str",Space,Quoted DoubleQuote [Str "The"],Str ",Space,Str",Space,Quoted DoubleQuote [Str "long"],Str ",Space,Str",Space,Quoted DoubleQuote [Str "struggle"],Str "]),(",Quoted DoubleQuote [Str "date"],Str ",MetaInlines",Space,Str "[Str",Space,Quoted DoubleQuote [Str "2020-06-16"],Str "]),(",Quoted DoubleQuote [Str "keywords"],Str ",MetaInlines",Space,Str "[Str",Space,Quoted DoubleQuote [Str "Haskell"],Str ",Space,Str",Space,Quoted DoubleQuote [Str "IDE"],Str "]),(",Quoted DoubleQuote [Str "title"],Str ",MetaInlines",Space,Str "[Str",Space,Quoted DoubleQuote [Str "a"],Str ",Space,Str",Space,Quoted DoubleQuote [Str "new"],Str ",Space,Str",Space,Quoted DoubleQuote [Str "start"],Str "])]}"
-    ]
-    
+ 
+pandocY :: Pandoc 
+pandocY = Pandoc (Meta {unMeta = fromList [("abstract",MetaInlines [Str "long",Space,Str "abstract"]),("date",MetaInlines [Str "2020-06-16"]),("keywords",MetaInlines [Str "KEYword"]),("title",MetaInlines [Str "the",Space,Strong [Str "real"],Space,Str "title"])]}) [Header 1 ("hl1_text-for-title",[],[]) [Str "hl1_text",Space,Emph [Str "For"],Space,Strong [Str "Title"]],Para [Str "Nonsense",Space,Str "list."],BulletList [[Plain [Str "one"]],[Plain [Str "two"]]]] 
+ 

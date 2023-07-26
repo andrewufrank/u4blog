@@ -17,6 +17,12 @@ module Main where -- must have Main (main) or Main where
 --import System.Exit
 
 import Test.Framework
+-- import    {-@ HTF_TESTS @-}        Uniform.MetaStuff_test
+import    {-@ HTF_TESTS @-}        Uniform.TemplateStuff_test
+
+
+-- old 
+-- import    {-@ HTF_TESTS @-}        Uniform.Markdown_test
 -- import     {-@ HTF_TESTS @-}       Uniform.Json_test
 --import {-@ HTF_TESTS @-} Uniform.ByteString_test
 -- import     {-@ HTF_TESTS @-}       Uniform.Yaml_test
@@ -24,9 +30,7 @@ import Test.Framework
 --import     {-@ HTF_TESTS @-}       Uniform.Piped_test
 -- import    {-@ HTF_TESTS @-}        Uniform.BibTex_test
 
--- import    {-@ HTF_TESTS @-}        Uniform.Markdown_test
--- import    {-@ HTF_TESTS @-}        Uniform.MetaStuff_test
-import    {-@ HTF_TESTS @-}        Uniform.TemplateStuff_test
+
 -- -- TODO not yet working inut file missing
 -- import    {-@ HTF_TESTS @-}        Uniform.ProcessPDF_test
 -- import {-@ HTF_TESTS @-} Uniform.Docrep_test

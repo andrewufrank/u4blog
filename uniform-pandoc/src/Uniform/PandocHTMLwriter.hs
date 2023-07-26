@@ -45,6 +45,7 @@ writeHtml5String2 pandocRes = do
     p <- unPandocM $ writeHtml5String html5Options pandocRes
     return  p
 
+
 -- | Reasonable options for rendering to HTML
 html5Options :: WriterOptions
 html5Options =

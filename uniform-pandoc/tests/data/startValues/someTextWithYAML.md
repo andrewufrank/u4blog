@@ -1,14 +1,14 @@
 ---
-title:  a new start
-keywords: Haskell IDE
-abstract: The long struggle 
+title:  the **real** title
+keywords: KEYword
+abstract: long abstract
 date: 2020-06-16
 ---
 
 
-# hl1_text
+# hl1_text *For* **Title**
 
-Nonsense sentence.
+Nonsense list.
+- one
+- two 
 
-# gives
-$someTextWithYAML.md Meta {unMeta = fromList [("abstract",MetaInlines [Str "The",Space,Str "long",Space,Str "struggle"]),("date",MetaInlines [Str "2020-06-16"]),("keywords",MetaInlines [Str "Haskell",Space,Str "IDE"]),("title",MetaInlines [Str "a",Space,Str "new",Space,Str "start"])]}
