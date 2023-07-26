@@ -115,3 +115,13 @@ writeAST3md options dat = do
                 dat
         return r1
     return r
+
+-- | write the AST to html with options
+writeAST3html options dat = do
+    r <- unPandocM $ do
+        r1 <-
+            Pandoc.writeHtml5
+                options  
+                dat
+        return r1
+    return r

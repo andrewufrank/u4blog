@@ -132,7 +132,45 @@ test_templ_comp_minilatex = do
     -- let Right (target3, res3) = res5
     assertEqual (Right "template") res1
 
+block1 :: Block 
+block1 = Plain [Str "hl1_text",Space,Emph [Str "For"],Space,Strong [Str "Title"]]
+-- block1 = Plain [Str "long", Space, Str "abstract"]
 
+test_ast2md = do
+    res1 <- runErr $ do 
+        r <- writeAST3md def (Pandoc nullMeta [block1])
+        putIOwords ["abs1 as md", showT r]
+        return r
+    assertEqual (Right "long abstract\n") res1
+
+test_ast2html = do
+    res1 <- runErr $ do 
+        -- r :: _ <- writeAST3html def (Pandoc nullMeta [block1])
+        r :: Text <- writeHtml5String2 (Pandoc nullMeta [block1])
+        -- let r2 = render Nothing r
+        putIOwords ["abs1 as md",  r]
+        return r
+    assertEqual (Right "long abstract") res1
+
+test_html = do
+    res1 <- runErr $ do 
+        -- r :: _ <- writeAST3html def (Pandoc nullMeta [block1])
+        r :: Text <- writeHtml5String2 (Pandoc nullMeta [block1])
+        -- let r2 = render Nothing r
+        putIOwords ["abs1 as html",  r]
+        return r
+    assertEqual (Right "long abstract") res1
+    -- "hl1_text <em>For</em> <strong>Title</strong>"
+
+test_tex = do
+    res1 <- runErr $ do 
+        -- r :: _ <- writeAST3html def (Pandoc nullMeta [block1])
+        r :: Text <- writeTexSnip2 (Pandoc nullMeta [block1])
+        -- let r2 = render Nothing r
+        putIOwords ["abs1 as tex",  r]
+        return r
+    assertEqual (Right "long abstract") res1
+    -- "hl1\\_text \\emph{For} \\textbf{Title}"
         -- -- htpl2 <- compileTemplateFile False htpl
 
 -- -- does only look at the block, not using the header
