@@ -66,9 +66,9 @@ getFromYaml  :: Text -> Pandoc -> Maybe MetaValue
 getFromYaml key pan = 
         Pandoc.lookupMeta key (getMeta pan)
 
-getTextFromYaml4 :: Text -> Text -> Pandoc ->  MetaValue
+getMetaValueFromYaml4 :: Text -> Text -> Pandoc ->  MetaValue
 --get the Metavalue (with  default)
-getTextFromYaml4 def1 key pan = maybe (MetaString def1) (id) 
+getMetaValueFromYaml4 def1 key pan = maybe (MetaString def1) (id) 
         $ getFromYaml key pan 
         
 getTextFromYaml5 :: Text -> Text -> Pandoc ->  Text

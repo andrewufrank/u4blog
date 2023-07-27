@@ -46,13 +46,22 @@ import UniformBase
 import Uniform.HttpFiles
 import Uniform.TexFileTypes
 
+type Con = Context Text 
 defFieldText :: Text -> Text -> Context Text -> Context Text 
+-- set the value if it has not value so far, does not overwrite
 defFieldText k v ct = defField k v  ct
 
-fillContext1 :: f   -> Context Text -> Context Text 
+
+fillContext1 :: fn  -> Context Text -> Context Text 
 fillContext1 fn ct  = defFieldText "linkpdf3" "A.pdf" -- convertLink2pdf ix 
                     . defFieldText "link" "filename3" -- convertLink2html ix=fn 
                     -- here all hmtl + latex  context values 
+                    $ ct 
+fillMeta2context :: Pandoc -> Context Text -> Context Text 
+-- the values in meta from the YAML header which are text 
+fillMeta2context pan ct =
+                    moveFieldMeta2Context zero  "date" pan
+
                     $ ct 
 
 -- ? how to deal with defaults?
@@ -65,6 +74,16 @@ fillContextLatex content ct = defFieldText "documentclass" "article"
                     . defField "body" content  
                     $ ct
 
+moveFieldMeta2Context ::  Text ->  Text -> Pandoc ->Context Text -> Context Text 
+-- get a field from the metadata and put it in the context  as text 
+moveFieldMeta2Context def k pan  ct = defFieldText k v ct 
+    where   v =   getTextFromYaml5 def k pan  :: Text                 
+
+moveFieldMetaVal2Context ::  Text ->  Text -> Pandoc ->Context Text -> Context Text 
+-- get a field from the metadata and put it in the context as metavalue 
+moveFieldMetaVal2Context def k pan  ct = defField k v ct 
+    where   v =   getMetaValueFromYaml4 def k pan                  
+
 fnA = makeAbsFile "/home/frank/Workspace11/u4blog/uniform-pandoc/tests/data/startValues/A.md"
 fnres_html =  makeAbsFile "/home/frank/tests/testhtmlA"
 fnres_latex =  makeAbsFile "/home/frank/tests/testlatexA"
@@ -76,7 +95,14 @@ test_A = do
 
         putIOwords ["pd \n", showT pd, "\n--"]
 
-        let contextBasic = fillContext1 fnA (mempty:: Context Text) :: Context Text 
+        -- get the metadata 
+        let contextFromMeta = fillMeta2context pd (mempty:: Context Text)
+        let contextFromMetaVal =     -- the ones to preserve the format
+                moveFieldMetaVal2Context "abstract missing" "abstract" pd
+                . moveFieldMetaVal2Context "title missing" "title" pd
+                . moveFieldMetaVal2Context "author missing" "author" pd
+                $ contextFromMeta :: Context Text
+        let contextBasic = fillContext1 fnA  contextFromMetaVal:: Context Text 
 
         contentHtml <- writeHtml5String2 pd   -- adds the content 
         contentTex <- writeTexSnip2 pd
@@ -94,7 +120,7 @@ test_A = do
         let resL = render (Just 50) restplL  :: Text  -- line length, can be Nothing
         
         putIOwords ["resH", resH]
-        
+
         write8   fnres_html htmloutFileType (HTMLout resH)
         write8   fnres_latex texFileType (Latex resL)
 

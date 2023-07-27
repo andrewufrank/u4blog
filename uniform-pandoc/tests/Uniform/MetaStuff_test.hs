@@ -47,7 +47,7 @@ import Text.DocTemplates as DocTemplates
 test_ka = assertEqual (Just abs1) $ getFromYaml "abstract" pandocY
 -- test getFromYaml with default as metavlaue, but value is present
 test_fa = assertEqual abs1 $
-             getTextFromYaml4 "oneAbstract" "abstract" pandocY
+             getMetaValueFromYaml4 "oneAbstract" "abstract" pandocY
 -- get as Text 
 test_faT = assertEqual "long abstract" $
              getTextFromYaml5 "oneAbstract" "abstract" pandocY
