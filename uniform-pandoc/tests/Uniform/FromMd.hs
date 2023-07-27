@@ -57,7 +57,7 @@ fillContext1 fn ct  = defFieldText "linkpdf3" "A.pdf" -- convertLink2pdf ix
 
 -- ? how to deal with defaults?
 fillContextHtml :: ToContext Text a => a -> Context Text -> Context Text 
-fillContextHtml content ct = defField "content3" content  
+fillContextHtml content ct = defField "body" content  
                      $ ct
 fillContextLatex :: ToContext Text a => a -> Context Text -> Context Text 
 fillContextLatex content ct = defFieldText "documentclass" "article"
@@ -66,23 +66,32 @@ fillContextLatex content ct = defFieldText "documentclass" "article"
                     $ ct
 
 fnA = makeAbsFile "/home/frank/Workspace11/u4blog/uniform-pandoc/tests/data/startValues/A.md"
+fnres_html =  makeAbsFile "/home/frank/tests/testhtmlA"
+
 test_A = do 
     res1 <- runErr $ do 
         mdfile <- read8 fnA markdownFileType 
         pd@(Pandoc m1 p1) <- readMarkdown2 mdfile
+
         putIOwords ["pd \n", showT pd, "\n--"]
 
         let contextBasic = fillContext1 fnA (mempty:: Context Text) :: Context Text 
 
-        contentHtml <- writeHtml5String2 pd
+        contentHtml <- writeHtml5String2 pd   -- adds the content 
         contentTex <- writeTexSnip2 pd
 
         let ctHtml = fillContextHtml contentHtml contextBasic
             ctLatex = fillContextLatex contentTex contextBasic
 
-            templH = compileDefaultTempalteHTML 
-            templT = compileDefaultTempalteLatex
-        -- templT <- unPandocM $ compileDefaultTemplate "latex"
+        putIOwords ["ctHtml", showT ctHtml]
+
+        templH <- compileDefaultTempalteHTML 
+            -- templT = compileDefaultTempalteLatex
+        let restplH = renderTemplate templH ctHtml :: Doc Text
+        let resH = render (Just 50) restplH  :: Text  -- line length, can be Nothing
+        putIOwords ["resH", resH]
+        let resHtml = HTMLout resH
+        write8   fnres_html htmloutFileType resHtml
 
         return "A"
     -- let Right (target3, res3) = res5

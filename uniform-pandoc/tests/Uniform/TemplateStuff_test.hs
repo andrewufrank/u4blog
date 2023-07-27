@@ -62,7 +62,7 @@ test_templ_latex = do
     -- let Right (target3, res3) = res5
     assertEqual (Right "htpl") res1
 
-fnres_html =  makeAbsFile "/home/frank/testhtml1"
+fnres_html =  makeAbsFile "/home/frank/tests/testhtml1"
 
 test_templ_comp_html = do 
     res1 <- runErr $ do 
@@ -83,7 +83,7 @@ test_templ_comp_html = do
     -- let Right (target3, res3) = res5
     assertEqual (Right "template") res1
 
-fnres_latex =  makeAbsFile "/home/frank/testlatex1"
+fnres_latex =  makeAbsFile "/home/frank/tests/testlatex1"
 
 test_templ_comp_latex = do 
     res1 <- runErr $ do 
