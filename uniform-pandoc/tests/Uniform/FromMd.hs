@@ -62,11 +62,12 @@ fillContextHtml content ct = defField "body" content
 fillContextLatex :: ToContext Text a => a -> Context Text -> Context Text 
 fillContextLatex content ct = defFieldText "documentclass" "article"
                     . defFieldText "fontsize" "12pt"
-                    . defField "content3" content  
+                    . defField "body" content  
                     $ ct
 
 fnA = makeAbsFile "/home/frank/Workspace11/u4blog/uniform-pandoc/tests/data/startValues/A.md"
 fnres_html =  makeAbsFile "/home/frank/tests/testhtmlA"
+fnres_latex =  makeAbsFile "/home/frank/tests/testlatexA"
 
 test_A = do 
     res1 <- runErr $ do 
@@ -86,12 +87,16 @@ test_A = do
         putIOwords ["ctHtml", showT ctHtml]
 
         templH <- compileDefaultTempalteHTML 
-            -- templT = compileDefaultTempalteLatex
+        templL <-compileDefaultTempalteLatex
         let restplH = renderTemplate templH ctHtml :: Doc Text
         let resH = render (Just 50) restplH  :: Text  -- line length, can be Nothing
+        let restplL = renderTemplate templL ctLatex :: Doc Text
+        let resL = render (Just 50) restplL  :: Text  -- line length, can be Nothing
+        
         putIOwords ["resH", resH]
-        let resHtml = HTMLout resH
-        write8   fnres_html htmloutFileType resHtml
+        
+        write8   fnres_html htmloutFileType (HTMLout resH)
+        write8   fnres_latex texFileType (Latex resL)
 
         return "A"
     -- let Right (target3, res3) = res5
