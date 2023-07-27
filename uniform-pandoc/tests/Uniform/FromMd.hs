@@ -78,13 +78,14 @@ test_A = do
         contentTex <- writeTexSnip2 pd
 
         let ctHtml = fillContextHtml contentHtml contextBasic
-        --     ctLatex = fillContextLatex contentTex contextBasic
+            ctLatex = fillContextLatex contentTex contextBasic
 
-        -- templH <- unPandocM $ compileDefaultTemplate "html"
+            templH = compileDefaultTempalteHTML 
+            templT = compileDefaultTempalteLatex
         -- templT <- unPandocM $ compileDefaultTemplate "latex"
 
-        return "htpl"
+        return "A"
     -- let Right (target3, res3) = res5
-    assertEqual (Right "htpl") res1
+    assertEqual (Right "") res1
 
 -- Pandoc (Meta {unMeta = fromList [("abstract",MetaInlines [Str "An",Space,Emph [Str "abstract"],Space,Str "for",Space,Str "the",Space,Strong [Str "example"],Space,Str "A"]),("date",MetaInlines [Str "2020-06-16"]),("keywords",MetaInlines [Str "A_KEYword"]),("title",MetaInlines [Str "the",Space,Strong [Str "real"],Space,Str "title",Space,Str "of",Space,Str "A"])]}) [Header 1 ("hl1_text-for-title-a",[],[]) [Str "hl1_text",Space,Emph [Str "For"],Space,Strong [Str "Title"],Space,Str "A"],Para [Str "Nonsense",Space,Str "list."],BulletList [[Plain [Str "one"]],[Plain [Str "two"]]]] 

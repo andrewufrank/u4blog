@@ -44,14 +44,19 @@ import qualified Text.Pandoc as Pandoc
 -- import Uniform.PandocImports
 import Text.DocLayout (render)
 import qualified Text.DocTemplates as DocTemplates
+import Data.Either (fromLeft, fromRight)
 
 instance Zeros (Template Text) where 
         zero = mempty -- Empty :: Template Text
 
-getDefaultTemplateLatex = unPandocM $ getDefaultTemplate "latex"
+getDefaultTemplateLatex :: ErrIO Text 
+getDefaultTemplateLatex =   unPandocM $ getDefaultTemplate "latex"
+getDefaultTemplateHTML :: ErrIO Text 
 getDefaultTemplateHTML = unPandocM $ getDefaultTemplate "html"
 
+compileDefaultTempalteHTML :: ErrIO (Template Text )
 compileDefaultTempalteHTML = unPandocM $ compileDefaultTemplate "html"
+compileDefaultTempalteLatex :: ErrIO (Template Text) 
 compileDefaultTempalteLatex = unPandocM $ compileDefaultTemplate "latex"
 
 compileTemplateText :: Bool    -- ^ debug output

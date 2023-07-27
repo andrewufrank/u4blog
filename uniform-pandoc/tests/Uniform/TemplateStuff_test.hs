@@ -62,7 +62,7 @@ test_templ_latex = do
     -- let Right (target3, res3) = res5
     assertEqual (Right "htpl") res1
 
-fnhtml =  makeAbsFile "/home/frank/testhtml1"
+fnres_html =  makeAbsFile "/home/frank/testhtml1"
 
 test_templ_comp_html = do 
     res1 <- runErr $ do 
@@ -78,12 +78,12 @@ test_templ_comp_html = do
 
         -- putIOwords ["res1 \n", showT res1]
         let resHtml = HTMLout res1 
-        -- write8   fnhtml htmloutFileType resHtml
+        write8   fnres_html htmloutFileType resHtml
         return "template"
     -- let Right (target3, res3) = res5
     assertEqual (Right "template") res1
 
-fnlatex =  makeAbsFile "/home/frank/testlatex1"
+fnres_latex =  makeAbsFile "/home/frank/testlatex1"
 
 test_templ_comp_latex = do 
     res1 <- runErr $ do 
@@ -100,15 +100,18 @@ test_templ_comp_latex = do
 
         -- putIOwords ["res1 \n", showT res1]
         let reslatex = Latex res1 
-        write8   fnlatex texFileType reslatex
+        write8   fnres_latex texFileType reslatex
         return "template"
     -- let Right (target3, res3) = res5
     assertEqual (Right "template") res1
 
+
+
+
+
+------------examples with a generic md file
 fnminilatex =  makeAbsFile "/home/frank/Workspace11/u4blog/uniform-pandoc/resources/minimalLatex.dtpl"
 fnminires =  makeAbsFile "/home/frank/tests/testmini"
-
-
 
 test_templ_comp_minilatex = do 
     res1 <- runErr $ do 
