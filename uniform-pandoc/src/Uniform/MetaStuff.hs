@@ -105,7 +105,6 @@ instance Zeros Pandoc where
 instance Zeros Text.Pandoc.Meta where
   zero = mempty
 
-
 getMeta :: Pandoc -> Pandoc.Meta
 getMeta (Pandoc.Pandoc m _) = m
 

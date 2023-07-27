@@ -52,7 +52,6 @@ test_fa = assertEqual abs1 $
 test_faT = assertEqual "long abstract" $
              getTextFromYaml5 "oneAbstract" "abstract" pandocY
 
-
 abs1:: MetaValue
 abs1 =  MetaInlines [Str "long", Space, Str "abstract"]
 
@@ -71,8 +70,6 @@ testval1 = "A test Text value" :: Text
 test_addPandoc = assertEqual (Just . MetaString $ testval1) $ 
             getFromYaml key1 . addMetaField2pandoc key1 testval1 $ pandocY
 
-
-
 -- basics to get the data 
 fn1 =  makeAbsFile "/home/frank/Workspace11/u4blog/uniform-pandoc/tests/data/startValues/someTextWithYAML.md"
 -- -- uniform-pandoc/tests/data/startValues/someTextWithYAML.md
@@ -90,7 +87,6 @@ metaY = Meta {unMeta = fromList
     [("abstract",MetaInlines [Str "The",Space,Str "long",Space,Str "struggle"]),("date",MetaInlines [Str "2020-06-16"])
     ,("keywords",MetaInlines [Str "Haskell",Space,Str "IDE"]),("title",MetaInlines [Str "a",Space,Str "new",Space,Str "start"])
     ]}
-
  
 pandocY :: Pandoc 
 pandocY = Pandoc (Meta {unMeta = fromList [("abstract",MetaInlines [Str "long",Space,Str "abstract"]),("date",MetaInlines [Str "2020-06-16"]),("keywords",MetaInlines [Str "KEYword"]),("title",MetaInlines [Str "the",Space,Strong [Str "real"],Space,Str "title"])]}) [Header 1 ("hl1_text-for-title",[],[]) [Str "hl1_text",Space,Emph [Str "For"],Space,Strong [Str "Title"]],Para [Str "Nonsense",Space,Str "list."],BulletList [[Plain [Str "one"]],[Plain [Str "two"]]]] 
