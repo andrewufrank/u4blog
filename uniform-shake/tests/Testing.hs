@@ -29,7 +29,7 @@ import           UniformBase
 main = do
     putIOwords ["HTF errorTest.hs:\n uniform-error test"]
     r <- htfMainWithArgs ["--quiet"] htf_importedTests
-    putIOwords ["HTF end errorTest.hs:\n posTest", showT r]
+    -- putIOwords ["HTF end errorTest.hs:\n posTest", showT r]
     -- r2 <- errorTest
     -- putIOwords [" error test end\n  ", showT r2]
     return r
