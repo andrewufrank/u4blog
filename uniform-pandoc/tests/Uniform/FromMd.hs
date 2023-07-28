@@ -17,7 +17,8 @@
 module Uniform.FromMd where
 
 import Test.Framework
--- import qualified Data.Map as M 
+import qualified Data.Map as M 
+import Data.Map (fromList, toList)
 ---- using uniform:
 import Uniform.Json hiding (toList, fromList)
 import Uniform.PandocImports 
@@ -32,7 +33,7 @@ import Text.DocTemplates as DocTemplates
 import Text.DocLayout (render)
 import Data.Text.Lazy (unpack)
 import Text.Blaze.Html.Renderer.Text (renderHtml)
-import Data.Map 
+-- import Data.Map 
 -- import Uniform.Filenames 
 -- import Uniform2.Filetypes4sites should not be imported here
 
@@ -98,26 +99,40 @@ md2Meta :: Bool -> MarkdownText -> ErrIO Meta
 md2Meta debug mdtext = do 
     pd@(Pandoc m1 p1) <- readMarkdown2 mdtext
     -- putIOwords ["pd \n", showT pd, "\n--"] 
-    let c0 = m1  
     let c1 = Meta (fromList [(("body"::Text), (MetaBlocks p1))])  
-    putIOwords ["cn", showT c1]
-    -- todo 
-    let    cn = c0
+    -- todo missing the index, references, umlaut conversion
+    let    cn = mergeAll [m1, c1] :: Meta-- order may  be important
+    putIOwords ["md2Meta cn \n", showT cn, "\n--"] 
     return cn 
 
-meta2res :: Bool -> Meta -> ErrIO (HTMLout, Latex)
--- the second part resulting in the two output files 
-meta2res debug context = do 
-    -- todo 
-    return (zero, zero)
+mergeAll :: [Meta] -> Meta 
+mergeAll  = Meta . fromList . concat . map toList . map unMeta
+
+meta2hres :: Bool -> Meta -> ErrIO HTMLout
+-- the second part resulting in HTML result
+meta2hres debug meta = do 
+    putIOwords ["meta2hres meta \n", showT meta, "\n--"] 
+
+    tHtml :: Text <- writeHtml5String2 (Pandoc meta zero) -- gibt nichts....todo
+    putIOwords ["meta2hres tHtml \n", showT tHtml, "\n--"] 
+
+    templH :: Template Text <- compileDefaultTempalteHTML 
+        -- templL :: Template Text  <-compileDefaultTempalteLatex
+        -- -- renderTemplate :: (TemplateTarget a, ToContext a b) => Template a -> b -> Doc a
+    let restplH = renderTemplate templH tHtml :: Doc Text
+    let resH = render (Just 50) restplH  :: Text  -- line length, can be Nothing
+        -- let restplL = renderTemplate templL ctLatex :: Doc Text
+        -- let resL = render (Just 50) restplL  :: Text  -- line length, can be Nothing    -- todo 
+    return (HTMLout resH)
+
 
 convertFull :: Bool -> Path Abs File -> ErrIO (HTMLout, Latex)
 -- convert a md file to the html and latex format
 convertFull debug fnin = do
     mdfile <- read8 fnin markdownFileType 
     context <- md2Meta debug mdfile 
-    (h,l) <- meta2res debug context
-    return (h,l)
+    h <- meta2hres debug context
+    return (h,zero)
 
 fnA = makeAbsFile "/home/frank/Workspace11/u4blog/uniform-pandoc/tests/data/startValues/A.md"
 fnres_html =  makeAbsFile "/home/frank/tests/testhtmlA"

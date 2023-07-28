@@ -17,18 +17,27 @@
 module Uniform.TemplateStuff_test where
 
 import Test.Framework
+    ( TestSuite, assertEqual, makeLoc, makeTestSuite, makeUnitTest )
 -- import qualified Data.Map as M 
 ---- using uniform:
-import Uniform.Json hiding (fromList)
-import Uniform.PandocImports 
-import Uniform.Markdown 
-import Uniform.TexWriter
-import Uniform.PandocHTMLwriter
+import Uniform.Json ()
+import Uniform.PandocImports ( Pandoc(Pandoc), unPandocM ) 
+import Uniform.Markdown () 
+import Uniform.TexWriter ( writeTexSnip2 )
+import Uniform.PandocHTMLwriter ( writeHtml5String2 )
 import Text.Pandoc
+    ( renderTemplate,
+      compileDefaultTemplate,
+      nullMeta,
+      def,
+      Block(Plain),
+      Inline(Str, Emph, Space, Strong) )
 import Text.Pandoc.Definition
-import Text.Pandoc.Writers
-import Text.Pandoc.Writers.Shared 
+    ( nullMeta, Block(Plain), Inline(Str, Emph, Space, Strong) )
+import Text.Pandoc.Writers ()
+import Text.Pandoc.Writers.Shared ( defField ) 
 import Text.DocTemplates as DocTemplates
+    ( renderTemplate, Doc, Context )
 import Text.DocLayout (render)
 import Data.Text.Lazy (unpack)
 import Text.Blaze.Html.Renderer.Text (renderHtml)
