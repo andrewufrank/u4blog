@@ -19,7 +19,7 @@ module Uniform.FromMd where
 import Test.Framework
 -- import qualified Data.Map as M 
 ---- using uniform:
-import Uniform.Json hiding (fromList)
+import Uniform.Json hiding (toList, fromList)
 import Uniform.PandocImports 
 import Uniform.Markdown 
 import Uniform.TexWriter
@@ -46,23 +46,19 @@ import UniformBase
 import Uniform.HttpFiles
 import Uniform.TexFileTypes
 
-type Con = Context MetaValue
 
-instance Zeros Con where 
-        zero = mempty 
-
--- defFieldText :: Text -> Text -> Con -> Con 
+-- defFieldText :: Text -> Text -> Meta -> Meta 
 -- -- set the value if it has not value so far, does not overwrite
 -- defFieldText k v ct = defField k (MetaString v)  ct
 
 -- -- defField :: ToContext a b => Text -> b -> Context a -> Context a
 
--- fillContext1 :: fn  -> Con -> Con 
+-- fillContext1 :: fn  -> Meta -> Meta 
 -- fillContext1 fn ct  = defFieldText "linkpdf3" "A.pdf" -- convertLink2pdf ix 
 --                     . defFieldText "link" "filename3" -- convertLink2html ix=fn 
 --                     -- here all hmtl + latex  context values 
 --                     $ ct 
--- fillMeta2context :: Pandoc -> Con -> Con 
+-- fillMeta2context :: Pandoc -> Meta -> Meta 
 -- -- the values in meta from the YAML header which are text 
 -- fillMeta2context pan ct =
 --                     moveFieldMeta2Context zero  "date" pan
@@ -70,47 +66,55 @@ instance Zeros Con where
 --                     $ ct 
 
 -- -- ? how to deal with defaults?
--- fillContextHtml ::   Text -> Con -> Con 
+-- fillContextHtml ::   Text -> Meta -> Meta 
 -- fillContextHtml content ct = defField "body" (MetaString content)  
 --                      $ ct
--- fillContextLatex :: Text -> Con -> Con 
+-- fillContextLatex :: Text -> Meta -> Meta 
 -- fillContextLatex content ct = defFieldText "documentclass" "article"
 --                     . defFieldText "fontsize" "12pt"
 --                     . defField "body" (MetaString content)  
 --                     $ ct
 
--- moveFieldMeta2Context ::  Text ->  Text -> Pandoc ->Con -> Con 
+-- moveFieldMeta2Context ::  Text ->  Text -> Pandoc ->Meta -> Meta 
 -- -- get a field from the metadata and put it in the context  as text 
 -- moveFieldMeta2Context def k pan  ct = defFieldText k v ct 
 --     where   v =   getTextFromYaml5 def k pan  :: Text                 
 
--- moveFieldMetaVal2Context ::  Text ->  Text -> Pandoc ->Con -> Con 
+-- moveFieldMetaVal2Context ::  Text ->  Text -> Pandoc ->Meta -> Meta 
 -- -- get a field from the metadata and put it in the context as metavalue 
 -- moveFieldMetaVal2Context def k pan  ct = defField k v ct 
 --     where   v =   getMetaValueFromYaml4 def k pan  :: MetaValue                
 
+-- -- defField :: ToContext a b => Text -> b -> Context a -> Context a
+ 
+test_map2list = assertEqual [] $ toList (unMeta . getMeta $ pandocA)
+test_map2listadd = assertEqual [] $ toList . unMeta $ Meta (fromList [(("body"::Text), (MetaString "xx"))]) <> (getMeta pandocA)
 
-md2convMV :: Bool -> Path Abs File -> ErrIO (Context MetaValue)
+md2Meta :: Bool -> MarkdownText -> ErrIO Meta 
 -- convert a markdown file to MetaValue
-md2convMV debug fnin = do 
-    mdfile <- read8 fnA markdownFileType 
-    pd@(Pandoc m1 p1) <- readMarkdown2 mdfile
+md2Meta debug mdtext = do 
+    pd@(Pandoc m1 p1) <- readMarkdown2 mdtext
+    -- putIOwords ["pd \n", showT pd, "\n--"] 
+    let c0 = zero :: Meta  
+    let c1 = Meta (fromList [(("body"::Text), (MetaBlocks p1))]) <> m1  
+    putIOwords ["cn", showT c1]
+    -- todo 
+    let    cn = c0
+    return cn 
 
-    putIOwords ["pd \n", showT pd, "\n--"]  
-
-    return zero 
-
-convMV2res :: Bool -> Context MetaValue -> ErrIO (HTMLout, Latex)
+meta2res :: Bool -> Meta -> ErrIO (HTMLout, Latex)
 -- the second part resulting in the two output files 
-convMV2res debug context = do 
+meta2res debug context = do 
+    -- todo 
     return (zero, zero)
 
 convertFull :: Bool -> Path Abs File -> ErrIO (HTMLout, Latex)
 -- convert a md file to the html and latex format
 convertFull debug fnin = do
-    context <- md2convMV debug fnin 
-
-    return (zero, zero)
+    mdfile <- read8 fnin markdownFileType 
+    context <- md2Meta debug mdfile 
+    (h,l) <- meta2res debug context
+    return (h,l)
 
 fnA = makeAbsFile "/home/frank/Workspace11/u4blog/uniform-pandoc/tests/data/startValues/A.md"
 fnres_html =  makeAbsFile "/home/frank/tests/testhtmlA"
@@ -134,20 +138,20 @@ test_A = do
         -- putIOwords ["pd \n", showT pd, "\n--"]
 
         -- -- get the metadata 
-        -- let contextFromMeta = fillMeta2context pd (mempty:: Con)
+        -- let contextFromMeta = fillMeta2context pd (mempty:: Meta)
         -- let contextFromMetaVal =     -- the ones to preserve the format
         --         moveFieldMetaVal2Context "abstract missing" "abstract" pd
         --         . moveFieldMetaVal2Context "title missing" "title" pd
         --         . moveFieldMetaVal2Context "author missing" "author" pd
-        --         $ contextFromMeta :: Con
-        -- let contextBasic = fillContext1 fnA  contextFromMetaVal:: Con 
+        --         $ contextFromMeta :: Meta
+        -- let contextBasic = fillContext1 fnA  contextFromMetaVal:: Meta 
 
         -- contentHtml :: Text <- writeHtml5String2 pd   -- adds the content 
         -- contentTex :: Text <- writeTexSnip2 pd
 
-        -- let ctHtml = fillContextHtml contentHtml contextBasic :: Con
-        --     ctLatex = fillContextLatex contentTex contextBasic :: Con 
-
+        -- let ctHtml = fillContextHtml contentHtml contextBasic :: Meta
+        --     ctLatex = fillContextLatex contentTex contextBasic :: Meta 
+-------  break 1st 2nd 
         -- putIOwords ["ctHtml", showT ctHtml]
 
         -- templH :: Template Text <- compileDefaultTempalteHTML 
@@ -162,4 +166,17 @@ test_A = do
 
     
 
--- Pandoc (Meta {unMeta = fromList [("abstract",MetaInlines [Str "An",Space,Emph [Str "abstract"],Space,Str "for",Space,Str "the",Space,Strong [Str "example"],Space,Str "A"]),("date",MetaInlines [Str "2020-06-16"]),("keywords",MetaInlines [Str "A_KEYword"]),("title",MetaInlines [Str "the",Space,Strong [Str "real"],Space,Str "title",Space,Str "of",Space,Str "A"])]}) [Header 1 ("hl1_text-for-title-a",[],[]) [Str "hl1_text",Space,Emph [Str "For"],Space,Strong [Str "Title"],Space,Str "A"],Para [Str "Nonsense",Space,Str "list."],BulletList [[Plain [Str "one"]],[Plain [Str "two"]]]] 
+pandocA = Pandoc 
+    (Meta {unMeta = fromList [
+        ("abstract",MetaInlines [Str "An",Space,Emph [Str "abstract"],Space,Str "for",Space,Str "the",Space,Strong [Str "example"],Space,Str "A"]),
+        ("date",MetaInlines [Str "2020-06-16"]),
+        ("keywords",MetaInlines [Str "A_KEYword"]),
+        ("title",MetaInlines [Str "the",Space,Strong [Str "real"],Space,Str "title",Space,Str "of",Space,Str "A"])]}) 
+    [Header 1 ("hl1_text-for-title-a",[],[]) 
+        [Str "hl1_text",Space,Emph [Str "For"],Space,Strong [Str "Title"],Space,Str "A"],
+        Para [Str "Nonsense",Space,Str "list."],
+        BulletList [
+                [Plain [Str "one"]],
+                [Plain [Str "two"]]
+        ]
+    ] 
