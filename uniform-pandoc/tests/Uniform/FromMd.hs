@@ -46,18 +46,19 @@ import UniformBase
 import Uniform.HttpFiles
 import Uniform.TexFileTypes
 
-type Con = Context Text 
-defFieldText :: Text -> Text -> Context Text -> Context Text 
+type Con = Context MetaValue
+defFieldText :: Text -> Text -> Con -> Con 
 -- set the value if it has not value so far, does not overwrite
-defFieldText k v ct = defField k v  ct
+defFieldText k v ct = defField k (MetaString v)  ct
 
+-- defField :: ToContext a b => Text -> b -> Context a -> Context a
 
-fillContext1 :: fn  -> Context Text -> Context Text 
+fillContext1 :: fn  -> Con -> Con 
 fillContext1 fn ct  = defFieldText "linkpdf3" "A.pdf" -- convertLink2pdf ix 
                     . defFieldText "link" "filename3" -- convertLink2html ix=fn 
                     -- here all hmtl + latex  context values 
                     $ ct 
-fillMeta2context :: Pandoc -> Context Text -> Context Text 
+fillMeta2context :: Pandoc -> Con -> Con 
 -- the values in meta from the YAML header which are text 
 fillMeta2context pan ct =
                     moveFieldMeta2Context zero  "date" pan
@@ -65,24 +66,24 @@ fillMeta2context pan ct =
                     $ ct 
 
 -- ? how to deal with defaults?
-fillContextHtml :: ToContext Text a => a -> Context Text -> Context Text 
-fillContextHtml content ct = defField "body" content  
+fillContextHtml ::   Text -> Con -> Con 
+fillContextHtml content ct = defField "body" (MetaString content)  
                      $ ct
-fillContextLatex :: ToContext Text a => a -> Context Text -> Context Text 
+fillContextLatex :: Text -> Con -> Con 
 fillContextLatex content ct = defFieldText "documentclass" "article"
                     . defFieldText "fontsize" "12pt"
-                    . defField "body" content  
+                    . defField "body" (MetaString content)  
                     $ ct
 
-moveFieldMeta2Context ::  Text ->  Text -> Pandoc ->Context Text -> Context Text 
+moveFieldMeta2Context ::  Text ->  Text -> Pandoc ->Con -> Con 
 -- get a field from the metadata and put it in the context  as text 
 moveFieldMeta2Context def k pan  ct = defFieldText k v ct 
     where   v =   getTextFromYaml5 def k pan  :: Text                 
 
-moveFieldMetaVal2Context ::  Text ->  Text -> Pandoc ->Context Text -> Context Text 
+moveFieldMetaVal2Context ::  Text ->  Text -> Pandoc ->Con -> Con 
 -- get a field from the metadata and put it in the context as metavalue 
 moveFieldMetaVal2Context def k pan  ct = defField k v ct 
-    where   v =   getMetaValueFromYaml4 def k pan                  
+    where   v =   getMetaValueFromYaml4 def k pan  :: MetaValue                
 
 fnA = makeAbsFile "/home/frank/Workspace11/u4blog/uniform-pandoc/tests/data/startValues/A.md"
 fnres_html =  makeAbsFile "/home/frank/tests/testhtmlA"
@@ -96,24 +97,25 @@ test_A = do
         putIOwords ["pd \n", showT pd, "\n--"]
 
         -- get the metadata 
-        let contextFromMeta = fillMeta2context pd (mempty:: Context Text)
+        let contextFromMeta = fillMeta2context pd (mempty:: Con)
         let contextFromMetaVal =     -- the ones to preserve the format
                 moveFieldMetaVal2Context "abstract missing" "abstract" pd
                 . moveFieldMetaVal2Context "title missing" "title" pd
                 . moveFieldMetaVal2Context "author missing" "author" pd
-                $ contextFromMeta :: Context Text
-        let contextBasic = fillContext1 fnA  contextFromMetaVal:: Context Text 
+                $ contextFromMeta :: Con
+        let contextBasic = fillContext1 fnA  contextFromMetaVal:: Con 
 
-        contentHtml <- writeHtml5String2 pd   -- adds the content 
-        contentTex <- writeTexSnip2 pd
+        contentHtml :: Text <- writeHtml5String2 pd   -- adds the content 
+        contentTex :: Text <- writeTexSnip2 pd
 
-        let ctHtml = fillContextHtml contentHtml contextBasic
-            ctLatex = fillContextLatex contentTex contextBasic
+        let ctHtml = fillContextHtml contentHtml contextBasic :: Con
+            ctLatex = fillContextLatex contentTex contextBasic :: Con 
 
         putIOwords ["ctHtml", showT ctHtml]
 
-        templH <- compileDefaultTempalteHTML 
-        templL <-compileDefaultTempalteLatex
+        templH :: Template Text <- compileDefaultTempalteHTML 
+        templL :: Template Text  <-compileDefaultTempalteLatex
+        -- renderTemplate :: (TemplateTarget a, ToContext a b) => Template a -> b -> Doc a
         let restplH = renderTemplate templH ctHtml :: Doc Text
         let resH = render (Just 50) restplH  :: Text  -- line length, can be Nothing
         let restplL = renderTemplate templL ctLatex :: Doc Text
