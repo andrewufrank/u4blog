@@ -1,0 +1,46 @@
+cradle:
+  cabal:
+    - path: "./src"
+      component: "lib:uniform-pandoc"
+
+    - path: "./tests"
+      component: "uniform-pandoc:test:pandoctest"
+
+    - path: "../../u2to/uniform-convenience/src"
+      component: "lib:uniform-convenience"
+
+    - path: "../../u4blog/uniform-json/src"
+      component: "lib:uniform-json"
+
+    - path: "../../u4blog/uniform-json/tests"
+      component: "uniform-json:test:json-test"
+
+    - path: "../../u4blog/uniform-latex2pdf/src"
+      component: "lib:uniform-latex2pdf"
+
+    - path: "../../uBase/uniform-algebras/./"
+      component: "lib:uniform-algebras"
+
+    - path: "../../uBase/uniform-error/./"
+      component: "lib:uniform-error"
+
+    - path: "../../uBase/uniform-error/test"
+      component: "uniform-error:test:error-test"
+
+    - path: "../../uBase/uniform-fileio/./"
+      component: "lib:uniform-fileio"
+
+    - path: "../../uBase/uniform-fileio/tests"
+      component: "uniform-fileio:test:fileio-test"
+
+    - path: "../../uBase/uniform-strings/./"
+      component: "lib:uniform-strings"
+
+    - path: "../../uBase/uniform-strings/test"
+      component: "uniform-strings:test:strings-test"
+
+    - path: "../../uBase/uniform-time/./"
+      component: "lib:uniform-time"
+
+    - path: "../../uBase/uniformBase/src"
+      component: "lib:uniformBase"

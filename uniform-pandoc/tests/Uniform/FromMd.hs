@@ -87,16 +87,19 @@ import Uniform.TexFileTypes
 
 -- -- defField :: ToContext a b => Text -> b -> Context a -> Context a
  
-test_map2list = assertEqual [] $ toList (unMeta . getMeta $ pandocA)
-test_map2listadd = assertEqual [] $ toList . unMeta $ Meta (fromList [(("body"::Text), (MetaString "xx"))]) <> (getMeta pandocA)
+test_map2list = assertEqual [("body", MetaString "xx")] $ toList (unMeta meta1)
+test_map2listadd = assertEqual cont12 $ toList . unMeta $ Meta (fromList [(("abst"::Text), (MetaString "yy"))]) <>  meta1
+
+meta1 = Meta (fromList [(("body"::Text), (MetaString "xx"))])
+cont12 =  [("abst", MetaString "yy"), ("body", MetaString "xx")]
 
 md2Meta :: Bool -> MarkdownText -> ErrIO Meta 
 -- convert a markdown file to MetaValue
 md2Meta debug mdtext = do 
     pd@(Pandoc m1 p1) <- readMarkdown2 mdtext
     -- putIOwords ["pd \n", showT pd, "\n--"] 
-    let c0 = zero :: Meta  
-    let c1 = Meta (fromList [(("body"::Text), (MetaBlocks p1))]) <> m1  
+    let c0 = m1  
+    let c1 = Meta (fromList [(("body"::Text), (MetaBlocks p1))])  
     putIOwords ["cn", showT c1]
     -- todo 
     let    cn = c0
