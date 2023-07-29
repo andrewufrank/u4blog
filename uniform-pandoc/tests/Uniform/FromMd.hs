@@ -69,13 +69,32 @@ metaStep1 =
  Meta {unMeta = fromList [("abstract",MetaInlines [Str "An",Space,Emph [Str "abstract"],Space,Str "for",Space,Str "the",Space,Strong [Str "example"],Space,Str "A"]),("body",MetaBlocks [Header 1 ("hl1_text-for-title-a",[],[]) [Str "hl1_text",Space,Emph [Str "For"],Space,Strong [Str "Title"],Space,Str "A"],Para [Str "Nonsense",Space,Str "list."],BulletList [[Plain [Str "one"]],[Plain [Str "two"]]]]),("date",MetaInlines [Str "2020-06-16"]),("keywords",MetaInlines [Str "A_KEYword"]),("title",MetaInlines [Str "the",Space,Strong [Str "real"],Space,Str "title",Space,Str "of",Space,Str "A"])]} 
 
 meta2htmltext :: Bool -> Meta -> ErrIO (M.Map Text Text)
--- convert all in Meta to 
+-- convert all in Meta to html codes
 meta2htmltext debug m1 = do
     let listMetaValues = toList . unMeta $ m1:: [(Text, MetaValue)]
-        l2 = map (second metaValueToText) listMetaValues
+    l2 <- mapM mv2 listMetaValues
+    -- l2 <- mapM (second metaValueToHTML) listMetaValues
+        -- l2 = map (second metaValueToText) listMetaValues
 
-    let resList = map (second (fromJustNote "meta2htmltext")) l2
+    let resList = l2 -- map (second (fromJustNote "meta2htmltext")) l2
     return $ fromList resList
+  where 
+    mv2 :: (Text, MetaValue) -> ErrIO (Text, Text)
+    mv2 (t, mv) = do  
+        mv2 :: Text <- metaValueToHTML mv
+        return (t, mv2) -- fromJustNote "meta2htmltext" $ mv2)
+
+
+htmlStep1 = fromList [("abstract",
+       "An <em>abstract</em> for the <strong>example</strong> A"),
+      ("body",
+       "<h1 id=\"hl1_text-for-title-a\">hl1_text <em>For</em>\n<strong>Title</strong> A</h1>\n<p>Nonsense list.</p>\n<ul>\n<li>one</li>\n<li>two</li>\n</ul>"),
+      ("date", "2020-06-16"), ("keywords", "A_KEYword"),
+      ("title", "the <strong>real</strong> title of A")] :: M.Map Text Text
+test_htmltext = do 
+    res1 <- runErr $ do 
+        meta2htmltext False metaStep1 
+    assertEqual (Right htmlStep1) res1 
 
 md2Meta :: Bool -> MarkdownText -> ErrIO Meta
 -- step1: convert a markdown file to MetaValue
@@ -95,8 +114,10 @@ meta2hres :: Bool -> Meta -> ErrIO HTMLout
 -- step2: the second part resulting in HTML result
 meta2hres debug meta = do
     putIOwords ["meta2hres meta \n", showT meta, "\n--"]
+    -- convert to list of (text,Block) 
+    -- make M.Map and pass to render template 
 
-    tHtml :: Text <- writeHtml5String2 (Pandoc meta zero) -- gibt nichts....todo
+    tHtml :: M.Map Text Text <- meta2htmltext debug meta
     putIOwords ["meta2hres tHtml \n", showT tHtml, "\n--"]
 
     templH :: Template Text <- compileDefaultTempalteHTML
@@ -134,7 +155,7 @@ test_A = do
 
         return "A"
     -- let Right (target3, res3) = res5
-    assertEqual (Right "A") res1  -- todo is fake 
+    assertEqual (Right "Aa") res1  -- todo is fake 
 
 
         -- mdfile <- read8 fnA markdownFileType 
