@@ -10,35 +10,34 @@
 {-# LANGUAGE OverloadedStrings     #-}
 {-# LANGUAGE ScopedTypeVariables   #-}
 {-# LANGUAGE TypeFamilies          #-}
-{-# LANGUAGE DeriveGeneric          #-}
+-- {-# LANGUAGE DeriveGeneric          #-}
 -- {-# LANGUAGE TypeSynonymInstances  #-}
 -- {-# OPTIONS_GHC -fno-warn-missing-methods #-}
 
 module Uniform.FromMd where
 
 import Test.Framework
-import qualified Data.Map as M 
+import qualified Data.Map as M
 import Data.Map (fromList, toList)
 ---- using uniform:
 import Uniform.Json hiding (toList, fromList)
-import Uniform.PandocImports 
-import Uniform.Markdown 
-import Uniform.TexWriter
+import Uniform.PandocImports
+import Uniform.Markdown
+import Uniform.TexWriter ()
 import Uniform.PandocHTMLwriter
 import Text.Pandoc
-import Text.Pandoc.Definition
-import Text.Pandoc.Writers
-import Text.Pandoc.Writers.Shared 
-import Text.DocTemplates as DocTemplates
+import Text.Pandoc.Definition ()
+import Text.Pandoc.Writers ()
+import Text.Pandoc.Writers.Shared ()
+import Text.DocTemplates as DocTemplates ( Doc )
 import Text.DocLayout (render)
 import Data.Text.Lazy (unpack)
 import Text.Blaze.Html.Renderer.Text (renderHtml)
 -- import Data.Map 
 -- import Uniform.Filenames 
 -- import Uniform2.Filetypes4sites should not be imported here
-
-import Uniform.Test.TestHarness
-import Uniform.MetaStuff_test 
+import Uniform.Test.TestHarness ()
+import Uniform.MetaStuff_test ()
 -- import Uniform.Markdown_test 
 import Uniform.MetaStuff
 import Uniform.TemplatesStuff
@@ -47,76 +46,60 @@ import UniformBase
 import Uniform.HttpFiles
 import Uniform.TexFileTypes
 
+test_meta2text = do  
+    res1 <- runErr $ do 
+        meta2htmltext False (getMeta pandocA)
+    assertEqual (Right zeromap) res1
 
--- defFieldText :: Text -> Text -> Meta -> Meta 
--- -- set the value if it has not value so far, does not overwrite
--- defFieldText k v ct = defField k (MetaString v)  ct
+res1a = fromList  -- the text, lost the styling, metaValueToText wrong 
+     [("abstract", "An abstract for the example A"),
+      ("date", "2020-06-16"), ("keywords", "A_KEYword"),
+      ("title", "the real title of A")]
+zeromap = fromList [("abstract", "An abstract for the example A"),
+      ("date", "2020-06-16"), ("keywords", "A_KEYword"),
+      ("title", "the real title of A")] :: M.Map Text Text 
 
--- -- defField :: ToContext a b => Text -> b -> Context a -> Context a
+test_step1 = do 
+    res1 <- runErr $ do 
+        md <- read8 fnA markdownFileType
+        md2Meta False md 
+    assertEqual (Right metaStep1) res1 
 
--- fillContext1 :: fn  -> Meta -> Meta 
--- fillContext1 fn ct  = defFieldText "linkpdf3" "A.pdf" -- convertLink2pdf ix 
---                     . defFieldText "link" "filename3" -- convertLink2html ix=fn 
---                     -- here all hmtl + latex  context values 
---                     $ ct 
--- fillMeta2context :: Pandoc -> Meta -> Meta 
--- -- the values in meta from the YAML header which are text 
--- fillMeta2context pan ct =
---                     moveFieldMeta2Context zero  "date" pan
+metaStep1 = 
+ Meta {unMeta = fromList [("abstract",MetaInlines [Str "An",Space,Emph [Str "abstract"],Space,Str "for",Space,Str "the",Space,Strong [Str "example"],Space,Str "A"]),("body",MetaBlocks [Header 1 ("hl1_text-for-title-a",[],[]) [Str "hl1_text",Space,Emph [Str "For"],Space,Strong [Str "Title"],Space,Str "A"],Para [Str "Nonsense",Space,Str "list."],BulletList [[Plain [Str "one"]],[Plain [Str "two"]]]]),("date",MetaInlines [Str "2020-06-16"]),("keywords",MetaInlines [Str "A_KEYword"]),("title",MetaInlines [Str "the",Space,Strong [Str "real"],Space,Str "title",Space,Str "of",Space,Str "A"])]} 
 
---                     $ ct 
+meta2htmltext :: Bool -> Meta -> ErrIO (M.Map Text Text)
+-- convert all in Meta to 
+meta2htmltext debug m1 = do
+    let listMetaValues = toList . unMeta $ m1:: [(Text, MetaValue)]
+        l2 = map (second metaValueToText) listMetaValues
 
--- -- ? how to deal with defaults?
--- fillContextHtml ::   Text -> Meta -> Meta 
--- fillContextHtml content ct = defField "body" (MetaString content)  
---                      $ ct
--- fillContextLatex :: Text -> Meta -> Meta 
--- fillContextLatex content ct = defFieldText "documentclass" "article"
---                     . defFieldText "fontsize" "12pt"
---                     . defField "body" (MetaString content)  
---                     $ ct
+    let resList = map (second (fromJustNote "meta2htmltext")) l2
+    return $ fromList resList
 
--- moveFieldMeta2Context ::  Text ->  Text -> Pandoc ->Meta -> Meta 
--- -- get a field from the metadata and put it in the context  as text 
--- moveFieldMeta2Context def k pan  ct = defFieldText k v ct 
---     where   v =   getTextFromYaml5 def k pan  :: Text                 
-
--- moveFieldMetaVal2Context ::  Text ->  Text -> Pandoc ->Meta -> Meta 
--- -- get a field from the metadata and put it in the context as metavalue 
--- moveFieldMetaVal2Context def k pan  ct = defField k v ct 
---     where   v =   getMetaValueFromYaml4 def k pan  :: MetaValue                
-
--- -- defField :: ToContext a b => Text -> b -> Context a -> Context a
- 
-test_map2list = assertEqual [("body", MetaString "xx")] $ toList (unMeta meta1)
-test_map2listadd = assertEqual cont12 $ toList . unMeta $ Meta (fromList [(("abst"::Text), (MetaString "yy"))]) <>  meta1
-
-meta1 = Meta (fromList [(("body"::Text), (MetaString "xx"))])
-cont12 =  [("abst", MetaString "yy"), ("body", MetaString "xx")]
-
-md2Meta :: Bool -> MarkdownText -> ErrIO Meta 
--- convert a markdown file to MetaValue
-md2Meta debug mdtext = do 
+md2Meta :: Bool -> MarkdownText -> ErrIO Meta
+-- step1: convert a markdown file to MetaValue
+md2Meta debug mdtext = do
     pd@(Pandoc m1 p1) <- readMarkdown2 mdtext
     -- putIOwords ["pd \n", showT pd, "\n--"] 
-    let c1 = Meta (fromList [(("body"::Text), (MetaBlocks p1))])  
+    let c1 = Meta (fromList [(("body"::Text), (MetaBlocks p1))])
     -- todo missing the index, references, umlaut conversion
     let    cn = mergeAll [m1, c1] :: Meta-- order may  be important
-    putIOwords ["md2Meta cn \n", showT cn, "\n--"] 
-    return cn 
+    putIOwords ["md2Meta cn \n", showT cn, "\n--"]
+    return cn
 
-mergeAll :: [Meta] -> Meta 
+mergeAll :: [Meta] -> Meta
 mergeAll  = Meta . fromList . concat . map toList . map unMeta
 
 meta2hres :: Bool -> Meta -> ErrIO HTMLout
--- the second part resulting in HTML result
-meta2hres debug meta = do 
-    putIOwords ["meta2hres meta \n", showT meta, "\n--"] 
+-- step2: the second part resulting in HTML result
+meta2hres debug meta = do
+    putIOwords ["meta2hres meta \n", showT meta, "\n--"]
 
     tHtml :: Text <- writeHtml5String2 (Pandoc meta zero) -- gibt nichts....todo
-    putIOwords ["meta2hres tHtml \n", showT tHtml, "\n--"] 
+    putIOwords ["meta2hres tHtml \n", showT tHtml, "\n--"]
 
-    templH :: Template Text <- compileDefaultTempalteHTML 
+    templH :: Template Text <- compileDefaultTempalteHTML
         -- templL :: Template Text  <-compileDefaultTempalteLatex
         -- -- renderTemplate :: (TemplateTarget a, ToContext a b) => Template a -> b -> Doc a
     let restplH = renderTemplate templH tHtml :: Doc Text
@@ -129,25 +112,29 @@ meta2hres debug meta = do
 convertFull :: Bool -> Path Abs File -> ErrIO (HTMLout, Latex)
 -- convert a md file to the html and latex format
 convertFull debug fnin = do
-    mdfile <- read8 fnin markdownFileType 
-    context <- md2Meta debug mdfile 
+    mdfile <- read8 fnin markdownFileType
+    context <- md2Meta debug mdfile
     h <- meta2hres debug context
     return (h,zero)
 
+fnA :: Path Abs File
 fnA = makeAbsFile "/home/frank/Workspace11/u4blog/uniform-pandoc/tests/data/startValues/A.md"
+fnres_html :: Path Abs File
 fnres_html =  makeAbsFile "/home/frank/tests/testhtmlA"
+fnres_latex :: Path Abs File
 fnres_latex =  makeAbsFile "/home/frank/tests/testlatexA"
 
-test_A = do 
-    res1 <- runErr $ do 
-        (hout, lout) <- convertFull False fnA 
+test_A :: IO ()
+test_A = do
+    res1 <- runErr $ do
+        (hout, lout) <- convertFull False fnA
 
         write8   fnres_html htmloutFileType hout
         write8   fnres_latex texFileType lout
 
-        return "A"    
+        return "A"
     -- let Right (target3, res3) = res5
-    assertEqual (Right "") res1
+    assertEqual (Right "A") res1  -- todo is fake 
 
 
         -- mdfile <- read8 fnA markdownFileType 
@@ -179,22 +166,23 @@ test_A = do
         -- let resH = render (Just 50) restplH  :: Text  -- line length, can be Nothing
         -- let restplL = renderTemplate templL ctLatex :: Doc Text
         -- let resL = render (Just 50) restplL  :: Text  -- line length, can be Nothing
-        
+
         -- putIOwords ["resH", resH]
 
-    
 
-pandocA = Pandoc 
+
+pandocA :: Pandoc
+pandocA = Pandoc
     (Meta {unMeta = fromList [
         ("abstract",MetaInlines [Str "An",Space,Emph [Str "abstract"],Space,Str "for",Space,Str "the",Space,Strong [Str "example"],Space,Str "A"]),
         ("date",MetaInlines [Str "2020-06-16"]),
         ("keywords",MetaInlines [Str "A_KEYword"]),
-        ("title",MetaInlines [Str "the",Space,Strong [Str "real"],Space,Str "title",Space,Str "of",Space,Str "A"])]}) 
-    [Header 1 ("hl1_text-for-title-a",[],[]) 
+        ("title",MetaInlines [Str "the",Space,Strong [Str "real"],Space,Str "title",Space,Str "of",Space,Str "A"])]})
+    [Header 1 ("hl1_text-for-title-a",[],[])
         [Str "hl1_text",Space,Emph [Str "For"],Space,Strong [Str "Title"],Space,Str "A"],
         Para [Str "Nonsense",Space,Str "list."],
         BulletList [
                 [Plain [Str "one"]],
                 [Plain [Str "two"]]
         ]
-    ] 
+    ]

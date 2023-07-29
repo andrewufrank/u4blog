@@ -37,8 +37,8 @@ import Text.Pandoc
 import Text.Pandoc.Highlighting  
 import qualified Text.Pandoc as Pandoc
 -- import Uniform.PandocImports
-import Text.DocLayout (render)
-import Text.DocTemplates as DocTemplates
+-- import Text.DocLayout (render)
+-- import Text.DocTemplates as DocTemplates
 
 writeHtml5String2 :: Pandoc -> ErrIO Text
 writeHtml5String2 pandocRes = do

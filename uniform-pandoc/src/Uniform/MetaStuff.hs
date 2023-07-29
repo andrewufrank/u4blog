@@ -8,7 +8,7 @@
 -- das ist, was von pandoc zum import gebraucht wird
 -------------------------------
 {-# LANGUAGE ConstraintKinds #-}
-{-# LANGUAGE DeriveGeneric #-}
+-- {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE DoAndIfThenElse #-}
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE FlexibleInstances #-}
@@ -31,7 +31,7 @@ module Uniform.MetaStuff
 where
 
 import Text.Pandoc
-  ( 
+  (
     Meta(..),
     -- MetaValue, nullMeta,
     -- Pandoc (..),
@@ -48,36 +48,37 @@ import qualified Text.Pandoc as Pandoc
 -- import Text.Pandoc 
 import Text.Pandoc.Shared (stringify, addMetaField)
 -- import Text.Pandoc.Shared
-import Text.Pandoc.Builder 
+import Text.Pandoc.Builder
 import Uniform.Json
 import UniformBase
+import Uniform.PandocHTMLwriter
 
 --  functions to extract values from the meta record 
 -- containing the YAML Header values
 
-getDoNotReplace :: Pandoc -> Maybe MetaValue 
+getDoNotReplace :: Pandoc -> Maybe MetaValue
 -- get the string in the Yaml with words which must be preserved
 -- a comma separated list 
-getDoNotReplace pan = 
+getDoNotReplace pan =
         Pandoc.lookupMeta "DoNotReplace" (getMeta pan)
 
-getFromYaml  :: Text -> Pandoc -> Maybe MetaValue 
+getFromYaml  :: Text -> Pandoc -> Maybe MetaValue
 -- get the MetaValue in the Yaml  at the key
-getFromYaml key pan = 
+getFromYaml key pan =
         Pandoc.lookupMeta key (getMeta pan)
 
 getMetaValueFromYaml4 :: Text -> Text -> Pandoc ->  MetaValue
 --get the Metavalue (with  default)
-getMetaValueFromYaml4 def1 key pan = maybe (MetaString def1) (id) 
-        $ getFromYaml key pan 
-        
+getMetaValueFromYaml4 def1 key pan = fromMaybe (MetaString def1)
+        $ getFromYaml key pan
+
 getTextFromYaml5 :: Text -> Text -> Pandoc ->  Text
 --get the Metavalue (with  default)
-getTextFromYaml5 def1 key pan = 
-    fromJustNoteT [("getTextFromYaml5"::Text), key] .
-    metaValueToText . maybe (MetaString def1) (id) 
-        $ getFromYaml key pan 
-        
+getTextFromYaml5 def1 key pan =
+    fromJustNoteT ["getTextFromYaml5"::Text, key] .
+    metaValueToText . fromMaybe (MetaString def1)
+        $ getFromYaml key pan
+
 metaValueToText :: MetaValue -> Maybe Text
 metaValueToText (MetaString t) = Just t
 metaValueToText (MetaInlines ils) = Just $ stringify ils
@@ -85,15 +86,37 @@ metaValueToText (MetaBlocks bls) = Just $ stringify bls
 metaValueToText (MetaList xs) = unwords' <$> mapM metaValueToText xs
 metaValueToText _ = Nothing
 
-meta2pandoc :: Meta -> Pandoc 
-meta2pandoc m = Pandoc m [] 
+metaValueToBlock :: MetaValue -> Maybe [Block]
+metaValueToBlock (MetaString t) = Just . sing $ Plain [Str t]
+metaValueToBlock (MetaInlines ils) = Just . sing$ Plain ils  -- could be Para
+metaValueToBlock (MetaBlocks bls) = Just $ bls
+-- metaValueToBlock (MetaList xs) = unwords' <$> mapM metaValueToText xs
+metaValueToBlock _ = Nothing
+
+sing a = [a]
+
+
+block2htmltext  :: [Block] -> ErrIO Text
+-- convert a Block to a html text 
+block2htmltext b = writeHtml5String2 (Pandoc nullMeta b)
+
+metaValueToHTML :: MetaValue -> ErrIO Text
+metaValueToHTML mv = do 
+    let bs = metaValueToBlock mv ::Maybe [Block]
+    t <- block2htmltext (fromJustNote "metaValueToHTML" $ bs)
+    return t
+
+
+
+meta2pandoc :: Meta -> Pandoc
+meta2pandoc m = Pandoc m []
 
 addMetaField2 :: ToMetaValue a => Text -> a -> Meta -> Meta
-addMetaField2  key val meta = addMetaField key val meta
+addMetaField2 = addMetaField
 
-addMetaField2pandoc :: ToMetaValue a => Text -> a -> Pandoc -> Pandoc 
-addMetaField2pandoc key val (Pandoc m b) = Pandoc m2 b 
-    where   m2 = addMetaField2 key val m 
+addMetaField2pandoc :: ToMetaValue a => Text -> a -> Pandoc -> Pandoc
+addMetaField2pandoc key val (Pandoc m b) = Pandoc m2 b
+    where   m2 = addMetaField2 key val m
 
 -- writeLaTeX2 ::    Pandoc -> ErrIO Text
 -- -- gives a texsnip Text

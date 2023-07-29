@@ -44,7 +44,7 @@ import qualified Text.Pandoc as Pandoc
 -- import Uniform.PandocImports
 import Text.DocLayout (render)
 import qualified Text.DocTemplates as DocTemplates
-import Data.Either (fromLeft, fromRight)
+-- import Data.Either (fromLeft, fromRight)
 
 instance Zeros (Template Text) where 
         zero = mempty -- Empty :: Template Text
