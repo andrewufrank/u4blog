@@ -57,21 +57,21 @@ metaValue2latex mv = do
     t <- block2latex (fromJustNote "metaValueToHTML" $ bs)
     return t
 
-meta2latex ::  Bool-> Meta -> ErrIO (M.Map Text Text)
--- convert all in Meta to html codes
-meta2latex debug m1 = do
-    let listMetaValues = toList . unMeta $ m1:: [(Text, MetaValue)]
-    l2 <- mapM mapSec listMetaValues
-    -- l2 <- mapM (second metaValueToHTML) listMetaValues
-        -- l2 = map (second metaValueToText) listMetaValues
+-- meta2latex ::  Bool-> Meta -> ErrIO (M.Map Text Text)
+-- -- convert all in Meta to html codes
+-- meta2latex debug m1 = do
+--     let listMetaValues = toList . unMeta $ m1:: [(Text, MetaValue)]
+--     l2 <- mapM mapSec listMetaValues
+--     -- l2 <- mapM (second metaValueToHTML) listMetaValues
+--         -- l2 = map (second metaValueToText) listMetaValues
 
-    let resList = l2 -- map (second (fromJustNote "meta2latex")) l2
-    return $ fromList resList
-  where 
-    mapSec :: (Text, MetaValue) -> ErrIO (Text, Text)
-    mapSec (t, mv) = do  
-        mv2 :: Text <- metaValue2latex mv
-        return (t, mv2) -- fromJustNote "meta2latex" $ mv2)
+--     let resList = l2 -- map (second (fromJustNote "meta2latex")) l2
+--     return $ fromList resList
+--   where 
+--     mapSec :: (Text, MetaValue) -> ErrIO (Text, Text)
+--     mapSec (t, mv) = do  
+--         mv2 :: Text <- metaValue2latex mv
+--         return (t, mv2) -- fromJustNote "meta2latex" $ mv2)
 
 latexRes = fromList 
     [("abstract", "An \\emph{abstract} for the \\textbf{example} A"),
@@ -79,12 +79,12 @@ latexRes = fromList
       ("title", "the \\textbf{real} title of A")]
 test_meta2latex = do  
     res1 <- runErr $ do 
-        meta2latex False (getMeta pandocA)
+        meta2xx False metaValue2latex (getMeta pandocA)
     assertEqual (Right latexRes) res1
 
 test_meta2htmltext = do  
     res1 <- runErr $ do 
-        meta2htmltext False (getMeta pandocA)
+        meta2xx False metaValueToHTML (getMeta pandocA)
     assertEqual (Right htmlRes) res1
 
 res1a = fromList  -- the text, lost the styling, metaValueToText wrong 
@@ -116,7 +116,7 @@ htmlStep1 = fromList [("abstract",
       ("title", "the <strong>real</strong> title of A")] :: M.Map Text Text
 test_htmltext = do 
     res1 <- runErr $ do 
-        meta2htmltext False metaStep1 
+        meta2xx False metaValueToHTML metaStep1 
     assertEqual (Right htmlStep1) res1 
 
 
@@ -128,7 +128,7 @@ meta2hres debug meta = do
     -- convert to list of (text,Block) 
     -- make M.Map and pass to render template 
 
-    tHtml :: M.Map Text Text <- meta2htmltext debug meta
+    tHtml :: M.Map Text Text <- meta2xx debug metaValueToHTML meta
     putIOwords ["meta2hres tHtml \n", showT tHtml, "\n--"]
 
     templH :: Template Text <- compileDefaultTempalteHTML

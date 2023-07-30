@@ -111,20 +111,16 @@ metaValueToHTML mv = do
     t <- block2htmltext (fromJustNote "metaValueToHTML" $ bs)
     return t
 
-meta2htmltext ::  Bool-> Meta -> ErrIO (M.Map Text Text)
+meta2xx ::  Bool-> (MetaValue -> ErrIO Text) -> Meta -> ErrIO (M.Map Text Text)
 -- convert all in Meta to html codes
-meta2htmltext debug m1 = do
+meta2xx debug metaValueToXX m1 = do
     let listMetaValues = toList . unMeta $ m1:: [(Text, MetaValue)]
     l2 <- mapM mapSec listMetaValues
-    -- l2 <- mapM (second metaValueToHTML) listMetaValues
-        -- l2 = map (second metaValueToText) listMetaValues
-
-    let resList = l2 -- map (second (fromJustNote "meta2htmltext")) l2
-    return $ fromList resList
+    return $ fromList l2
   where 
     mapSec :: (Text, MetaValue) -> ErrIO (Text, Text)
     mapSec (t, mv) = do  
-        mv2 :: Text <- metaValueToHTML mv
+        mv2 :: Text <- metaValueToXX mv
         return (t, mv2) -- fromJustNote "meta2htmltext" $ mv2)
 
 md2Meta :: Bool -> MarkdownText -> ErrIO Meta
