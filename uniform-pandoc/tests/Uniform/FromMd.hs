@@ -55,9 +55,10 @@ res1a = fromList  -- the text, lost the styling, metaValueToText wrong
      [("abstract", "An abstract for the example A"),
       ("date", "2020-06-16"), ("keywords", "A_KEYword"),
       ("title", "the real title of A")]
-zeromap = fromList [("abstract", "An abstract for the example A"),
+zeromap = fromList [("abstract",
+       "An <em>abstract</em> for the <strong>example</strong> A"),
       ("date", "2020-06-16"), ("keywords", "A_KEYword"),
-      ("title", "the real title of A")] :: M.Map Text Text 
+      ("title", "the <strong>real</strong> title of A")] :: M.Map Text Text 
 
 test_step1 = do 
     res1 <- runErr $ do 
@@ -138,6 +139,9 @@ convertFull debug fnin = do
     h <- meta2hres debug context
     return (h,zero)
 
+
+
+---------- the test to produce the output files html and latex 
 fnA :: Path Abs File
 fnA = makeAbsFile "/home/frank/Workspace11/u4blog/uniform-pandoc/tests/data/startValues/A.md"
 fnres_html :: Path Abs File
@@ -155,7 +159,7 @@ test_A = do
 
         return "A"
     -- let Right (target3, res3) = res5
-    assertEqual (Right "Aa") res1  -- todo is fake 
+    assertEqual (Right "A") res1  -- todo is fake 
 
 
         -- mdfile <- read8 fnA markdownFileType 
