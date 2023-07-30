@@ -47,15 +47,15 @@ import UniformBase
 import Uniform.HttpFiles
 import Uniform.TexFileTypes
 
-block2latex  :: [Block] -> ErrIO Text
--- convert a Block to a html text 
-block2latex b = writeTexSnip2 (Pandoc nullMeta b)
 
-metaValue2latex :: MetaValue -> ErrIO Text
-metaValue2latex mv = do 
-    let bs = metaValueToBlock mv ::Maybe [Block]
-    t <- block2latex (fromJustNote "metaValueToHTML" $ bs)
-    return t
+
+-- metaValue2latex :: MetaValue -> ErrIO Text
+-- metaValue2latex mv = do 
+--     let bs = metaValueToBlock mv ::Maybe [Block]
+--     t <- block2xx writeTexSnip2(fromJustNote "metaValueToHTML" $ bs)
+--     return t
+
+
 
 -- meta2latex ::  Bool-> Meta -> ErrIO (M.Map Text Text)
 -- -- convert all in Meta to html codes
@@ -79,12 +79,12 @@ latexRes = fromList
       ("title", "the \\textbf{real} title of A")]
 test_meta2latex = do  
     res1 <- runErr $ do 
-        meta2xx False metaValue2latex (getMeta pandocA)
+        meta2xx False  writeTexSnip2 (getMeta pandocA)
     assertEqual (Right latexRes) res1
 
 test_meta2htmltext = do  
     res1 <- runErr $ do 
-        meta2xx False metaValueToHTML (getMeta pandocA)
+        meta2xx False  writeHtml5String2 (getMeta pandocA)
     assertEqual (Right htmlRes) res1
 
 res1a = fromList  -- the text, lost the styling, metaValueToText wrong 
@@ -116,7 +116,7 @@ htmlStep1 = fromList [("abstract",
       ("title", "the <strong>real</strong> title of A")] :: M.Map Text Text
 test_htmltext = do 
     res1 <- runErr $ do 
-        meta2xx False metaValueToHTML metaStep1 
+        meta2xx False   writeHtml5String2 metaStep1 
     assertEqual (Right htmlStep1) res1 
 
 
@@ -128,7 +128,7 @@ meta2hres debug meta = do
     -- convert to list of (text,Block) 
     -- make M.Map and pass to render template 
 
-    tHtml :: M.Map Text Text <- meta2xx debug metaValueToHTML meta
+    tHtml :: M.Map Text Text <- meta2xx debug writeHtml5String2 meta
     putIOwords ["meta2hres tHtml \n", showT tHtml, "\n--"]
 
     templH :: Template Text <- compileDefaultTempalteHTML

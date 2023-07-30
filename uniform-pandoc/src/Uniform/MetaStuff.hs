@@ -101,26 +101,36 @@ metaValueToBlock _ = Nothing
 sing a = [a]
 
 
-block2htmltext  :: [Block] -> ErrIO Text
--- convert a Block to a html text 
-block2htmltext b = writeHtml5String2 (Pandoc nullMeta b)
+-- block2htmltext  :: [Block] -> ErrIO Text
+-- -- convert a Block to a html text 
+-- block2htmltext b = writeHtml5String2 (Pandoc nullMeta b)
 
-metaValueToHTML :: MetaValue -> ErrIO Text
-metaValueToHTML mv = do 
+-- metaValueToHTML :: MetaValue -> ErrIO Text
+-- metaValueToHTML mv = do 
+--     let bs = metaValueToBlock mv ::Maybe [Block]
+--     t <- block2htmltext (fromJustNote "metaValueToHTML" $ bs)
+--     return t
+
+block2xx  :: (Pandoc -> ErrIO Text) ->[Block] -> ErrIO Text
+-- convert a Block to a html text 
+block2xx writeXX b = writeXX (Pandoc nullMeta b)
+
+metaValue2xx :: (Pandoc -> ErrIO Text) -> MetaValue -> ErrIO Text
+metaValue2xx writer mv = do 
     let bs = metaValueToBlock mv ::Maybe [Block]
-    t <- block2htmltext (fromJustNote "metaValueToHTML" $ bs)
+    t <- block2xx writer (fromJustNote "metaValueToHTML" $ bs)
     return t
 
-meta2xx ::  Bool-> (MetaValue -> ErrIO Text) -> Meta -> ErrIO (M.Map Text Text)
+meta2xx ::  Bool-> (Pandoc -> ErrIO Text) -> Meta -> ErrIO (M.Map Text Text)
 -- convert all in Meta to html codes
-meta2xx debug metaValueToXX m1 = do
+meta2xx debug writer  m1 = do
     let listMetaValues = toList . unMeta $ m1:: [(Text, MetaValue)]
     l2 <- mapM mapSec listMetaValues
     return $ fromList l2
   where 
     mapSec :: (Text, MetaValue) -> ErrIO (Text, Text)
     mapSec (t, mv) = do  
-        mv2 :: Text <- metaValueToXX mv
+        mv2 :: Text <- metaValue2xx writer mv
         return (t, mv2) -- fromJustNote "meta2htmltext" $ mv2)
 
 md2Meta :: Bool -> MarkdownText -> ErrIO Meta

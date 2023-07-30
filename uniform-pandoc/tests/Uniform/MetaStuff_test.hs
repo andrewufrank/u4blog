@@ -73,7 +73,7 @@ abs1 =  MetaInlines [Str "long", Space, Str "abstract"]
 test_block_html :: IO ()
 test_block_html = do 
     res1 <- runErr $ do 
-        block2htmltext abs2r
+        block2xx writeHtml5String2 abs2r
     assertEqual (Right abs2html) $ res1
 abs2html = "An <em>abstract</em> for the <strong>example</strong> A"
 
@@ -84,7 +84,7 @@ test_mvt = assertEqual abs1t $ metaValueToText abs1
 test_metaval_html :: IO ()
 test_metaval_html = do 
     res1 <- runErr $ do 
-        metaValueToHTML abs2
+        metaValue2xx writeHtml5String2 abs2
     assertEqual (Right abs2html) $ res1
 
     
