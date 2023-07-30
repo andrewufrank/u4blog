@@ -48,10 +48,15 @@ import qualified Text.Pandoc as Pandoc
 -- import Text.Pandoc 
 import Text.Pandoc.Shared (stringify, addMetaField)
 -- import Text.Pandoc.Shared
-import Text.Pandoc.Builder
-import Uniform.Json
+import Text.Pandoc.Builder (ToMetaValue) -- do not import more!
+import Uniform.Json hiding ( fromList, toList) 
 import UniformBase
+import Uniform.PandocImports  
 import Uniform.PandocHTMLwriter
+import qualified Data.Map as M 
+import Data.Map ( fromList, toList) 
+import Text.Pandoc
+import Uniform.Markdown
 
 --  functions to extract values from the meta record 
 -- containing the YAML Header values
@@ -106,8 +111,35 @@ metaValueToHTML mv = do
     t <- block2htmltext (fromJustNote "metaValueToHTML" $ bs)
     return t
 
+meta2htmltext ::  Bool-> Meta -> ErrIO (M.Map Text Text)
+-- convert all in Meta to html codes
+meta2htmltext debug m1 = do
+    let listMetaValues = toList . unMeta $ m1:: [(Text, MetaValue)]
+    l2 <- mapM mapSec listMetaValues
+    -- l2 <- mapM (second metaValueToHTML) listMetaValues
+        -- l2 = map (second metaValueToText) listMetaValues
 
+    let resList = l2 -- map (second (fromJustNote "meta2htmltext")) l2
+    return $ fromList resList
+  where 
+    mapSec :: (Text, MetaValue) -> ErrIO (Text, Text)
+    mapSec (t, mv) = do  
+        mv2 :: Text <- metaValueToHTML mv
+        return (t, mv2) -- fromJustNote "meta2htmltext" $ mv2)
 
+md2Meta :: Bool -> MarkdownText -> ErrIO Meta
+-- step1: convert a markdown file to MetaValue
+md2Meta debug mdtext = do
+    pd@(Pandoc m1 p1) <- readMarkdown2 mdtext
+    -- putIOwords ["pd \n", showT pd, "\n--"] 
+    let c1 = Meta (fromList [(("body"::Text), (MetaBlocks p1))])
+    -- todo missing the index, references, umlaut conversion
+    let    cn = mergeAll [m1, c1] :: Meta-- order may  be important
+    putIOwords ["md2Meta cn \n", showT cn, "\n--"]
+    return cn
+
+mergeAll :: [Meta] -> Meta
+mergeAll  = Meta . fromList . concat . map toList . map unMeta
 meta2pandoc :: Meta -> Pandoc
 meta2pandoc m = Pandoc m []
 

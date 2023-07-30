@@ -26,7 +26,8 @@
 module Uniform.PandocImports
   ( module Uniform.PandocImports,
     Pandoc (..),
-    Meta(..)
+    Meta(..), MetaValue (..),
+    Block(..)
   )
 where
 

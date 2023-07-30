@@ -69,21 +69,7 @@ test_step1 = do
 metaStep1 = 
  Meta {unMeta = fromList [("abstract",MetaInlines [Str "An",Space,Emph [Str "abstract"],Space,Str "for",Space,Str "the",Space,Strong [Str "example"],Space,Str "A"]),("body",MetaBlocks [Header 1 ("hl1_text-for-title-a",[],[]) [Str "hl1_text",Space,Emph [Str "For"],Space,Strong [Str "Title"],Space,Str "A"],Para [Str "Nonsense",Space,Str "list."],BulletList [[Plain [Str "one"]],[Plain [Str "two"]]]]),("date",MetaInlines [Str "2020-06-16"]),("keywords",MetaInlines [Str "A_KEYword"]),("title",MetaInlines [Str "the",Space,Strong [Str "real"],Space,Str "title",Space,Str "of",Space,Str "A"])]} 
 
-meta2htmltext :: Bool -> Meta -> ErrIO (M.Map Text Text)
--- convert all in Meta to html codes
-meta2htmltext debug m1 = do
-    let listMetaValues = toList . unMeta $ m1:: [(Text, MetaValue)]
-    l2 <- mapM mv2 listMetaValues
-    -- l2 <- mapM (second metaValueToHTML) listMetaValues
-        -- l2 = map (second metaValueToText) listMetaValues
 
-    let resList = l2 -- map (second (fromJustNote "meta2htmltext")) l2
-    return $ fromList resList
-  where 
-    mv2 :: (Text, MetaValue) -> ErrIO (Text, Text)
-    mv2 (t, mv) = do  
-        mv2 :: Text <- metaValueToHTML mv
-        return (t, mv2) -- fromJustNote "meta2htmltext" $ mv2)
 
 
 htmlStep1 = fromList [("abstract",
@@ -97,19 +83,7 @@ test_htmltext = do
         meta2htmltext False metaStep1 
     assertEqual (Right htmlStep1) res1 
 
-md2Meta :: Bool -> MarkdownText -> ErrIO Meta
--- step1: convert a markdown file to MetaValue
-md2Meta debug mdtext = do
-    pd@(Pandoc m1 p1) <- readMarkdown2 mdtext
-    -- putIOwords ["pd \n", showT pd, "\n--"] 
-    let c1 = Meta (fromList [(("body"::Text), (MetaBlocks p1))])
-    -- todo missing the index, references, umlaut conversion
-    let    cn = mergeAll [m1, c1] :: Meta-- order may  be important
-    putIOwords ["md2Meta cn \n", showT cn, "\n--"]
-    return cn
 
-mergeAll :: [Meta] -> Meta
-mergeAll  = Meta . fromList . concat . map toList . map unMeta
 
 meta2hres :: Bool -> Meta -> ErrIO HTMLout
 -- step2: the second part resulting in HTML result

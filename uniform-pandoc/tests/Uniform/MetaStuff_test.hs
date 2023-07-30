@@ -38,16 +38,7 @@ import Data.Map ( fromList, toList)
 
 import Uniform.Test.TestHarness ()
 import Uniform.MetaStuff
-    ( getFromYaml,
-      getMetaValueFromYaml4,
-      getTextFromYaml5,
-      metaValueToText,
-      meta2pandoc,
-      addMetaField2,
-      addMetaField2pandoc,
-      metaValueToHTML,
-      block2htmltext,
-      metaValueToBlock )
+ 
 
 -- import Uniform.Markdown_test 
 -- import Uniform.Error           hiding (  (<.>)  )  -- (</>)
