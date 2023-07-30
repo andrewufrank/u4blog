@@ -41,21 +41,57 @@ import Uniform.MetaStuff_test ()
 -- import Uniform.Markdown_test 
 import Uniform.MetaStuff
 import Uniform.TemplatesStuff
+import Uniform.TexWriter
 -- import Uniform.Error           hiding (  (<.>)  )  -- (</>)
 import UniformBase
 import Uniform.HttpFiles
 import Uniform.TexFileTypes
 
-test_meta2text = do  
+block2latex  :: [Block] -> ErrIO Text
+-- convert a Block to a html text 
+block2latex b = writeTexSnip2 (Pandoc nullMeta b)
+
+metaValue2latex :: MetaValue -> ErrIO Text
+metaValue2latex mv = do 
+    let bs = metaValueToBlock mv ::Maybe [Block]
+    t <- block2latex (fromJustNote "metaValueToHTML" $ bs)
+    return t
+
+meta2latex ::  Bool-> Meta -> ErrIO (M.Map Text Text)
+-- convert all in Meta to html codes
+meta2latex debug m1 = do
+    let listMetaValues = toList . unMeta $ m1:: [(Text, MetaValue)]
+    l2 <- mapM mapSec listMetaValues
+    -- l2 <- mapM (second metaValueToHTML) listMetaValues
+        -- l2 = map (second metaValueToText) listMetaValues
+
+    let resList = l2 -- map (second (fromJustNote "meta2latex")) l2
+    return $ fromList resList
+  where 
+    mapSec :: (Text, MetaValue) -> ErrIO (Text, Text)
+    mapSec (t, mv) = do  
+        mv2 :: Text <- metaValue2latex mv
+        return (t, mv2) -- fromJustNote "meta2latex" $ mv2)
+
+latexRes = fromList 
+    [("abstract", "An \\emph{abstract} for the \\textbf{example} A"),
+      ("date", "2020-06-16"), ("keywords", "A\\_KEYword"),
+      ("title", "the \\textbf{real} title of A")]
+test_meta2latex = do  
+    res1 <- runErr $ do 
+        meta2latex False (getMeta pandocA)
+    assertEqual (Right latexRes) res1
+
+test_meta2htmltext = do  
     res1 <- runErr $ do 
         meta2htmltext False (getMeta pandocA)
-    assertEqual (Right zeromap) res1
+    assertEqual (Right htmlRes) res1
 
 res1a = fromList  -- the text, lost the styling, metaValueToText wrong 
      [("abstract", "An abstract for the example A"),
       ("date", "2020-06-16"), ("keywords", "A_KEYword"),
       ("title", "the real title of A")]
-zeromap = fromList [("abstract",
+htmlRes = fromList [("abstract",
        "An <em>abstract</em> for the <strong>example</strong> A"),
       ("date", "2020-06-16"), ("keywords", "A_KEYword"),
       ("title", "the <strong>real</strong> title of A")] :: M.Map Text Text 
