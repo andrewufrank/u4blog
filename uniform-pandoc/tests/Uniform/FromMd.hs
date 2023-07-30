@@ -46,6 +46,7 @@ import Uniform.TexWriter
 import UniformBase
 import Uniform.HttpFiles
 import Uniform.TexFileTypes
+import Text.Pandoc.Shared (addMetaField)
 
 
 
@@ -140,6 +141,26 @@ meta2hres debug meta = do
         -- let resL = render (Just 50) restplL  :: Text  -- line length, can be Nothing    -- todo 
     return (HTMLout resH)
 
+meta2latex :: Bool -> Meta -> ErrIO Latex
+-- step2: the second part resulting in HTML result
+meta2latex debug meta = do
+    putIOwords ["meta2hres meta \n", showT meta, "\n--"]
+    -- convert to list of (text,Block) 
+    -- make M.Map and pass to render template 
+
+    -- add docclass 
+    let meta2 = addMetaFieldT "documentclass" "article" meta
+    t  :: M.Map Text Text <- meta2xx debug writeTexSnip2 meta2
+    putIOwords ["meta2hres tHtml \n", showT t, "\n--"]
+
+    templL :: Template Text <- compileDefaultTempalteLatex
+        -- templL :: Template Text  <-compileDefaultTempalteLatex
+        -- -- renderTemplate :: (TemplateTarget a, ToContext a b) => Template a -> b -> Doc a
+    let restpl = renderTemplate templL t :: Doc Text
+    let resH = render (Just 50) restpl :: Text  -- line length, can be Nothing
+        -- let restplL = renderTemplate templL ctLatex :: Doc Text
+        -- let resL = render (Just 50) restplL  :: Text  -- line length, can be Nothing    -- todo 
+    return (Latex resH)
 
 convertFull :: Bool -> Path Abs File -> ErrIO (HTMLout, Latex)
 -- convert a md file to the html and latex format
@@ -147,7 +168,8 @@ convertFull debug fnin = do
     mdfile <- read8 fnin markdownFileType
     context <- md2Meta debug mdfile
     h <- meta2hres debug context
-    return (h,zero)
+    l <- meta2latex debug context
+    return (h,l)
 
 
 

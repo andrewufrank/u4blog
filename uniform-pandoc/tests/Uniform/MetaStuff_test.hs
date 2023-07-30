@@ -96,7 +96,7 @@ key1 = "indexEntry" :: Text
 test_addMeta :: IO ()
 test_addMeta = assertEqual testval1 $
             getTextFromYaml5 "def" key1 .
-            meta2pandoc .    addMetaField2 key1 (testval1 :: Text) $ metaY 
+            meta2pandoc .    addMetaFieldT key1 (testval1) $ metaY 
 
 -- check that the value is stored and can be retrieved
 testval1 :: Text

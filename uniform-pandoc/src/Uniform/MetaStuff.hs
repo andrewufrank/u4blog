@@ -135,6 +135,7 @@ meta2xx debug writer  m1 = do
 
 md2Meta :: Bool -> MarkdownText -> ErrIO Meta
 -- step1: convert a markdown file to MetaValue
+-- independent of output target (html or latex)
 md2Meta debug mdtext = do
     pd@(Pandoc m1 p1) <- readMarkdown2 mdtext
     -- putIOwords ["pd \n", showT pd, "\n--"] 
@@ -149,12 +150,12 @@ mergeAll  = Meta . fromList . concat . map toList . map unMeta
 meta2pandoc :: Meta -> Pandoc
 meta2pandoc m = Pandoc m []
 
-addMetaField2 :: ToMetaValue a => Text -> a -> Meta -> Meta
-addMetaField2 = addMetaField
+addMetaFieldT ::   Text -> Text -> Meta -> Meta
+addMetaFieldT = addMetaField
 
 addMetaField2pandoc :: ToMetaValue a => Text -> a -> Pandoc -> Pandoc
 addMetaField2pandoc key val (Pandoc m b) = Pandoc m2 b
-    where   m2 = addMetaField2 key val m
+    where   m2 = addMetaField key val m
 
 -- writeLaTeX2 ::    Pandoc -> ErrIO Text
 -- -- gives a texsnip Text
