@@ -57,6 +57,8 @@ import qualified Data.Map as M
 import Data.Map ( fromList, toList) 
 import Text.Pandoc
 import Uniform.Markdown
+import qualified Text.Pandoc.Citeproc as PC
+
 
 --  functions to extract values from the meta record 
 -- containing the YAML Header values
@@ -93,6 +95,7 @@ metaValueToText _ = Nothing
 
 metaValueToBlock :: MetaValue -> Maybe [Block]
 metaValueToBlock (MetaString t) = Just . sing $ Plain [Str t]
+metaValueToBlock (MetaBool t) = Just . sing $ Plain [Str . showT $ t]
 metaValueToBlock (MetaInlines ils) = Just . sing$ Plain ils  -- could be Para
 metaValueToBlock (MetaBlocks bls) = Just $ bls
 -- metaValueToBlock (MetaList xs) = unwords' <$> mapM metaValueToText xs
@@ -118,7 +121,7 @@ block2xx writeXX b = writeXX (Pandoc nullMeta b)
 metaValue2xx :: (Pandoc -> ErrIO Text) -> MetaValue -> ErrIO Text
 metaValue2xx writer mv = do 
     let bs = metaValueToBlock mv ::Maybe [Block]
-    t <- block2xx writer (fromJustNote "metaValueToHTML" $ bs)
+    t <- block2xx writer (fromJustNote ("metaValueTo2xx " <> show mv) $ bs)
     return t
 
 meta2xx ::  Bool-> (Pandoc -> ErrIO Text) -> Meta -> ErrIO (M.Map Text Text)
@@ -133,12 +136,15 @@ meta2xx debug writer  m1 = do
         mv2 :: Text <- metaValue2xx writer mv
         return (t, mv2) -- fromJustNote "meta2htmltext" $ mv2)
 
-md2Meta :: Bool -> MarkdownText -> ErrIO Meta
+md2Meta :: Bool -> Path Abs File -> MarkdownText -> ErrIO Meta
 -- step1: convert a markdown file to MetaValue
 -- independent of output target (html or latex)
-md2Meta debug mdtext = do
-    pd@(Pandoc m1 p1) <- readMarkdown2 mdtext
+md2Meta debug filep mdtext = do
+    putIOwords ["md2Meta filepath", showT  filep, "\n--"] 
+    pandoc1<- readMarkdown2 mdtext
     -- putIOwords ["pd \n", showT pd, "\n--"] 
+    -- process references, does nothing if none
+    (Pandoc m1 p1) <- unPandocM $ PC.processCitations pandoc1
     let c1 = Meta (fromList [(("body"::Text), (MetaBlocks p1))])
     -- todo missing the index, references, umlaut conversion
     let    cn = mergeAll [m1, c1] :: Meta-- order may  be important
