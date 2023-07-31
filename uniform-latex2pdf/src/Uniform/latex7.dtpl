@@ -1,5 +1,5 @@
 $-- template to produce a latex file 
-% produced with latex7.dtpl
+% produced with latex161.dtpl -- 
 
 $-- preamble
 \documentclass[
