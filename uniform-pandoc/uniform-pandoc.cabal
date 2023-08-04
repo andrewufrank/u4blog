@@ -4,10 +4,10 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: da24c71347f9c43078b9b48f8c374198cf78b3a7330a9d0b26a99bc1cf540964
+-- hash: 8f09a1294d7afe1a43a9bd3f6b4e49750316f568f2a90e20fa4279758794510f
 
 name:           uniform-pandoc
-version:        0.1.6.1
+version:        0.1.6.2
 synopsis:       handling of   some pandoc stuff
 description:    remove particular aspects of abstraction 
 category:       Uniform handling of   some pandoc stuff

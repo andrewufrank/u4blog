@@ -30,29 +30,26 @@ module Uniform.MetaStuff
   )
 where
 
-import Text.Pandoc
-  (
-    Meta(..),
-    -- MetaValue, nullMeta,
-    -- Pandoc (..),
-    -- WriterOptions
-    --   ( writerCiteMethod,
-    --     writerExtensions,
-    --     writerHighlightStyle,
-    --     writerHTMLMathMethod
-    --   )
-    -- , def
-    -- , writeLaTeX,
-  )
+-- import Text.Pandoc
+--   (
+--     Meta(..),
+--     -- MetaValue, nullMeta,
+--     -- Pandoc (..),
+--     -- WriterOptions
+--     --   ( writerCiteMethod,
+--     --     writerExtensions,
+--     --     writerHighlightStyle,
+--     --     writerHTMLMathMethod
+--     --   )
+--     -- , def
+--     -- , writeLaTeX,
+--   )
 import qualified Text.Pandoc as Pandoc
--- import Text.Pandoc 
 import Text.Pandoc.Shared (stringify, addMetaField)
--- import Text.Pandoc.Shared
 import Text.Pandoc.Builder (ToMetaValue) -- do not import more!
 import Uniform.Json hiding ( fromList, toList) 
 import UniformBase
 import Uniform.PandocImports  
-import Uniform.PandocHTMLwriter
 import qualified Data.Map as M 
 import Data.Map ( fromList, toList) 
 import Text.Pandoc
@@ -124,9 +121,9 @@ metaValue2xx writer mv = do
     t <- block2xx writer (fromJustNote ("metaValueTo2xx " <> show mv) $ bs)
     return t
 
-meta2xx ::  Bool-> (Pandoc -> ErrIO Text) -> Meta -> ErrIO (M.Map Text Text)
+meta2xx :: (Pandoc -> ErrIO Text) -> Meta -> ErrIO (M.Map Text Text)
 -- convert all in Meta to html codes
-meta2xx debug writer  m1 = do
+meta2xx writer  m1 = do
     let listMetaValues = toList . unMeta $ m1:: [(Text, MetaValue)]
     l2 <- mapM mapSec listMetaValues
     return $ fromList l2
@@ -136,10 +133,10 @@ meta2xx debug writer  m1 = do
         mv2 :: Text <- metaValue2xx writer mv
         return (t, mv2) -- fromJustNote "meta2htmltext" $ mv2)
 
-md2Meta :: Bool -> Path Abs File -> MarkdownText -> ErrIO Meta
+md2Meta :: Path Abs File -> MarkdownText -> ErrIO Meta
 -- step1: convert a markdown file to MetaValue
 -- independent of output target (html or latex)
-md2Meta debug filep mdtext = do
+md2Meta  filep mdtext = do
     putIOwords ["md2Meta filepath", showT  filep, "\n--"] 
     pandoc1<- readMarkdown2 mdtext
     -- putIOwords ["pd \n", showT pd, "\n--"] 

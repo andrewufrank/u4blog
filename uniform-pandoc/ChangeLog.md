@@ -18,5 +18,6 @@
             add Ext_smart for Smart quotes, apostrophes, ellipses, dashes
             add footnotes in footnotes fix 
             add fancyvrb
-            
+0.1.6.1 the new meta based (simplified) set of functions
+0.1.6.2 working to integrate with daino 0.1.5.6.2           
 

@@ -19,30 +19,18 @@ module Uniform.FromMd where
 import Test.Framework
 import qualified Data.Map as M
 import Data.Map (fromList, toList)
----- using uniform:
 import Uniform.Json hiding (toList, fromList)
 import Uniform.PandocImports
 import Uniform.Markdown
-import Uniform.TexWriter ()
 import Uniform.PandocHTMLwriter
 import Text.Pandoc
-import Text.Pandoc.Definition ()
-import Text.Pandoc.Writers ()
-import Text.Pandoc.Writers.Shared ()
 import Text.DocTemplates as DocTemplates ( Doc )
 import Text.DocLayout (render)
 import Data.Text.Lazy (unpack)
 import Text.Blaze.Html.Renderer.Text (renderHtml)
--- import Data.Map 
--- import Uniform.Filenames 
--- import Uniform2.Filetypes4sites should not be imported here
-import Uniform.Test.TestHarness ()
-import Uniform.MetaStuff_test ()
--- import Uniform.Markdown_test 
 import Uniform.MetaStuff
 import Uniform.TemplatesStuff
 import Uniform.TexWriter
--- import Uniform.Error           hiding (  (<.>)  )  -- (</>)
 import UniformBase
 import Uniform.HttpFiles
 import Uniform.TexFileTypes
@@ -80,12 +68,12 @@ latexRes = fromList
       ("title", "the \\textbf{real} title of A")]
 test_meta2latex = do  
     res1 <- runErr $ do 
-        meta2xx False  writeTexSnip2 (getMeta pandocA)
+        meta2xx  writeTexSnip2 (getMeta pandocA)
     assertEqual (Right latexRes) res1
 
 test_meta2htmltext = do  
     res1 <- runErr $ do 
-        meta2xx False  writeHtml5String2 (getMeta pandocA)
+        meta2xx  writeHtml5String2 (getMeta pandocA)
     assertEqual (Right htmlRes) res1
 
 res1a = fromList  -- the text, lost the styling, metaValueToText wrong 
@@ -100,7 +88,7 @@ htmlRes = fromList [("abstract",
 test_step1 = do 
     res1 <- runErr $ do 
         md <- read8 fnA markdownFileType
-        md2Meta False md 
+        md2Meta fnA md 
     assertEqual (Right metaStep1) res1 
 
 metaStep1 = 
@@ -117,19 +105,19 @@ htmlStep1 = fromList [("abstract",
       ("title", "the <strong>real</strong> title of A")] :: M.Map Text Text
 test_htmltext = do 
     res1 <- runErr $ do 
-        meta2xx False   writeHtml5String2 metaStep1 
+        meta2xx  writeHtml5String2 metaStep1 
     assertEqual (Right htmlStep1) res1 
 
 
 
-meta2hres :: Bool -> Meta -> ErrIO HTMLout
+meta2hres :: Meta -> ErrIO HTMLout
 -- step2: the second part resulting in HTML result
-meta2hres debug meta = do
+meta2hres  meta = do
     putIOwords ["meta2hres meta \n", showT meta, "\n--"]
     -- convert to list of (text,Block) 
     -- make M.Map and pass to render template 
 
-    tHtml :: M.Map Text Text <- meta2xx debug writeHtml5String2 meta
+    tHtml :: M.Map Text Text <- meta2xx  writeHtml5String2 meta
     putIOwords ["meta2hres tHtml \n", showT tHtml, "\n--"]
 
     templH :: Template Text <- compileDefaultTempalteHTML
@@ -141,16 +129,16 @@ meta2hres debug meta = do
         -- let resL = render (Just 50) restplL  :: Text  -- line length, can be Nothing    -- todo 
     return (HTMLout resH)
 
-meta2latex :: Bool -> Meta -> ErrIO Latex
+meta2latex ::  Meta -> ErrIO Latex
 -- step2: the second part resulting in HTML result
-meta2latex debug meta = do
+meta2latex   meta = do
     putIOwords ["meta2hres meta \n", showT meta, "\n--"]
     -- convert to list of (text,Block) 
     -- make M.Map and pass to render template 
 
     -- add docclass 
     let meta2 = addMetaFieldT "documentclass" "article" meta
-    t  :: M.Map Text Text <- meta2xx debug writeTexSnip2 meta2
+    t  :: M.Map Text Text <- meta2xx   writeTexSnip2 meta2
     putIOwords ["meta2hres tHtml \n", showT t, "\n--"]
 
     templL :: Template Text <- compileDefaultTempalteLatex
@@ -162,13 +150,13 @@ meta2latex debug meta = do
         -- let resL = render (Just 50) restplL  :: Text  -- line length, can be Nothing    -- todo 
     return (Latex resH)
 
-convertFull :: Bool -> Path Abs File -> ErrIO (HTMLout, Latex)
+convertFull ::  Path Abs File -> ErrIO (HTMLout, Latex)
 -- convert a md file to the html and latex format
-convertFull debug fnin = do
+convertFull  fnin = do
     mdfile <- read8 fnin markdownFileType
-    context <- md2Meta debug mdfile
-    h <- meta2hres debug context
-    l <- meta2latex debug context
+    context <- md2Meta fnin mdfile
+    h <- meta2hres  context
+    l <- meta2latex  context
     return (h,l)
 
 
@@ -184,7 +172,7 @@ fnres_latex =  makeAbsFile "/home/frank/tests/testlatexA"
 test_A :: IO ()
 test_A = do
     res1 <- runErr $ do
-        (hout, lout) <- convertFull False fnA
+        (hout, lout) <- convertFull fnA
 
         write8   fnres_html htmloutFileType hout
         write8   fnres_latex texFileType lout

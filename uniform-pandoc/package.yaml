@@ -1,5 +1,5 @@
 name:         uniform-pandoc 
-version:      0.1.6.1
+version:      0.1.6.2
 license:      GPL
 license-file: GPL_3
 github:  andrewufrank/u4blog.git/uniform-pandoc
@@ -20,7 +20,7 @@ extra-source-files:
 
 dependencies:
 - base >= 4.7 && < 5
-- pandoc == 3.1.6
+- pandoc  
 - pandoc-types
 
 - uniformBase >=0.1.5.1
