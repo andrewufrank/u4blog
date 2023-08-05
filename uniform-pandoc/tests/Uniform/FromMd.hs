@@ -110,45 +110,9 @@ test_htmltext = do
 
 
 
-meta2hres :: Meta -> ErrIO HTMLout
--- step2: the second part resulting in HTML result
-meta2hres  meta = do
-    putIOwords ["meta2hres meta \n", showT meta, "\n--"]
-    -- convert to list of (text,Block) 
-    -- make M.Map and pass to render template 
 
-    tHtml :: M.Map Text Text <- meta2xx  writeHtml5String2 meta
-    putIOwords ["meta2hres tHtml \n", showT tHtml, "\n--"]
 
-    templH :: Template Text <- compileDefaultTempalteHTML
-        -- templL :: Template Text  <-compileDefaultTempalteLatex
-        -- -- renderTemplate :: (TemplateTarget a, ToContext a b) => Template a -> b -> Doc a
-    let restplH = renderTemplate templH tHtml :: Doc Text
-    let resH = render (Just 50) restplH  :: Text  -- line length, can be Nothing
-        -- let restplL = renderTemplate templL ctLatex :: Doc Text
-        -- let resL = render (Just 50) restplL  :: Text  -- line length, can be Nothing    -- todo 
-    return (HTMLout resH)
 
-meta2latex ::  Meta -> ErrIO Latex
--- step2: the second part resulting in HTML result
-meta2latex   meta = do
-    putIOwords ["meta2hres meta \n", showT meta, "\n--"]
-    -- convert to list of (text,Block) 
-    -- make M.Map and pass to render template 
-
-    -- add docclass 
-    let meta2 = addMetaFieldT "documentclass" "article" meta
-    t  :: M.Map Text Text <- meta2xx   writeTexSnip2 meta2
-    putIOwords ["meta2hres tHtml \n", showT t, "\n--"]
-
-    templL :: Template Text <- compileDefaultTempalteLatex
-        -- templL :: Template Text  <-compileDefaultTempalteLatex
-        -- -- renderTemplate :: (TemplateTarget a, ToContext a b) => Template a -> b -> Doc a
-    let restpl = renderTemplate templL t :: Doc Text
-    let resH = render (Just 50) restpl :: Text  -- line length, can be Nothing
-        -- let restplL = renderTemplate templL ctLatex :: Doc Text
-        -- let resL = render (Just 50) restplL  :: Text  -- line length, can be Nothing    -- todo 
-    return (Latex resH)
 
 convertFull ::  Path Abs File -> ErrIO (HTMLout, Latex)
 -- convert a md file to the html and latex format

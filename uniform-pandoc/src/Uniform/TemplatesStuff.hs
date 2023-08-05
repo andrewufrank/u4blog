@@ -24,6 +24,7 @@
 module Uniform.TemplatesStuff
   ( module Uniform.TemplatesStuff,
     Pandoc (..),
+    Template, renderTemplate, render
   )
 where
 

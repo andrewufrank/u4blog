@@ -37,7 +37,35 @@ import qualified Text.Pandoc                   as Pandoc
 import Uniform.PandocImports
 import Text.Pandoc.Highlighting (tango)
 import UniformBase
+import Uniform.TexFileTypes
+import qualified Data.Map as M
 
+import Data.Map (fromList, toList)
+import Uniform.TemplatesStuff
+import Text.DocTemplates as DocTemplates ( Doc )
+
+import Uniform.MetaStuff
+
+meta2latex ::  Meta -> ErrIO Latex
+-- step2: the second part resulting in HTML result
+meta2latex   meta = do
+    putIOwords ["meta2hres meta \n", showT meta, "\n--"]
+    -- convert to list of (text,Block) 
+    -- make M.Map and pass to render template 
+
+    -- add docclass 
+    let meta2 = addMetaFieldT "documentclass" "article" meta
+    t  :: M.Map Text Text <- meta2xx   writeTexSnip2 meta2
+    putIOwords ["meta2hres tHtml \n", showT t, "\n--"]
+
+    templL :: Template Text <- compileDefaultTempalteLatex
+        -- templL :: Template Text  <-compileDefaultTempalteLatex
+        -- -- renderTemplate :: (TemplateTarget a, ToContext a b) => Template a -> b -> Doc a
+    let restpl = renderTemplate templL t :: Doc Text
+    let resH = render (Just 50) restpl :: Text  -- line length, can be Nothing
+        -- let restplL = renderTemplate templL ctLatex :: Doc Text
+        -- let resL = render (Just 50) restplL  :: Text  -- line length, can be Nothing    -- todo 
+    return (Latex resH)
 
 latexOptions :: Pandoc.WriterOptions
 -- | reasonable extension - crucial!

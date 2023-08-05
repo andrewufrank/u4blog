@@ -27,6 +27,8 @@ module Uniform.MetaStuff
   ( module Uniform.MetaStuff,
     Pandoc (..),
     Meta(..)
+    , setValue2meta
+    , getValue4meta
   )
 where
 
@@ -79,7 +81,29 @@ import Text.Pandoc.Definition as Pandoc
 import Text.Pandoc.Writers.Shared as Pandoc
 import Uniform.Markdown ( readMarkdown2, MarkdownText )
 import qualified Text.Pandoc.Citeproc as PC
+import Uniform.HttpFiles
+import Uniform.TemplatesStuff
+import Text.DocTemplates as DocTemplates ( Doc )
+import Uniform.PandocHTMLwriter
 
+meta2hres :: Meta -> ErrIO HTMLout
+-- step2: the second part resulting in HTML result
+meta2hres  meta = do
+    putIOwords ["meta2hres meta \n", showT meta, "\n--"]
+    -- convert to list of (text,Block) 
+    -- make M.Map and pass to render template 
+
+    tHtml :: M.Map Text Text <- meta2xx  writeHtml5String2 meta
+    putIOwords ["meta2hres tHtml \n", showT tHtml, "\n--"]
+
+    templH :: Template Text <- compileDefaultTempalteHTML
+        -- templL :: Template Text  <-compileDefaultTempalteLatex
+        -- -- renderTemplate :: (TemplateTarget a, ToContext a b) => Template a -> b -> Doc a
+    let restplH = renderTemplate templH tHtml :: Doc Text
+    let resH = render (Just 50) restplH  :: Text  -- line length, can be Nothing
+        -- let restplL = renderTemplate templL ctLatex :: Doc Text
+        -- let resL = render (Just 50) restplL  :: Text  -- line length, can be Nothing    -- todo 
+    return (HTMLout resH)
 
 --  functions to extract values from the meta record 
 -- containing the YAML Header values
@@ -146,7 +170,7 @@ metaValue2xx writer mv = do
     return t
 
 meta2xx :: (Pandoc -> ErrIO Text) -> Meta -> ErrIO (M.Map Text Text)
--- convert all in Meta to html codes
+-- convert all in Meta to   codes (html or latex depending on writer)
 meta2xx writer  m1 = do
     let listMetaValues = toList . unMeta $ m1:: [(Text, MetaValue)]
     l2 <- mapM mapSec listMetaValues
