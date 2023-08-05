@@ -44,16 +44,40 @@ where
 --     -- , def
 --     -- , writeLaTeX,
 --   )
-import qualified Text.Pandoc as Pandoc
+-- import qualified Text.Pandoc as Pandoc
 import Text.Pandoc.Shared (stringify, addMetaField)
 import Text.Pandoc.Builder (ToMetaValue) -- do not import more!
-import Uniform.Json hiding ( fromList, toList) 
+import Uniform.Json
+    (  FromJSON(parseJSON),
+      Value,
+      ToJSON(toJSON, toJSONList),
+      parseMaybe ) 
+import Uniform.PandocImports 
+import Uniform.PandocImports as Pandoc
+    ( Meta(Meta))
+    
+    --   MetaValue(MetaBlocks, MetaMap, MetaList, MetaBool, MetaString,
+                -- MetaInlines),
+    --   Pandoc(Pandoc) ) 
+  
 import UniformBase
-import Uniform.PandocImports  
+-- import Uniform.PandocImports
+--     ( unPandocM,
+--       Block(Plain),
+--       Meta(..),
+--       MetaValue(MetaList, MetaString, MetaBool, MetaInlines, MetaBlocks),
+--       Pandoc(..) )  
 import qualified Data.Map as M 
 import Data.Map ( fromList, toList) 
-import Text.Pandoc
-import Uniform.Markdown
+import Text.Pandoc.Definition as Pandoc
+    ( 
+      Pandoc(..),
+      lookupMeta,
+      MetaValue (..),
+      nullMeta,
+      Inline(Str) )
+import Text.Pandoc.Writers.Shared as Pandoc
+import Uniform.Markdown ( readMarkdown2, MarkdownText )
 import qualified Text.Pandoc.Citeproc as PC
 
 
@@ -64,7 +88,7 @@ getDoNotReplace :: Pandoc -> Maybe MetaValue
 -- get the string in the Yaml with words which must be preserved
 -- a comma separated list 
 getDoNotReplace pan =
-        Pandoc.lookupMeta "DoNotReplace" (getMeta pan)
+        lookupMeta "DoNotReplace" (getMeta pan)
 
 getFromYaml  :: Text -> Pandoc -> Maybe MetaValue
 -- get the MetaValue in the Yaml  at the key
@@ -154,7 +178,19 @@ meta2pandoc :: Meta -> Pandoc
 meta2pandoc m = Pandoc m []
 
 addMetaFieldT ::   Text -> Text -> Meta -> Meta
+-- better not use:
+-- if a value exists, converts to list and adds
 addMetaFieldT = addMetaField
+
+getValue4meta :: Meta -> Text -> Text 
+-- get a value from Meta which is a MetaString
+-- null when not set 
+getValue4meta m t = Pandoc.lookupMetaString t m
+
+setValue2meta ::  Text -> Text -> Meta -> Meta
+--set a value as MetaString, overwrites existing value
+-- not usable for setting defaults! 
+setValue2meta k v m = Meta (M.insert k (MetaString v) (unMeta m))
 
 addMetaField2pandoc :: ToMetaValue a => Text -> a -> Pandoc -> Pandoc
 addMetaField2pandoc key val (Pandoc m b) = Pandoc m2 b
@@ -167,7 +203,7 @@ addMetaField2pandoc key val (Pandoc m b) = Pandoc m2 b
 instance Zeros Pandoc where
   zero =  Pandoc nullMeta zero
 
-instance Zeros Text.Pandoc.Meta where
+instance Zeros Pandoc.Meta where
   zero = mempty
 
 getMeta :: Pandoc -> Pandoc.Meta

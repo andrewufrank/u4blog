@@ -28,11 +28,16 @@ module Uniform.TemplatesStuff
 where
 
 
-import Uniform.Json
+import Uniform.Json ( Value )
 import UniformBase
 
 import Uniform.PandocImports (  unPandocM )
 import Text.Pandoc
+    ( renderTemplate,
+      compileDefaultTemplate,
+      getDefaultTemplate,
+      Template,
+      Pandoc(..) )
 
 
 

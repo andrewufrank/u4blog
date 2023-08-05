@@ -106,6 +106,13 @@ test_addPandoc = assertEqual (Just . MetaString $ testval1) $
             getFromYaml key1 . addMetaField2pandoc key1 testval1 $ pandocY
 
 
+testval2 :: Text
+testval2= "A test Text value" :: Text 
+test_setgetmeta :: IO ()
+test_setgetmeta = assertEqual (testval2) $ 
+            flip getValue4meta key1 . setValue2meta key1 testval2 $ metaY
+
+
 
 test_map2list :: IO ()
 test_map2list = assertEqual [("body", MetaString "xx")] $ toList (unMeta meta1)

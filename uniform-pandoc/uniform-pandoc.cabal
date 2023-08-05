@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 8f09a1294d7afe1a43a9bd3f6b4e49750316f568f2a90e20fa4279758794510f
+-- hash: ae87a6188b5866bc0ad7ee86ecc12e10cbb16ac0ed0e9f9c9c3e8ec3c1f683c8
 
 name:           uniform-pandoc
 version:        0.1.6.2
@@ -52,7 +52,7 @@ library
     , containers
     , doclayout
     , doctemplates
-    , pandoc ==3.1.6
+    , pandoc
     , pandoc-types
     , text
     , uniform-http
@@ -84,7 +84,7 @@ test-suite pandoctest
     , containers
     , doclayout
     , doctemplates
-    , pandoc ==3.1.6
+    , pandoc
     , pandoc-types
     , text
     , uniform-convenience

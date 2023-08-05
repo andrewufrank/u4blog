@@ -31,26 +31,27 @@ module Uniform.PandocImports
   )
 where
 
-import Text.Pandoc
-  ( 
-    Meta(..),
-    -- MetaValue, nullMeta,
-    -- Pandoc (..),
-    -- WriterOptions
-    --   ( writerCiteMethod,
-    --     writerExtensions,
-    --     writerHighlightStyle,
-    --     writerHTMLMathMethod
-    --   )
-    -- , def
-    -- , writeLaTeX,
-  )
+-- import Text.Pandoc
+--   ( 
+--     Meta(..),
+--     -- MetaValue, nullMeta,
+--     -- Pandoc (..),
+--     -- WriterOptions
+--     --   ( writerCiteMethod,
+--     --     writerExtensions,
+--     --     writerHighlightStyle,
+--     --     writerHTMLMathMethod
+--     --   )
+--     -- , def
+--     -- , writeLaTeX,
+--   )
 import qualified Text.Pandoc as Pandoc
 -- import Text.Pandoc 
-import Text.Pandoc.Shared (stringify, addMetaField)
+-- import Text.Pandoc.Shared (stringify, addMetaField)
 -- import Text.Pandoc.Shared
-import Text.Pandoc.Builder 
-import Uniform.Json
+import Text.Pandoc.Builder
+    ( Block(..), Meta(..), MetaValue(..), Pandoc(..) ) 
+-- import Uniform.Json
 import UniformBase
 
 
@@ -67,7 +68,6 @@ callPandoc op1 = do
 
 justToKeepWarningAway :: Int 
 justToKeepWarningAway = 0 
-
 
 
 

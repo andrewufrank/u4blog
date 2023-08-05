@@ -29,6 +29,9 @@ module Uniform.Pandoc
   , module Uniform.BibTex
   , module Uniform.Markdown
   , module Uniform.TexWriter
+  , module Uniform.MetaStuff 
+  , module Uniform.TemplatesStuff 
+
 --   , module Uniform.Pandoc2pdf
   )
 where
@@ -38,6 +41,8 @@ import Uniform.PandocHTMLwriter
 import Uniform.BibTex
 import Uniform.Markdown
 import Uniform.TexWriter
+import Uniform.MetaStuff
+import Uniform.TemplatesStuff
 
 import qualified Text.Pandoc                   as Pandoc
 import Text.Pandoc ( ReaderOptions, WriterOptions(..) )        
