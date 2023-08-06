@@ -195,41 +195,23 @@ md2Meta  filep mdtext = do
     p1 <- md2Meta_Readmd filep mdtext
     p2 <- md2Meta_Process p1 
     return p2
-
-    -- pandoc1<- readMarkdown2 mdtext
-    -- -- putIOwords ["pd \n", showT pd, "\n--"] 
-    -- -- process references, does nothing if none
-    -- (Pandoc m1 p1) <- unPandocM $ PC.processCitations pandoc1
-    -- let c1 = Meta (fromList [(("body"::Text), (MetaBlocks p1))])
-    -- -- todo missing the index, references, umlaut conversion
-    -- let    cn = mergeAll [m1, c1] :: Meta-- order may  be important
-    -- -- putIOwords ["md2Meta cn \n", showT cn, "\n--"]
-    -- return cn
+    -- broken in two to be able to insert the default values 
+    -- into the metadata before processing the cites
+  
 
 md2Meta_Readmd :: Path Abs File -> MarkdownText -> ErrIO Pandoc
--- step1: convert a markdown file to MetaValue
--- independent of output target (html or latex)
+-- step1:reads only the md file to pandoc 
 md2Meta_Readmd  filep mdtext = do
     putIOwords ["md2Meta filepath", showT  filep, "\n--"] 
     pandoc1<- readMarkdown2 mdtext
     return pandoc1
-    -- -- putIOwords ["pd \n", showT pd, "\n--"] 
-    -- -- process references, does nothing if none
-    -- (Pandoc m1 p1) <- unPandocM $ PC.processCitations pandoc1
-    -- let c1 = Meta (fromList [(("body"::Text), (MetaBlocks p1))])
-    -- -- todo missing the index, references, umlaut conversion
-    -- let    cn = mergeAll [m1, c1] :: Meta-- order may  be important
-    -- -- putIOwords ["md2Meta cn \n", showT cn, "\n--"]
-    -- return cn
+ 
 md2Meta_Process :: Pandoc -> ErrIO Meta
--- step1: convert a markdown file to MetaValue
--- independent of output target (html or latex)
+-- process the pandoc file with citeproc 
+-- stores the result as body in meta
+-- the body is not required anymore!
 md2Meta_Process  pandoc1 = do
-    -- putIOwords ["md2Meta filepath", showT  filep, "\n--"] 
-    -- pandoc1<- readMarkdown2 mdtext
-    -- -- putIOwords ["pd \n", showT pd, "\n--"] 
-    -- -- process references, does nothing if none
-    (Pandoc m1 p1) <- unPandocM $ PC.processCitations pandoc1
+   (Pandoc m1 p1) <- unPandocM $ PC.processCitations pandoc1
     let c1 = Meta (fromList [(("body"::Text), (MetaBlocks p1))])
     -- todo missing the index, references, umlaut conversion
     let    cn = mergeAll [m1, c1] :: Meta-- order may  be important
