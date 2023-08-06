@@ -29,7 +29,7 @@ module Uniform.TemplatesStuff
 where
 
 
-import Uniform.Json ( Value )
+-- import Uniform.Json ( Value )
 import UniformBase
 
 import Uniform.PandocImports (  unPandocM )
@@ -65,57 +65,58 @@ compileDefaultTempalteHTML = unPandocM $ compileDefaultTemplate "html"
 compileDefaultTempalteLatex :: ErrIO (Template Text) 
 compileDefaultTempalteLatex = unPandocM $ compileDefaultTemplate "latex"
 
-compileTemplateText :: Bool    -- ^ debug output
-    -> Text -- ^ the template as text
+compileTemplateText ::  
+    Text -- ^ the template as text
     -> ErrIO (Template Text)
-compileTemplateText debug tplText = do     
+compileTemplateText tplText = do     
     templ1 <- liftIO $ DocTemplates.compileTemplate mempty tplText
     -- err1 :: Either String (Doc Text) <- liftIO $ DocTemplates.applyTemplate mempty (unwrap7 templText) (unDocValue val)
     let templ3 = case templ1 of
             Left msg -> errorT ["compileTemplateFile error", showT msg]
             Right tmp2 -> tmp2
-    when debug $ putIOwords ["compileTemplateFile templ3",  showT templ3]
+    -- putIOwords ["compileTemplateFile templ3",  showT templ3]
     return templ3
 
-compileTemplateFile2 debug tplfn = do 
+compileTemplateFile2 tplfn = do 
     tp <- readFile2 tplfn 
-    ctpl <- compileTemplateText debug tp 
+    ctpl <- compileTemplateText tp 
     return ctpl 
 
 
 
 -- | apply the template 
 -- concentrating the specific pandoc ops 
-applyTemplate4 ::  Bool -- ^ 
-  -> Text -- ^ the template as text
-  -> [Value]-- ^ the values to fill in (produce with toJSON)a
-  -- possibly Map (Text, Text) from Data.Map 
-  -> ErrIO Text -- ^ the resulting html text 
-applyTemplate4 debug t1 vals = do
-    templ3 <- compileTemplateText debug t1
-    -- when debug $ 
-    putIOwords ["applyTemplate3 temp2",  showT templ3]
-    -- renderTemplate :: (TemplateTarget a, ToContext a b) => Template a -> b -> Doc a
-    let valmerged = vals -- mergeLeftPref vals
-    when debug $ putIOwords ["the valmerged is ", showPretty valmerged]
-    let res = renderTemplate templ3 ( valmerged)
-    -- when debug $ putIOwords ["applyTemplate3 res",  showT res]
-    let res2 = render Nothing res  -- macht reflow (zeileneinteilung)
-    return res2
+-- not used; use compileTemplateText and meta2hres/latex
+-- applyTemplate4 ::  Bool -- ^ 
+--   -> Text -- ^ the template as text
+--   -> [Value]-- ^ the values to fill in (produce with toJSON)a
+--   -- possibly Map (Text, Text) from Data.Map 
+--   -> ErrIO Text -- ^ the resulting html text 
+-- applyTemplate4 debug t1 vals = do
+--     templ3 <- compileTemplateText debug t1
+--     -- when debug $ 
+--     putIOwords ["applyTemplate3 temp2",  showT templ3]
+--     -- renderTemplate :: (TemplateTarget a, ToContext a b) => Template a -> b -> Doc a
+--     let valmerged = vals -- mergeLeftPref vals
+--     when debug $ putIOwords ["the valmerged is ", showPretty valmerged]
+--     let res = renderTemplate templ3 ( valmerged)
+--     -- when debug $ putIOwords ["applyTemplate3 res",  showT res]
+--     let res2 = render Nothing res  -- macht reflow (zeileneinteilung)
+--     return res2
 
-writeAST2md :: Pandoc -> ErrIO Text
+-- writeAST2md :: Pandoc -> ErrIO Text
 
--- | write the AST to markdown (def + set extHeaders False)
-writeAST2md dat = do
-    r <- unPandocM $ do
-        r1 <-
-            Pandoc.writeMarkdown
-                Pandoc.def{Pandoc.writerSetextHeaders = False}
-                dat
-        return r1
-    return  r
+-- -- | write the AST to markdown (def + set extHeaders False)
+-- writeAST2md dat = do
+--     r <- unPandocM $ do
+--         r1 <-
+--             Pandoc.writeMarkdown
+--                 Pandoc.def{Pandoc.writerSetextHeaders = False}
+--                 dat
+--         return r1
+--     return  r
 
-writeAST3md :: Pandoc.WriterOptions -> Pandoc -> ErrIO Text
+-- writeAST3md :: Pandoc.WriterOptions -> Pandoc -> ErrIO Text
 
 -- | write the AST to markdown with options
 writeAST3md options dat = do

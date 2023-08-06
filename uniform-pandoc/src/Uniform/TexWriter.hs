@@ -46,9 +46,11 @@ import Text.DocTemplates as DocTemplates ( Doc )
 
 import Uniform.MetaStuff
 
-meta2latex ::  Meta -> ErrIO Latex
+meta2latex ::  Template Text -> Meta -> ErrIO Latex
 -- step2: the second part resulting in HTML result
-meta2latex   meta = do
+-- requires compiled template 
+-- and sets documentclass to article
+meta2latex  templL  meta = do
     putIOwords ["meta2hres meta \n", showT meta, "\n--"]
     -- convert to list of (text,Block) 
     -- make M.Map and pass to render template 
@@ -58,7 +60,7 @@ meta2latex   meta = do
     t  :: M.Map Text Text <- meta2xx   writeTexSnip2 meta2
     putIOwords ["meta2hres tHtml \n", showT t, "\n--"]
 
-    templL :: Template Text <- compileDefaultTempalteLatex
+    -- templL :: Template Text <- compileDefaultTempalteLatex
         -- templL :: Template Text  <-compileDefaultTempalteLatex
         -- -- renderTemplate :: (TemplateTarget a, ToContext a b) => Template a -> b -> Doc a
     let restpl = renderTemplate templL t :: Doc Text

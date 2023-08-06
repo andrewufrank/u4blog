@@ -86,9 +86,9 @@ import Uniform.TemplatesStuff
 import Text.DocTemplates as DocTemplates ( Doc )
 import Uniform.PandocHTMLwriter
 
-meta2hres :: Meta -> ErrIO HTMLout
+meta2hres :: Template Text -> Meta -> ErrIO HTMLout
 -- step2: the second part resulting in HTML result
-meta2hres  meta = do
+meta2hres templH meta = do
     -- putIOwords ["meta2hres meta \n", showT meta, "\n--"]
     -- convert to list of (text,Block) 
     -- make M.Map and pass to render template 
@@ -96,7 +96,7 @@ meta2hres  meta = do
     tHtml :: M.Map Text Text <- meta2xx  writeHtml5String2 meta
     -- putIOwords ["meta2hres tHtml \n", showT tHtml, "\n--"]
 
-    templH :: Template Text <- compileDefaultTempalteHTML
+    -- templH :: Template Text <- compileDefaultTempalteHTML
         -- templL :: Template Text  <-compileDefaultTempalteLatex
         -- -- renderTemplate :: (TemplateTarget a, ToContext a b) => Template a -> b -> Doc a
     let restplH = renderTemplate templH tHtml :: Doc Text
