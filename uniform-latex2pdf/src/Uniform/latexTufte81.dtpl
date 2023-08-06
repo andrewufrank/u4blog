@@ -4,13 +4,15 @@ $-- template to produce a latex file with the tufte style fixed notes-in-notes
 % requires removed limiation on subsubpara in tufte-common.def 
  
 \documentclass[a4paper,openany,nobib] %openright to force parts and chapter to start right
-        $if(latBookBig)$ {tufte-book}  %testbook $latBookBig$
-        $elseif(latBooklet)$ {tufte-book}  %testbooklet $latBooklet$
-        $else$ {tufte-handout}  %testhandout $latBookBig$ testzwei $latBooklet$
+        $if(bookBig)$ {tufte-book}  %testbook $latBookBig$
+        $elseif(booklet)$ {tufte-book}  %testbooklet $latBooklet$
+        $else$ {tufte-handout}  
         $endif$
 % produced with latext8tufte v1
 
-$-- not used: $latBook$  % should be true for bookbig and booklet
+$-- not used: 
+%testhandout $bookBig$ testzwei $booklet$
+% $book$  % should be true for bookbig and booklet
 
 \titleclass{\subsubsection}{straight}
 \titleformat{\subsubsection}%
@@ -94,6 +96,7 @@ $--     natbib=true,
 \makeatother
 
 % to add the chapter and part in the header
+% seems to produced problems
 \fancypagestyle{mystyle}{%
 	\fancyhf{}%
 	\renewcommand{\chaptermark}[1]{\markboth{##1}{}}%
@@ -104,8 +107,8 @@ $--     natbib=true,
 
 
 
-$if(latBibliography)$\addbibresource{$latBibliography$}$endif$
-$if(latReferences)$\addbibresource{local.bib}$endif$
+$if(bibliography)$\addbibresource{$bibliography$}$endif$
+$if(references)$\addbibresource{local.bib}$endif$
 
 \makeindex
 
@@ -125,15 +128,15 @@ $-- \usepackage[colorlinks]{hyperref}
 \urlstyle{same}% uses the style from where it is used
 
 $-- content descriptionm
-\title{$latTitle$}
-\author{$latAuthor$}
+\title{$title$}
+\author{$author$}
 \date{2023}  $-- no date??
 \publisher{Gerastree editions}
 \usepackage[]{mdframed}
 
 % -- -- --- ----------  ----             ----        ---------------
 \begin{document}
-\pagestyle{mystyle} % to use mystyle 
+% \pagestyle{mystyle} % to use mystyle 
 
 %\frontmatter  %not defined in tufte-latex?
 
@@ -148,9 +151,9 @@ $if(bookprint)$ % bookprint line 71
     \newpage\thispagestyle{empty}
 $endif$
 
-$if(latReferences)$ % lat references
+$if(references)$ % references in md file
   \usepackage{filecontents}
-  \begin{filecontents}{\local.bib}$latReferences$
+  \begin{filecontents}{\local.bib}$references$
   \end{filecontents}
 $endif$
 
@@ -198,22 +201,22 @@ $else$
     %\begin{titlepage}
         %\centering
         %\includegraphics[width=0.15\textwidth]{example-image-1x1}\par\vspace{1cm}
-        %{\textsc{$latTitle$}  }
+        %{\textsc{$title$}  }
         %\vspace{1cm}
-        %{\Large \textsc{$latTitle$} 
+        %\Large \textsc{$title$} 
         \vspace{1.5cm}
-        {\huge\bfseries{$latTitle$} \par}
+        {\huge\bfseries{$title$} \par}
         \vspace{1cm}
-        $if(latAuthor)${\Large\itshape $latAuthor$ \par}$endif$
+        $if(latAuthor)${\Large\itshape $author$ \par}$endif$
         %\vfill
         %supervised by\par
         %Dr.~Mark \textsc{Brown}
         %\vfill
 
-        $if(latAbstract)$  % lat abstract
+        $if(abstract)$  % lat abstract
             \begin{mdframed}\sloppy
             \medskip
-            $latAbstract$
+            $abstract$
             \medskip
             \end{mdframed}
         $endif$
@@ -224,10 +227,10 @@ $else$
 $endif$
 
 % testest -- begingroup
-$if(latBookBig)$
+$if(lbookBig)$
     \clearpage
     \tableofcontents
-$elseif(latBooklet)$
+$elseif(booklet)$
     \begingroup
     \let\clearpage\relax
     \tableofcontents
@@ -244,16 +247,16 @@ $endif$
 
 $-- \tableofcontents  add page break if requred
 
-$if(latBookBig)$
+$if(bookBig)$
     \newpage         % -- testtest bookbig newpage -- 
-$elseif(latBooklet)$
+$elseif(booklet)$
     %\newpage    % -- testtest booklet newpage 
     \vspace{2cm}
 $endif$
 
 % testtestContentanfang--------
 %\mainmatter
-$latContent$
+$body$
 
 %testtestContentende--------
 
@@ -285,7 +288,7 @@ $endfor$
 % ====================== endcontentTestTest
 
 $-- \printbibliography
-%\bibliography{$latBibliography$} 
+%\bibliography{$bibliography$} 
 $-- bracuht noch references case
 %\bibliographystyle{plainnat}
 
@@ -293,10 +296,10 @@ $-- bracuht noch references case
 \printindex
 
 \vspace*{\fill}
-\scriptsize Produced with `daino' ($latDainoVersion$) from \url{$latFn$} with latexTufte81.dtpl 
+\scriptsize Produced with `daino' ($dainoVersion$) from \url{$link$} with latexTufte81.dtpl 
 
-\scriptsize arguments  $latBookBig$  $latBooklet$ 
-$-- book: $latBook$ 
+\scriptsize arguments bookBig: $bookBig$ booklet: $booklet$ 
+$-- book: $book$ 
 
 
 % ===================== enddocument testtest
