@@ -211,14 +211,15 @@ md2Meta_Process :: Pandoc -> ErrIO Meta
 -- stores the result as body in meta
 -- the body is not required anymore!
 md2Meta_Process  pandoc1 = do
-   (Pandoc m1 p1) <- unPandocM $ PC.processCitations pandoc1
+    (Pandoc m1 p1) <- unPandocM $ PC.processCitations pandoc1
     let c1 = Meta (fromList [(("body"::Text), (MetaBlocks p1))])
     -- todo missing the index, references, umlaut conversion
-    let    cn = mergeAll [m1, c1] :: Meta-- order may  be important
+        cn = mergeAll [m1, c1] :: Meta-- order may  be important
     -- putIOwords ["md2Meta cn \n", showT cn, "\n--"]
     return cn
 
 mergeAll :: [Meta] -> Meta
+-- combines list, preference to the right (last key wins if duplicated!)
 mergeAll  = Meta . fromList . concat . map toList . map unMeta
 meta2pandoc :: Meta -> Pandoc
 meta2pandoc m = Pandoc m []
@@ -241,6 +242,15 @@ setValue2meta k v m = Meta (M.insert k (MetaString v) (unMeta m))
 addMetaField2pandoc :: ToMetaValue a => Text -> a -> Pandoc -> Pandoc
 addMetaField2pandoc key val (Pandoc m b) = Pandoc m2 b
     where   m2 = addMetaField key val m
+
+addListOfDefaults :: [(Text, Text)] -> Meta -> Meta 
+-- add a list of default key value pairs to a Meta
+-- if a key is present, its value is retainied 
+-- defaults are set only if key not present 
+addListOfDefaults list meta = Meta   $ M.union metavals (fromList defvals) 
+    where
+        metavals =  unMeta $ meta 
+        defvals = map (second MetaString) list
 
 -- writeLaTeX2 ::    Pandoc -> ErrIO Text
 -- -- gives a texsnip Text

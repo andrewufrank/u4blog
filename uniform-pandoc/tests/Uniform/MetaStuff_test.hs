@@ -124,6 +124,21 @@ meta1 = Meta (fromList [(("body"::Text), (MetaString "xx"))])
 cont12 :: [(Text, MetaValue)]
 cont12 =  [("abst", MetaString "yy"), ("body", MetaString "xx")]
 
+defs1 :: [(Text,Text)]
+defs1 = [("def1","def1v"),("date","dataFalse")]
+test_defs :: IO ()
+test_defs = assertEqual defs1res $ addListOfDefaults defs1 metaY
+
+defs1res :: Meta
+defs1res = Meta{unMeta =
+       fromList
+         [("abstract",
+           MetaInlines [Str "The", Space, Str "long", Space, Str "struggle"]),
+          ("date", MetaInlines [Str "2020-06-16"]),
+          ("def1", MetaString "def1v"),
+          ("keywords", MetaInlines [Str "Haskell", Space, Str "IDE"]),
+          ("title",
+           MetaInlines [Str "a", Space, Str "new", Space, Str "start"])]}
 --------------------------------------------------------------------------
 -- basics to get the data 
 fn1 :: Path Abs File
