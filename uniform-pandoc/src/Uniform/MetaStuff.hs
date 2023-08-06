@@ -89,12 +89,12 @@ import Uniform.PandocHTMLwriter
 meta2hres :: Meta -> ErrIO HTMLout
 -- step2: the second part resulting in HTML result
 meta2hres  meta = do
-    putIOwords ["meta2hres meta \n", showT meta, "\n--"]
+    -- putIOwords ["meta2hres meta \n", showT meta, "\n--"]
     -- convert to list of (text,Block) 
     -- make M.Map and pass to render template 
 
     tHtml :: M.Map Text Text <- meta2xx  writeHtml5String2 meta
-    putIOwords ["meta2hres tHtml \n", showT tHtml, "\n--"]
+    -- putIOwords ["meta2hres tHtml \n", showT tHtml, "\n--"]
 
     templH :: Template Text <- compileDefaultTempalteHTML
         -- templL :: Template Text  <-compileDefaultTempalteLatex
@@ -192,14 +192,48 @@ md2Meta :: Path Abs File -> MarkdownText -> ErrIO Meta
 -- independent of output target (html or latex)
 md2Meta  filep mdtext = do
     putIOwords ["md2Meta filepath", showT  filep, "\n--"] 
+    p1 <- md2Meta_Readmd filep mdtext
+    p2 <- md2Meta_Process p1 
+    return p2
+
+    -- pandoc1<- readMarkdown2 mdtext
+    -- -- putIOwords ["pd \n", showT pd, "\n--"] 
+    -- -- process references, does nothing if none
+    -- (Pandoc m1 p1) <- unPandocM $ PC.processCitations pandoc1
+    -- let c1 = Meta (fromList [(("body"::Text), (MetaBlocks p1))])
+    -- -- todo missing the index, references, umlaut conversion
+    -- let    cn = mergeAll [m1, c1] :: Meta-- order may  be important
+    -- -- putIOwords ["md2Meta cn \n", showT cn, "\n--"]
+    -- return cn
+
+md2Meta_Readmd :: Path Abs File -> MarkdownText -> ErrIO Pandoc
+-- step1: convert a markdown file to MetaValue
+-- independent of output target (html or latex)
+md2Meta_Readmd  filep mdtext = do
+    putIOwords ["md2Meta filepath", showT  filep, "\n--"] 
     pandoc1<- readMarkdown2 mdtext
-    -- putIOwords ["pd \n", showT pd, "\n--"] 
-    -- process references, does nothing if none
+    return pandoc1
+    -- -- putIOwords ["pd \n", showT pd, "\n--"] 
+    -- -- process references, does nothing if none
+    -- (Pandoc m1 p1) <- unPandocM $ PC.processCitations pandoc1
+    -- let c1 = Meta (fromList [(("body"::Text), (MetaBlocks p1))])
+    -- -- todo missing the index, references, umlaut conversion
+    -- let    cn = mergeAll [m1, c1] :: Meta-- order may  be important
+    -- -- putIOwords ["md2Meta cn \n", showT cn, "\n--"]
+    -- return cn
+md2Meta_Process :: Pandoc -> ErrIO Meta
+-- step1: convert a markdown file to MetaValue
+-- independent of output target (html or latex)
+md2Meta_Process  pandoc1 = do
+    -- putIOwords ["md2Meta filepath", showT  filep, "\n--"] 
+    -- pandoc1<- readMarkdown2 mdtext
+    -- -- putIOwords ["pd \n", showT pd, "\n--"] 
+    -- -- process references, does nothing if none
     (Pandoc m1 p1) <- unPandocM $ PC.processCitations pandoc1
     let c1 = Meta (fromList [(("body"::Text), (MetaBlocks p1))])
     -- todo missing the index, references, umlaut conversion
     let    cn = mergeAll [m1, c1] :: Meta-- order may  be important
-    putIOwords ["md2Meta cn \n", showT cn, "\n--"]
+    -- putIOwords ["md2Meta cn \n", showT cn, "\n--"]
     return cn
 
 mergeAll :: [Meta] -> Meta
