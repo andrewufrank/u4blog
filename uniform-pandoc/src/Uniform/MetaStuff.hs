@@ -143,9 +143,15 @@ metaValueToBlock (MetaString t) = Just . sing $ Plain [Str t]
 metaValueToBlock (MetaBool t) = Just . sing $ Plain [Str . showT $ t]
 metaValueToBlock (MetaInlines ils) = Just . sing$ Plain ils  -- could be Para
 metaValueToBlock (MetaBlocks bls) = Just $ bls
--- metaValueToBlock (MetaList xs) = unwords' <$> mapM metaValueToText xs
+metaValueToBlock (MetaList xs) = Just $ mapmb xs
+    where 
+        mapmb :: [MetaValue] -> [Block]
+        mapmb xs2 =   map mbBlocks xs2
+        mbBlocks :: MetaValue -> Block
+        mbBlocks (MetaInlines ils) =    Plain $ ils 
+        mbBlocks x = errorT  ["mbBlocks", showT x]
+    -- unwords' <$> mapM metaValueToText xs
 metaValueToBlock _ = Nothing
-
 sing a = [a]
 
 
