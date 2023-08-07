@@ -18,10 +18,12 @@
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE UndecidableInstances #-}
 {-# LANGUAGE LiberalTypeSynonyms #-}
-{-# OPTIONS_GHC -Wall -fno-warn-orphans 
+{-# OPTIONS_GHC -Wall -fno-warn-orphans
             -fno-warn-missing-signatures
-            -fno-warn-missing-methods 
-            -fno-warn-duplicate-exports   #-}
+            -fno-warn-missing-methods
+            -fno-warn-duplicate-exports
+            -fno-warn-unused-imports
+            -fno-warn-unused-matches #-}
 
 module Uniform.MetaStuff
   ( module Uniform.MetaStuff,
@@ -72,7 +74,8 @@ import UniformBase
 import qualified Data.Map as M 
 import Data.Map ( fromList, toList) 
 import Text.Pandoc.Definition as Pandoc
-    ( 
+    ( Meta,
+      Meta (..),
       Pandoc(..),
       lookupMeta,
       MetaValue (..),
@@ -143,8 +146,16 @@ metaValueToBlock (MetaString t) = Just . sing $ Plain [Str t]
 metaValueToBlock (MetaBool t) = Just . sing $ Plain [Str . showT $ t]
 metaValueToBlock (MetaInlines ils) = Just . sing$ Plain ils  -- could be Para
 metaValueToBlock (MetaBlocks bls) = Just $ bls
--- metaValueToBlock (MetaList xs) = unwords' <$> mapM metaValueToText xs
+metaValueToBlock (MetaList xs) = Just $ mapmb xs
+    where 
+        mapmb :: [MetaValue] -> [Block]
+        mapmb xs2 =   map mbBlocks xs2
+        mbBlocks :: MetaValue -> Block
+        mbBlocks (MetaInlines ils) =    Plain $ ils 
+        mbBlocks x = errorT  ["mbBlocks", showT x]
+    -- unwords' <$> mapM metaValueToText xs
 metaValueToBlock _ = Nothing
+
 
 sing a = [a]
 

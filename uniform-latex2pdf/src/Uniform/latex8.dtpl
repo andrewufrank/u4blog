@@ -1,0 +1,123 @@
+$-- template to produce a latex file 
+ 
+$-- preamble
+\documentclass[
+$--	  headings=standardclasses,		% to use serif font for titles 
+$--                  unnecessary, probably implied     hyperref={colorlinks},
+	  a4paper,
+	  10pt,
+      toc=flat,	 
+	  notitlepage 
+        ] 
+        $if(latBookBig)$ {scrbook} % testbook $latBook$
+        $elseif(latBooklet)$ {scrreport} % testbooklet $latBooklet$
+        $else$ {scrartcl}  % testeins $latBookBig$ testzwei $latBooklet$
+        $endif$
+
+\addtokomafont{part}{\LARGE} % reduce size of part
+\addtokomafont{partnumber}{\LARGE}
+\setkomafont{sectioning}{\bfseries}  % serif font for titles
+
+\usepackage{fontspec}
+\usepackage[$latLanguage$]{babel}
+$-- \renewcaptionname{ngerman}{\bibname}{Literatur}   %Bibliography
+$-- \renewcaptionname{$latLanguage$}{\bibname}{$latBiblioTitle$}   %Bibliography
+$-- automatical adaption
+
+\usepackage{bookmark}
+
+$-- numbering thru all of the book
+\counterwithin{chapter}{part}
+\counterwithin{section}{chapter}
+\renewcommand{\thepart}{\arabic{part}}
+\setcounter{secnumdepth}{\subsubsectionnumdepth} % numbering for subsubsections
+
+\usepackage{csquotes}  $-- required for babel 
+
+\usepackage{graphicx}
+          \setkeys{Gin}{width=.75\linewidth,keepaspectratio}
+\usepackage{makeidx}
+\usepackage[backend=biber,
+    style=authoryear,
+    natbib=true,
+    hyperref=true,
+    ]{biblatex}
+
+$if(latBibliography)$\addbibresource{$latBibliography$}$endif$
+$if(latReferences)$\addbibresource{local.bib}$endif$
+
+\makeindex
+
+\providecommand{\tightlist}{%
+\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+$-- \usepackage[colorlinks]{hyperref}
+\usepackage{xcolor}
+\hypersetup{
+    colorlinks,
+    linkcolor={red!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}
+}
+
+$-- content
+\title{$latTitle$}
+\author{$latAuthor$}
+\date{}  $-- no date??
+\graphicspath{{$latBakedDir$}}
+
+\usepackage[]{mdframed}
+
+\begin{document}
+
+
+$if(latReferences)$
+  \usepackage{filecontents}
+  \begin{filecontents}{\local.bib}$latReferences$
+  \end{filecontents}
+$endif$
+
+\maketitle
+
+
+$if(latAbstract)$\begin{mdframed}$latAbstract$
+    \bigskip
+    \end{mdframed}
+$endif$
+
+\tableofcontents
+\newpage
+
+$latContent$
+
+$for(latIndex.fileEntries)$   $-- for the booklet level of collections
+    \chapter{$it.title$}
+    \begin{mdframed}$it.abstract$\end{mdframed}
+    $it.content$
+$endfor$
+
+
+$for(latIndex.dirEntries)$   $-- for the bookbig level of collections
+    \part{$latIndex.dirEntries.title$}
+    \begin{mdframed}$latIndex.dirEntries.abstract$\end{mdframed}
+    $latIndex.dirEntries.content$
+
+
+    $for(latIndex.dirEntries.fileEntries)$   $-- the files in the parts in bookbig
+        \chapter{$latIndex.dirEntries.fileEntries.title$}
+        \begin{mdframed}$latIndex.dirEntries.fileEntries.abstract$\end{mdframed}
+        $latIndex.dirEntries.fileEntries.content$
+    $endfor$
+
+$endfor$
+
+endcontentTest
+
+\printbibliography
+
+\printindex
+
+\vspace*{\fill}
+{\scriptsize Produced with `daino' ($latDainoVersion$) from $latFn$}
+
+\end{document}
