@@ -1,0 +1,16 @@
+
+    <!doctype html>
+    <html>
+    <head>
+    <title>$title$</title>
+    <meta name="description" content=$abstract$>
+    <meta name="keywords" content=$keywords$>
+    </head>
+    <body>
+   title: $title$ 
+   version: $publish$ 
+   date: $date$
+
+   body: $body$
+    </body>
+    </html>

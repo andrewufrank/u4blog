@@ -37,31 +37,11 @@ import Uniform.HttpFiles
 import Uniform.TexFileTypes
 import Text.Pandoc.Shared (addMetaField)
 
-
-
--- metaValue2latex :: MetaValue -> ErrIO Text
--- metaValue2latex mv = do 
---     let bs = metaValueToBlock mv ::Maybe [Block]
---     t <- block2xx writeTexSnip2(fromJustNote "metaValueToHTML" $ bs)
---     return t
+----------- for experiment 0.1.6.3 
 
 
 
--- meta2latex ::  Bool-> Meta -> ErrIO (M.Map Text Text)
--- -- convert all in Meta to html codes
--- meta2latex debug m1 = do
---     let listMetaValues = toList . unMeta $ m1:: [(Text, MetaValue)]
---     l2 <- mapM mapSec listMetaValues
---     -- l2 <- mapM (second metaValueToHTML) listMetaValues
---         -- l2 = map (second metaValueToText) listMetaValues
-
---     let resList = l2 -- map (second (fromJustNote "meta2latex")) l2
---     return $ fromList resList
---   where 
---     mapSec :: (Text, MetaValue) -> ErrIO (Text, Text)
---     mapSec (t, mv) = do  
---         mv2 :: Text <- metaValue2latex mv
---         return (t, mv2) -- fromJustNote "meta2latex" $ mv2)
+----------- from 0.1.6.2
 
 latexRes = fromList 
     [("abstract", "An \\emph{abstract} for the \\textbf{example} A"),
