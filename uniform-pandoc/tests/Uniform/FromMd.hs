@@ -32,6 +32,7 @@ import Uniform.MetaStuff
 import Uniform.TemplatesStuff
 import Uniform.TexWriter
 import UniformBase
+-- import Uniform.FileIO
 import Uniform.HttpFiles
 import Uniform.TexFileTypes
 import Text.Pandoc.Shared (addMetaField)
@@ -110,17 +111,39 @@ test_htmltext = do
 
 
 
+fnLatexTempl :: Path Abs File
+fnLatexTempl = makeAbsFile "/home/frank/Workspace11/dainoTheme/templates/latexTufte81.dtpl"
+fnHtmlTempl = makeAbsFile "/home/frank/Workspace11/dainoTheme/templates/master7tufte.dtpl"
 
+convertFullwithTemplate ::  Path Abs File -> ErrIO (HTMLout, Latex)
+-- convert a md file to the html and latex format
+convertFullwithTemplate  fnin = do
+    mdfile <- read8 fnin markdownFileType
+    context <- md2Meta fnin mdfile
 
+    latexTempl <- compileTemplateFile2 fnLatexTempl
+    htmlTempl  <- compileTemplateFile2 fnHtmlTempl
 
+    -- htmlTempl <- compileDefaultTempalteHTML
+    -- latexTempl <- compileDefaultTempalteLatex
+
+    h <- meta2hres  htmlTempl context
+
+    l <- meta2latex  latexTempl context
+    return (h,l)
 
 convertFull ::  Path Abs File -> ErrIO (HTMLout, Latex)
 -- convert a md file to the html and latex format
 convertFull  fnin = do
     mdfile <- read8 fnin markdownFileType
     context <- md2Meta fnin mdfile
-    h <- meta2hres  context
-    l <- meta2latex  context
+
+    htmlTempl <- compileDefaultTempalteHTML
+    latexTempl <- compileDefaultTempalteLatex
+
+    h <- meta2hres  htmlTempl context
+
+    l <- meta2latex  latexTempl context
     return (h,l)
 
 
@@ -136,7 +159,8 @@ fnres_latex =  makeAbsFile "/home/frank/tests/testlatexA"
 test_A :: IO ()
 test_A = do
     res1 <- runErr $ do
-        (hout, lout) <- convertFull fnA
+        -- (hout, lout) <- convertFull fnA
+        (hout, lout) <- convertFullwithTemplate fnA
 
         write8   fnres_html htmloutFileType hout
         write8   fnres_latex texFileType lout

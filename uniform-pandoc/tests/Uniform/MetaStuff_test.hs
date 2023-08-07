@@ -32,6 +32,7 @@ import Text.DocTemplates as DocTemplates ()
 import Text.DocLayout (render)
 import Data.Text.Lazy (unpack)
 import Text.Blaze.Html.Renderer.Text (renderHtml)
+import qualified Data.Map as M
 import Data.Map ( fromList, toList) 
 -- import Uniform.Filenames 
 -- import Uniform2.Filetypes4sites should not be imported here
@@ -124,7 +125,34 @@ meta1 = Meta (fromList [(("body"::Text), (MetaString "xx"))])
 cont12 :: [(Text, MetaValue)]
 cont12 =  [("abst", MetaString "yy"), ("body", MetaString "xx")]
 
---------------------------------------------------------------------------
+defs1 :: [(Text,Text)]
+defs1 = [("def1","def1v"),("date","dataFalse")]
+test_defs :: IO ()
+test_defs = assertEqual defs1res $ addListOfDefaults defs1 metaY
+
+defs1res :: Meta
+defs1res = Meta{unMeta =
+       fromList
+         [("abstract",
+           MetaInlines [Str "The", Space, Str "long", Space, Str "struggle"]),
+          ("date", MetaInlines [Str "2020-06-16"]),
+          ("def1", MetaString "def1v"),
+          ("keywords", MetaInlines [Str "Haskell", Space, Str "IDE"]),
+          ("title",
+           MetaInlines [Str "a", Space, Str "new", Space, Str "start"])]}
+
+test_usemeta :: IO ()
+-- test with fn1 to show the pandoc 
+test_usemeta = do 
+    res1 <- runErr $ do 
+        m1 <- meta2xx  writeHtml5String2 defs1res
+        return m1
+    assertEqual (Right resm1) res1   -- set to False to produce output
+resm1 :: M.Map Text Text 
+resm1 = fromList [("abstract", "The long struggle"), ("date", "2020-06-16"),
+      ("def1", "def1v"), ("keywords", "Haskell IDE"),
+      ("title", "a new start")]
+-- --------------------------------------------------------------------------
 -- basics to get the data 
 fn1 :: Path Abs File
 fn1 =  makeAbsFile "/home/frank/Workspace11/u4blog/uniform-pandoc/tests/data/startValues/someTextWithYAML.md"

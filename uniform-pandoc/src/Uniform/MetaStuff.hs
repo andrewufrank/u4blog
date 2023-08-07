@@ -18,12 +18,10 @@
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE UndecidableInstances #-}
 {-# LANGUAGE LiberalTypeSynonyms #-}
-{-# OPTIONS_GHC -Wall -fno-warn-orphans
+{-# OPTIONS_GHC -Wall -fno-warn-orphans 
             -fno-warn-missing-signatures
-            -fno-warn-missing-methods
-            -fno-warn-duplicate-exports
-            -fno-warn-unused-imports
-            -fno-warn-unused-matches #-}
+            -fno-warn-missing-methods 
+            -fno-warn-duplicate-exports   #-}
 
 module Uniform.MetaStuff
   ( module Uniform.MetaStuff,
@@ -74,8 +72,7 @@ import UniformBase
 import qualified Data.Map as M 
 import Data.Map ( fromList, toList) 
 import Text.Pandoc.Definition as Pandoc
-    ( Meta,
-      Meta (..),
+    ( 
       Pandoc(..),
       lookupMeta,
       MetaValue (..),
@@ -89,17 +86,17 @@ import Uniform.TemplatesStuff
 import Text.DocTemplates as DocTemplates ( Doc )
 import Uniform.PandocHTMLwriter
 
-meta2hres :: Meta -> ErrIO HTMLout
+meta2hres :: Template Text -> Meta -> ErrIO HTMLout
 -- step2: the second part resulting in HTML result
-meta2hres  meta = do
-    putIOwords ["meta2hres meta \n", showT meta, "\n--"]
+meta2hres templH meta = do
+    -- putIOwords ["meta2hres meta \n", showT meta, "\n--"]
     -- convert to list of (text,Block) 
     -- make M.Map and pass to render template 
 
     tHtml :: M.Map Text Text <- meta2xx  writeHtml5String2 meta
-    putIOwords ["meta2hres tHtml \n", showT tHtml, "\n--"]
+    -- putIOwords ["meta2hres tHtml \n", showT tHtml, "\n--"]
 
-    templH :: Template Text <- compileDefaultTempalteHTML
+    -- templH :: Template Text <- compileDefaultTempalteHTML
         -- templL :: Template Text  <-compileDefaultTempalteLatex
         -- -- renderTemplate :: (TemplateTarget a, ToContext a b) => Template a -> b -> Doc a
     let restplH = renderTemplate templH tHtml :: Doc Text
@@ -155,8 +152,6 @@ metaValueToBlock (MetaList xs) = Just $ mapmb xs
         mbBlocks x = errorT  ["mbBlocks", showT x]
     -- unwords' <$> mapM metaValueToText xs
 metaValueToBlock _ = Nothing
-
-
 sing a = [a]
 
 
@@ -197,17 +192,34 @@ md2Meta :: Path Abs File -> MarkdownText -> ErrIO Meta
 -- independent of output target (html or latex)
 md2Meta  filep mdtext = do
     putIOwords ["md2Meta filepath", showT  filep, "\n--"] 
+    p1 <- md2Meta_Readmd filep mdtext
+    p2 <- md2Meta_Process p1 
+    return p2
+    -- broken in two to be able to insert the default values 
+    -- into the metadata before processing the cites
+  
+
+md2Meta_Readmd :: Path Abs File -> MarkdownText -> ErrIO Pandoc
+-- step1:reads only the md file to pandoc 
+md2Meta_Readmd  filep mdtext = do
+    putIOwords ["md2Meta filepath", showT  filep, "\n--"] 
     pandoc1<- readMarkdown2 mdtext
-    -- putIOwords ["pd \n", showT pd, "\n--"] 
-    -- process references, does nothing if none
+    return pandoc1
+ 
+md2Meta_Process :: Pandoc -> ErrIO Meta
+-- process the pandoc file with citeproc 
+-- stores the result as body in meta
+-- the body is not required anymore!
+md2Meta_Process  pandoc1 = do
     (Pandoc m1 p1) <- unPandocM $ PC.processCitations pandoc1
     let c1 = Meta (fromList [(("body"::Text), (MetaBlocks p1))])
     -- todo missing the index, references, umlaut conversion
-    let    cn = mergeAll [m1, c1] :: Meta-- order may  be important
-    putIOwords ["md2Meta cn \n", showT cn, "\n--"]
+        cn = mergeAll [m1, c1] :: Meta-- order may  be important
+    -- putIOwords ["md2Meta cn \n", showT cn, "\n--"]
     return cn
 
 mergeAll :: [Meta] -> Meta
+-- combines list, preference to the right (last key wins if duplicated!)
 mergeAll  = Meta . fromList . concat . map toList . map unMeta
 meta2pandoc :: Meta -> Pandoc
 meta2pandoc m = Pandoc m []
@@ -230,6 +242,15 @@ setValue2meta k v m = Meta (M.insert k (MetaString v) (unMeta m))
 addMetaField2pandoc :: ToMetaValue a => Text -> a -> Pandoc -> Pandoc
 addMetaField2pandoc key val (Pandoc m b) = Pandoc m2 b
     where   m2 = addMetaField key val m
+
+addListOfDefaults :: [(Text, Text)] -> Meta -> Meta 
+-- add a list of default key value pairs to a Meta
+-- if a key is present, its value is retainied 
+-- defaults are set only if key not present 
+addListOfDefaults list meta = Meta   $ M.union metavals (fromList defvals) 
+    where
+        metavals =  unMeta $ meta 
+        defvals = map (second MetaString) list
 
 -- writeLaTeX2 ::    Pandoc -> ErrIO Text
 -- -- gives a texsnip Text

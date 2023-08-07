@@ -124,7 +124,7 @@ fnminires =  makeAbsFile "/home/frank/tests/testmini"
 
 test_templ_comp_minilatex = do 
     res1 <- runErr $ do 
-        htpl2 <- compileTemplateFile2 False fnminilatex
+        htpl2 <- compileTemplateFile2 fnminilatex
         let cont1 = defField "abstract" ("A1"::Text) mempty :: Context Text 
         let cont2 = defField "title" ("T1" :: Text) cont1  :: Context Text
         let cont2 = defField "fontsize" ("12pt" :: Text)
