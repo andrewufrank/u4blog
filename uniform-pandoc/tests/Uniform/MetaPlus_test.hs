@@ -77,7 +77,9 @@ metap1 = MetaPlus { metap = resAWithBody
                    , extra = extra1
                    , mapHtml = resAhtml} 
                    
-test_mp1 = assertEqual (zero) metap1                   
+-- test_mp1 = assertEqual (zero) metap1                   
+
+fnminiPlusres =  makeAbsFile "/home/frank/tests/testminiMetaPlus"
 
 test_templ_comp_miniplus :: IO ()
 test_templ_comp_miniplus = do 
@@ -88,9 +90,9 @@ test_templ_comp_miniplus = do
         let res1 = render (Just 50) tpl1  -- line length, can be Nothing
 
         -- putIOwords ["res1 \n", showT res1]
-        write8   fnminires htmloutFileType (HTMLout res1)
+        write8   fnminiPlusres htmloutFileType (HTMLout res1)
         return res1
-    assertEqual (Right resAhtmlout) res1
+    assertEqual (Right zero) res1
 
                    
 --- tests from 0.1.6.2----------------

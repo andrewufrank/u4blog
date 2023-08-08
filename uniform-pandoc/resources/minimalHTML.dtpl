@@ -2,16 +2,17 @@
     <!doctype html>
     <html>
     <head>
-    <title>$title$</title><br>
-    <meta name="description" content=$abstract$><br>
-    <meta name="keywords" content=$keywords$><br>
+    <title>$mapHtml.title$</title><br>
+    <meta name="description" content=$mapHtml.abstract$><br>
+    <meta name="keywords" content=$mapHtml.keywords$><br>
     </head>
     <body>
-   title: $title$ <br>
-   version: $publish$ <br>
-   date: $date$ <br>
-   def1: $def1$ <br>
-
-   body: $body$ <br>
+   title: $mapHtml.title$ <br>
+   version: $mapHtml.publish$ <br>
+   date: $mapHtml.date$ <br>
+   def1: $mapHtml.def1$ <br>
+   dainoVersion: $extra.dainoVersion$  <br>
+   bakedDir: $extra.bakedDir$ <br>
+   body: <br> $mapHtml.body$ <br>
     </body>
     </html>
