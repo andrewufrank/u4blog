@@ -128,33 +128,34 @@ import UniformBase
 -- cont12 :: [(Text, MetaValue)]
 -- cont12 =  [("abst", MetaString "yy"), ("body", MetaString "xx")]
 
--- defs1 :: [(Text,Text)]
--- defs1 = [("def1","def1v"),("date","dataFalse")]
--- test_defs :: IO ()
--- test_defs = assertEqual defs1res $ addListOfDefaults defs1 metaY
+defs1 :: [(Text,Text)]
+defs1 = [("def1","def1v"),("date","dataFalse")] -- the date nmust not be overwritten from yaml value 
+test_defs :: IO ()
+test_defs = assertEqual defs1res $ addListOfDefaults defs1 (getMeta pandocA)
 
--- defs1res :: Meta
--- defs1res = Meta{unMeta =
---        fromList
---          [("abstract",
---            MetaInlines [Str "The", Space, Str "long", Space, Str "struggle"]),
---           ("date", MetaInlines [Str "2020-06-16"]),
---           ("def1", MetaString "def1v"),
---           ("keywords", MetaInlines [Str "Haskell", Space, Str "IDE"]),
---           ("title",
---            MetaInlines [Str "a", Space, Str "new", Space, Str "start"])]}
+defs1res :: Meta
+defs1res = Meta{unMeta =
+       fromList
+         [("abstract",
+           MetaInlines [Str "abstract02", Space, Str "missing"]),
+          ("date", MetaInlines [Str "2023-03-31"]),
+          ("def1", MetaString "def1v"),
+          ("keywords",
+           MetaInlines [Str "one,", Space, Str "two,", Space, Str "three"]),
+          ("title", MetaInlines [Str "title02", Space, Str "missing"]),
+          ("version", MetaInlines [Str "publish"])]}
 
--- test_usemeta :: IO ()
--- -- test with fn1 to show the pandoc 
--- test_usemeta = do 
---     res1 <- runErr $ do 
---         m1 <- meta2xx  writeHtml5String2 defs1res
---         return m1
---     assertEqual (Right resm1) res1   -- set to False to produce output
--- resm1 :: M.Map Text Text 
--- resm1 = fromList [("abstract", "The long struggle"), ("date", "2020-06-16"),
---       ("def1", "def1v"), ("keywords", "Haskell IDE"),
---       ("title", "a new start")]
+test_usemeta :: IO ()
+-- test with fn1 to show the pandoc 
+test_usemeta = do 
+    res1 <- runErr $ do 
+        m1 <- meta2xx  writeHtml5String2 defs1res
+        return m1
+    assertEqual (Right resm1) res1   -- set to False to produce output
+resm1 :: M.Map Text Text 
+resm1 = fromList [("abstract", "abstract02 missing"), ("date", "2023-03-31"),
+      ("def1", "def1v"), ("keywords", "one, two, three"),
+      ("title", "title02 missing"), ("version", "publish")]
 -- --------------------------------------------------------------------------
 -- basics to get the data 
 fn1 :: Path Abs File
@@ -179,11 +180,11 @@ metaY = Meta {unMeta = fromList
 
 -- meta with bold etc...
 
-metaA = Meta {unMeta = fromList [
-        ("abstract",MetaInlines [Str "An",Space,Emph [Str "abstract"],Space,Str "for",Space,Str "the",Space,Strong [Str "example"],Space,Str "A"]),
-        ("date",MetaInlines [Str "2020-06-16"]),
-        ("keywords",MetaInlines [Str "A_KEYword"]),
-        ("title",MetaInlines [Str "the",Space,Strong [Str "real"],Space,Str "title",Space,Str "of",Space,Str "A"])]}
+-- metaA = Meta {unMeta = fromList [
+--         ("abstract",MetaInlines [Str "An",Space,Emph [Str "abstract"],Space,Str "for",Space,Str "the",Space,Strong [Str "example"],Space,Str "A"]),
+--         ("date",MetaInlines [Str "2020-06-16"]),
+--         ("keywords",MetaInlines [Str "A_KEYword"]),
+--         ("title",MetaInlines [Str "the",Space,Strong [Str "real"],Space,Str "title",Space,Str "of",Space,Str "A"])]}
 
 pandocA = Pandoc  -- the contentn of blogA (fnA)
      (Meta{unMeta =

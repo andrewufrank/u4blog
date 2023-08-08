@@ -10,6 +10,7 @@
    title: $title$ 
    version: $publish$ 
    date: $date$
+   def1: $def1$
 
    body: $body$
     </body>

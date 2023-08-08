@@ -127,13 +127,14 @@ fnminires =  makeAbsFile "/home/frank/tests/testmini"
 test_templ_comp_minilatex = do 
     res1 <- runErr $ do 
         htpl2 <- compileTemplateFile2 fnminihtml -- fnminilatex
-        let cont1 = defField "abstract" ("A1"::Text) mempty :: Context Text 
-        let cont2 = defField "title" ("T1" :: Text) cont1  :: Context Text
+        let meta2html = resm1 :: Map Text Text 
+        -- let cont1 = defField "abstract" ("A1"::Text) mempty :: Context Text 
+        -- let cont2 = defField "title" ("T1" :: Text) cont1  :: Context Text
         -- let cont2 = defField "fontsize" ("12pt" :: Text)
         --             .  defField "documentclass" ("article"::Doc Text) 
         --             . defField "title" ("T1" :: Text) $ cont1  :: Context Text
         -- putIOwords ["minilatex cont2", showT cont2 ]           
-        let tpl1 = renderTemplate htpl2 cont2  :: Doc Text
+        let tpl1 = renderTemplate htpl2 meta2html  :: Doc Text
         -- putIOwords ["tpl1 \n", showT tpl1]
         let res1 = render (Just 50) tpl1  -- line length, can be Nothing
 
@@ -145,8 +146,11 @@ test_templ_comp_minilatex = do
     -- let Right (target3, res3) = res5
     assertEqual (Right resmini) res1
 
-resmini= "\n    <!doctype html>\n    <html>\n    <head>\n    <title>T1</title>\n    <meta name=\"description\" content=A1>\n    <meta name=\"keywords\" content=>\n    </head>\n    <body>\n   title: T1 \n   version:  \n   date: \n\n   body: \n    </body>\n    </html>\n"
+resmini= "\n    <!doctype html>\n    <html>\n    <head>\n    <title>title02 missing</title>\n    <meta name=\"description\" content=abstract02 missing>\n    <meta name=\"keywords\" content=one, two, three>\n    </head>\n    <body>\n   title: title02 missing \n   version:  \n   date: 2023-03-31\n   def1: def1v\n\n   body: \n    </body>\n    </html>\n"
 
+
+-- "\n    <!doctype html>\n    <html>\n    <head>\n    <title>T1</title>\n    <meta name=\"description\" content=A1>\n    <meta name=\"keywords\" content=>\n    </head>\n    <body>\n   title: T1 \n   version:  \n   date: \n\n   body: \n    </body>\n    </html>\n"
+ 
 -- block1 :: Block 
 -- block1 = Plain [Str "hl1_text",Space,Emph [Str "For"],Space,Strong [Str "Title"]]
 -- -- block1 = Plain [Str "long", Space, Str "abstract"]
