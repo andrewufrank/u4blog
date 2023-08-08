@@ -149,13 +149,39 @@ test_usemeta :: IO ()
 -- test with fn1 to show the pandoc 
 test_usemeta = do 
     res1 <- runErr $ do 
-        m1 <- meta2xx  writeHtml5String2 defs1res
+        m1 <- meta2xx  writeHtml5String2 resAWithBody
         return m1
-    assertEqual (Right resm1) res1   -- set to False to produce output
-resm1 :: M.Map Text Text 
-resm1 = fromList [("abstract", "abstract02 missing"), ("date", "2023-03-31"),
-      ("def1", "def1v"), ("keywords", "one, two, three"),
+    assertEqual (Right resAhtml) res1   -- set to False to produce output
+resAhtml :: M.Map Text Text 
+resAhtml = fromList [("abstract", "abstract02 missing"),
+      ("body",
+       "<h1 id=\"02-hl1title-for-02-but-missing\">02-hl1title for 02 but\nmissing</h1>\n<p>02-text: The text for 02:</p>"),
+      ("date", "2023-03-31"), ("keywords", "one, two, three"),
       ("title", "title02 missing"), ("version", "publish")]
+
+-- process cites and put body into meta 
+test_body = do 
+    res1 <- runErr $ md2Meta_Process pandocA 
+    assertEqual (Right resAWithBody) res1 
+
+resAWithBody :: Meta
+resAWithBody = Meta{unMeta =
+          fromList
+            [("abstract",
+              MetaInlines [Str "abstract02", Space, Str "missing"]),
+             ("body",
+              MetaBlocks
+                [Header 1 ("02-hl1title-for-02-but-missing", [], [])
+                   [Str "02-hl1title", Space, Str "for", Space, Str "02", Space,
+                    Str "but", Space, Str "missing"],
+                 Para
+                   [Str "02-text:", Space, Str "The", Space, Str "text", Space,
+                    Str "for", Space, Str "02:"]]),
+             ("date", MetaInlines [Str "2023-03-31"]),
+             ("keywords",
+              MetaInlines [Str "one,", Space, Str "two,", Space, Str "three"]),
+             ("title", MetaInlines [Str "title02", Space, Str "missing"]),
+             ("version", MetaInlines [Str "publish"])]}
 -- --------------------------------------------------------------------------
 -- basics to get the data 
 fn1 :: Path Abs File

@@ -2,16 +2,16 @@
     <!doctype html>
     <html>
     <head>
-    <title>$title$</title>
-    <meta name="description" content=$abstract$>
-    <meta name="keywords" content=$keywords$>
+    <title>$title$</title><br>
+    <meta name="description" content=$abstract$><br>
+    <meta name="keywords" content=$keywords$><br>
     </head>
     <body>
-   title: $title$ 
-   version: $publish$ 
-   date: $date$
-   def1: $def1$
+   title: $title$ <br>
+   version: $publish$ <br>
+   date: $date$ <br>
+   def1: $def1$ <br>
 
-   body: $body$
+   body: $body$ <br>
     </body>
     </html>
