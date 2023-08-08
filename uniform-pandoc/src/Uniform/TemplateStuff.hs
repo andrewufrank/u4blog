@@ -21,8 +21,8 @@
             -fno-warn-missing-methods 
             -fno-warn-duplicate-exports   #-}
 
-module Uniform.TemplatesStuff
-  ( module Uniform.TemplatesStuff,
+module Uniform.TemplateStuff
+  ( module Uniform.TemplateStuff,
     Pandoc (..),
     Template, renderTemplate, render
   )

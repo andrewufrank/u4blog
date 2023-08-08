@@ -82,7 +82,7 @@ import Text.Pandoc.Writers.Shared as Pandoc
 import Uniform.Markdown ( readMarkdown2, MarkdownText )
 import qualified Text.Pandoc.Citeproc as PC
 import Uniform.HttpFiles
-import Uniform.TemplatesStuff
+import Uniform.TemplateStuff
 import Text.DocTemplates as DocTemplates ( Doc )
 import Uniform.PandocHTMLwriter
 

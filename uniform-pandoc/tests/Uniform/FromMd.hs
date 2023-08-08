@@ -29,7 +29,7 @@ import Text.DocLayout (render)
 import Data.Text.Lazy (unpack)
 import Text.Blaze.Html.Renderer.Text (renderHtml)
 import Uniform.MetaStuff
-import Uniform.TemplatesStuff
+import Uniform.TemplateStuff
 import Uniform.TexWriter
 import UniformBase
 -- import Uniform.FileIO

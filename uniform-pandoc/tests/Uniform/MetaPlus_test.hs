@@ -21,7 +21,7 @@ module Uniform.MetaPlus_test where
 import Test.Framework
 -- import qualified Data.Map as M 
 ---- using uniform:
-import Uniform.Json (ToJSON, FromJSON)
+import Uniform.Json (ToJSON, FromJSON, toJSON)
 import Uniform.PandocImports ( Meta(..), Pandoc(..) ) 
 import Uniform.Markdown ( markdownFileType, readMarkdown2 ) 
 import Uniform.TexWriter ()
@@ -31,13 +31,17 @@ import Text.Pandoc
 import Text.Pandoc.Definition ()
 import Text.Pandoc.Writers ()
 import Text.DocTemplates as DocTemplates ()
-import Text.DocLayout (render)
+import Text.DocLayout (render, Doc)
 import Data.Text.Lazy (unpack)
 import Text.Blaze.Html.Renderer.Text (renderHtml)
 import qualified Data.Map as M
 import Data.Map ( fromList, toList) 
 import Uniform.Test.TestHarness ()
 import Uniform.MetaStuff
+import Uniform.TemplateStuff
+import Uniform.TemplateStuff_test
+import Uniform.HttpFiles
+
 import UniformBase
 
 -- tests for 0.1.6.3
@@ -71,10 +75,23 @@ extra1 = ExtraValues {dainoVersion = "0.1.5.6.3"
 
 metap1 = MetaPlus { metap = resAWithBody
                    , extra = extra1
-                   , mapHtml = zero} 
+                   , mapHtml = resAhtml} 
                    
 test_mp1 = assertEqual (zero) metap1                   
-                   
+
+test_templ_comp_miniplus :: IO ()
+test_templ_comp_miniplus = do 
+    res1 <- runErr $ do 
+        htpl2 <- compileTemplateFile2 fnminihtml -- fnminilatex
+        let tpl1 = renderTemplate htpl2 (toJSON metap1)  :: Doc Text
+        -- putIOwords ["tpl1 \n", showT tpl1]
+        let res1 = render (Just 50) tpl1  -- line length, can be Nothing
+
+        -- putIOwords ["res1 \n", showT res1]
+        write8   fnminires htmloutFileType (HTMLout res1)
+        return res1
+    assertEqual (Right resAhtmlout) res1
+
                    
 --- tests from 0.1.6.2----------------
 

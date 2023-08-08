@@ -49,7 +49,7 @@ import Uniform.Test.TestHarness
 import Uniform.MetaStuff_test 
 -- import Uniform.Markdown_test 
 import Uniform.MetaStuff
-import Uniform.TemplatesStuff
+import Uniform.TemplateStuff
 -- import Uniform.Error           hiding (  (<.>)  )  -- (</>)
 import UniformBase
 import Uniform.HttpFiles
@@ -124,26 +124,17 @@ fnminilatex =  makeAbsFile "/home/frank/Workspace11/u4blog/uniform-pandoc/resour
 fnminihtml = makeAbsFile "/home/frank/Workspace11/u4blog/uniform-pandoc/resources/minimalHTML.dtpl"
 fnminires =  makeAbsFile "/home/frank/tests/testmini"
 
-test_templ_comp_minilatex = do 
+test_templ_comp_minihtml :: IO ()
+test_templ_comp_minihtml = do 
     res1 <- runErr $ do 
         htpl2 <- compileTemplateFile2 fnminihtml -- fnminilatex
-        -- let meta2html = resm1 :: Map Text Text 
-        -- let cont1 = defField "abstract" ("A1"::Text) mempty :: Context Text 
-        -- let cont2 = defField "title" ("T1" :: Text) cont1  :: Context Text
-        -- let cont2 = defField "fontsize" ("12pt" :: Text)
-        --             .  defField "documentclass" ("article"::Doc Text) 
-        --             . defField "title" ("T1" :: Text) $ cont1  :: Context Text
-        -- putIOwords ["minilatex cont2", showT cont2 ]           
         let tpl1 = renderTemplate htpl2 resAhtml  :: Doc Text
         -- putIOwords ["tpl1 \n", showT tpl1]
         let res1 = render (Just 50) tpl1  -- line length, can be Nothing
 
         -- putIOwords ["res1 \n", showT res1]
-        -- let reslatex = Latex res1 
         write8   fnminires htmloutFileType (HTMLout res1)
-        -- return "template"
         return res1
-    -- let Right (target3, res3) = res5
     assertEqual (Right resAhtmlout) res1
 
 resAhtmlout=  "\n    <!doctype html>\n    <html>\n    <head>\n    <title>title02 missing</title><br>\n    <meta name=\"description\" content=abstract02 missing><br>\n    <meta name=\"keywords\" content=one, two, three><br>\n    </head>\n    <body>\n   title: title02 missing <br>\n   version:  <br>\n   date: 2023-03-31 <br>\n   def1:  <br>\n\n   body: <h1 id=\"02-hl1title-for-02-but-missing\">02-hl1title for 02 but\nmissing</h1>\n<p>02-text: The text for 02:</p> <br>\n    </body>\n    </html>\n"

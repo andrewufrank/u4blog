@@ -41,7 +41,7 @@ import Uniform.TexFileTypes
 import qualified Data.Map as M
 
 import Data.Map (fromList, toList)
-import Uniform.TemplatesStuff
+import Uniform.TemplateStuff
 import Text.DocTemplates as DocTemplates ( Doc )
 
 import Uniform.MetaStuff
