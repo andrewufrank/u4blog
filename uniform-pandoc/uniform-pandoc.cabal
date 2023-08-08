@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 42bf047f5a426091fb1602eb51ee228c4fb6b5067a562bb052d866232a647da1
+-- hash: 84bb5b3bf80217c1dcf427d29a23887b4786c7bd1504ff17d55a5d9d8adefd46
 
 name:           uniform-pandoc
 version:        0.1.6.3
@@ -68,6 +68,7 @@ test-suite pandoctest
       Uniform.BibTex_test
       Uniform.FromMd
       Uniform.HTMLout_test
+      Uniform.MetaPlus_test
       Uniform.MetaStuff_test
       Uniform.TemplateStuff_test
       Paths_uniform_pandoc
