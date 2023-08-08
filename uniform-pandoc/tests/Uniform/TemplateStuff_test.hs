@@ -146,7 +146,7 @@ test_templ_comp_minilatex = do
     -- let Right (target3, res3) = res5
     assertEqual (Right resAhtmlout) res1
 
-resAhtmlout= "\n    <!doctype html>\n    <html>\n    <head>\n    <title>title02 missing</title><br>\n    <meta name=\"description\" content=abstract02 missing><br>\n    <meta name=\"keywords\" content=one, two, three><br>\n    </head>\n    <body>\n   title: title02 missing <br>\n   version:  <br>\n   date: 2023-03-31< br>\n   def1:  <br>\n\n   body: <h1 id=\"02-hl1title-for-02-but-missing\">02-hl1title for 02 but\nmissing</h1>\n<p>02-text: The text for 02:</p> <br>\n    </body>\n    </html>\n"
+resAhtmlout=  "\n    <!doctype html>\n    <html>\n    <head>\n    <title>title02 missing</title><br>\n    <meta name=\"description\" content=abstract02 missing><br>\n    <meta name=\"keywords\" content=one, two, three><br>\n    </head>\n    <body>\n   title: title02 missing <br>\n   version:  <br>\n   date: 2023-03-31 <br>\n   def1:  <br>\n\n   body: <h1 id=\"02-hl1title-for-02-but-missing\">02-hl1title for 02 but\nmissing</h1>\n<p>02-text: The text for 02:</p> <br>\n    </body>\n    </html>\n"
 
 
 -- "\n    <!doctype html>\n    <html>\n    <head>\n    <title>T1</title>\n    <meta name=\"description\" content=A1>\n    <meta name=\"keywords\" content=>\n    </head>\n    <body>\n   title: T1 \n   version:  \n   date: \n\n   body: \n    </body>\n    </html>\n"
