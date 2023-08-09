@@ -1,0 +1,15 @@
+
+    $-- a template to test if values are set from template
+-- from YAML header
+    title: $mapHtml.title$< 
+    abstract: $mapHtml.abstract$> 
+    keywords: $mapHtml.keywords$ 
+    version: $mapHtml.version$
+    date: $mapHtml.date$ 
+    body:  $mapHtml.body$  
+-- from Defaults   
+   def1: $mapHtml.def1$  
+-- from extra 
+   dainoVersion: $extra.dainoVersion$   
+   bakedDir: $extra.bakedDir$  
+ 

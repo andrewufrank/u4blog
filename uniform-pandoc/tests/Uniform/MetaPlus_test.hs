@@ -26,7 +26,7 @@ import Uniform.PandocImports ( Meta(..), Pandoc(..) )
 import Uniform.Markdown ( markdownFileType, readMarkdown2 ) 
 import Uniform.TexWriter ()
 import Uniform.PandocHTMLwriter  
-import Text.Pandoc
+import Text.Pandoc as Pandoc 
     
 import Text.Pandoc.Definition ()
 import Text.Pandoc.Writers ()
@@ -38,6 +38,7 @@ import qualified Data.Map as M
 import Data.Map ( fromList, toList) 
 import Uniform.Test.TestHarness ()
 import Uniform.MetaStuff
+import Uniform.MetaStuff_test
 import Uniform.TemplateStuff
 import Uniform.TemplateStuff_test
 import Uniform.HttpFiles
@@ -49,12 +50,14 @@ import UniformBase
 data MetaPlus = MetaPlus 
                 { metap :: Meta    -- ^ the pandoc meta 
                 , extra :: ExtraValues -- ^ other values to go into template
-                , mapHtml ::  M.Map Text Text}
+                , mapHtml ::  M.Map Text Text
+                , metaMarkdown :: M.Map Text Text 
+                }
     deriving (Eq, Ord, Show, Read, Generic) -- Zeros, ToJSON, FromJSON)
 instance ToJSON MetaPlus
 instance FromJSON MetaPlus
 instance Zeros MetaPlus where zero :: MetaPlus
-                              zero = MetaPlus zero zero zero
+                              zero = MetaPlus zero zero zero zero
 
 instance Zeros (M.Map Text Text) where zero = fromList []
 
@@ -73,18 +76,53 @@ instance Zeros ExtraValues where zero :: ExtraValues
 extra1 = ExtraValues {dainoVersion = "0.1.5.6.3"
                     , bakedDir = "/home/frank/baked"}
 
-metap1 = MetaPlus { metap = resAWithBody
+metap1 = MetaPlus { metap = resAWithBody1
                    , extra = extra1
-                   , mapHtml = resAhtml} 
+                   , mapHtml = resAhtml
+                   , metaMarkdown = resBody
+                   } 
                    
--- test_mp1 = assertEqual (zero) metap1                   
+-- test_mp1 = assertEqual (zero) metap1
 
+-- produce a markdown body 
+test_markdownBody = do 
+    res1 <- runErr $ do 
+        meta2xx writeToMarkdown  resAWithBody1 
+    putIOwords ["resAWithBody1", showT resAWithBody1]
+    putIOwords ["res1 from met2xx", showT res1]
+    assertEqual (Right resBody) res1 
+resBody = fromList
+     [("abstract", "abstract02 missing\n"),
+      ("body",
+       "# 02-hl1title for 02 but missing\n\n02-text: The text for 02:\n"),
+      ("date", "2023-03-31\n"), ("def1", "def1v\n"),
+      ("keywords", "one, two, three\n"), ("title", "title02 missing\n"),
+      ("version", "publish\n")]
+
+test_metastring1 = do 
+    res1 <- runErr $ do 
+        meta2xx writeToMarkdown  string44
+    assertEqual (Right resstring44) res1 
+
+string44:: Meta
+string44 = Meta{unMeta =
+          fromList
+           [("def1", MetaString "def1v") ]}
+resstring44 = (fromList [("def1", "def1v\n")])
+
+-- resA1md :: Meta -> ErrIO Text
+-- resA1md meta1 = do 
+--     md1 :: _ <- writeToMarkdown  meta1 
+--             -- includes defaults and body 
+--     return  md1 
+
+metaplusText = makeAbsFile "/home/frank/Workspace11/u4blog/uniform-pandoc/resources/metaplusText.dtpl"   
 fnminiPlusres =  makeAbsFile "/home/frank/tests/testminiMetaPlus"
 
 test_templ_comp_miniplus :: IO ()
 test_templ_comp_miniplus = do 
     res1 <- runErr $ do 
-        htpl2 <- compileTemplateFile2 fnminihtml -- fnminilatex
+        htpl2 <- compileTemplateFile2 metaplusText -- fnminilatex
         let tpl1 = renderTemplate htpl2 (toJSON metap1)  :: Doc Text
         -- putIOwords ["tpl1 \n", showT tpl1]
         let res1 = render (Just 50) tpl1  -- line length, can be Nothing
@@ -94,7 +132,9 @@ test_templ_comp_miniplus = do
         return res1
     assertEqual (Right resPlusRes) res1
 
-resPlusRes = "\n    \n    <!doctype html>\n    <html>\n    <head>\n    <title>title02 missing</title><br>\n    <meta name=\"description\" content=abstract02 missing><br>\n    <meta name=\"keywords\" content=one, two, three><br>\n    </head>\n    <body>\n   title: title02 missing <br>\n   version:  <br>\n   date: 2023-03-31 <br>\n   def1:  <br>\n   dainoVersion: 0.1.5.6.3  <br>\n   bakedDir: /home/frank/baked <br>\n   body: <br> <h1 id=\"02-hl1title-for-02-but-missing\">02-hl1title for 02 but\nmissing</h1>\n<p>02-text: The text for 02:</p> <br>\n    </body>\n    </html>\n"
+resPlusRes = "\n    \n-- from YAML header\n    title: title02 missing\n    abstract: abstract02 missing\n    keywords: one, two, three \n    version: publish\n    date: 2023-03-31 \n    body:  <h1 id=\"02-hl1title-for-02-but-missing\">02-hl1title for 02 but\nmissing</h1>\n<p>02-text: The text for 02:</p>  \n-- from Defaults   \n   def1:   \n-- from extra \n   dainoVersion: 0.1.5.6.3   \n   bakedDir: /home/frank/baked  "
+
+-- "\n    \n    <!doctype html>\n    <html>\n    <head>\n    <title>title02 missing</title><br>\n    <meta name=\"description\" content=abstract02 missing><br>\n    <meta name=\"keywords\" content=one, two, three><br>\n    </head>\n    <body>\n   title: title02 missing <br>\n   version:  <br>\n   date: 2023-03-31 <br>\n   def1:  <br>\n   dainoVersion: 0.1.5.6.3  <br>\n   bakedDir: /home/frank/baked <br>\n   body: <br> <h1 id=\"02-hl1title-for-02-but-missing\">02-hl1title for 02 but\nmissing</h1>\n<p>02-text: The text for 02:</p> <br>\n    </body>\n    </html>\n"
                    
 --- tests from 0.1.6.2----------------
 
@@ -176,10 +216,10 @@ resPlusRes = "\n    \n    <!doctype html>\n    <html>\n    <head>\n    <title>ti
 -- cont12 :: [(Text, MetaValue)]
 -- cont12 =  [("abst", MetaString "yy"), ("body", MetaString "xx")]
 
-defs1 :: [(Text,Text)]
-defs1 = [("def1","def1v"),("date","dataFalse")] -- the date nmust not be overwritten from yaml value 
-test_defs :: IO ()
-test_defs = assertEqual defs1res $ addListOfDefaults defs1 (getMeta pandocA)
+-- defs1 :: [(Text,Text)]
+-- defs1 = [("def1","def1v"),("date","dataFalse")] -- the date nmust not be overwritten from yaml value 
+-- test_defs9 :: IO ()
+-- test_defs = assertEqual defs1res $ addListOfDefaults defs1 (getMeta pandocA)
 
 defs1res :: Meta
 defs1res = Meta{unMeta =
@@ -197,7 +237,7 @@ test_usemeta :: IO ()
 -- test with fn1 to show the pandoc 
 test_usemeta = do 
     res1 <- runErr $ do 
-        m1 <- meta2xx  writeHtml5String2 resAWithBody
+        m1 <- meta2xx  writeHtml5String2 resAWithBody9
         return m1
     assertEqual (Right resAhtml) res1   -- set to False to produce output
 resAhtml :: M.Map Text Text 
@@ -208,12 +248,12 @@ resAhtml = fromList [("abstract", "abstract02 missing"),
       ("title", "title02 missing"), ("version", "publish")]
 
 -- process cites and put body into meta 
-test_body = do 
-    res1 <- runErr $ md2Meta_Process pandocA 
-    assertEqual (Right resAWithBody) res1 
+-- test_body = do 
+--     res1 <- runErr $ md2Meta_Process pandocA 
+--     assertEqual (Right resAWithBody9) res1 
 
-resAWithBody :: Meta
-resAWithBody = Meta{unMeta =
+resAWithBody9 :: Meta
+resAWithBody9 = Meta{unMeta =
           fromList
             [("abstract",
               MetaInlines [Str "abstract02", Space, Str "missing"]),
@@ -236,21 +276,21 @@ fn1 :: Path Abs File
 fn1 =  makeAbsFile "/home/frank/Workspace11/u4blog/uniform-pandoc/tests/data/startValues/someTextWithYAML.md"
 fnA = makeAbsFile "/home/frank/Workspace11/u4blog/uniform-pandoc/tests/data/dataFor0163/blogA.md"
 
-test_readmd :: IO ()
--- test with fn1 to show the pandoc 
-test_readmd = do 
-    res1 <- runErr $ do 
-        mdfile <- read8 fnA markdownFileType 
-        pd <- readMarkdown2 mdfile
-        -- putIOwords ["pd \n", showT pd, "\n--"]
-        return pd
-    assertEqual (Right pandocA) res1   -- set to False to produce output
+-- test_readmd :: IO ()
+-- -- test with fn1 to show the pandoc 
+-- test_readmd = do 
+--     res1 <- runErr $ do 
+--         mdfile <- read8 fnA markdownFileType 
+--         pd <- readMarkdown2 mdfile
+--         -- putIOwords ["pd \n", showT pd, "\n--"]
+--         return pd
+--     assertEqual (Right pandocA) res1   -- set to False to produce output
 
-metaY :: Meta 
-metaY = Meta {unMeta = fromList 
-    [("abstract",MetaInlines [Str "The",Space,Str "long",Space,Str "struggle"]),("date",MetaInlines [Str "2020-06-16"])
-    ,("keywords",MetaInlines [Str "Haskell",Space,Str "IDE"]),("title",MetaInlines [Str "a",Space,Str "new",Space,Str "start"])
-    ]}
+-- metaY :: Meta 
+-- metaY = Meta {unMeta = fromList 
+--     [("abstract",MetaInlines [Str "The",Space,Str "long",Space,Str "struggle"]),("date",MetaInlines [Str "2020-06-16"])
+--     ,("keywords",MetaInlines [Str "Haskell",Space,Str "IDE"]),("title",MetaInlines [Str "a",Space,Str "new",Space,Str "start"])
+--     ]}
 
 -- meta with bold etc...
 
@@ -260,22 +300,22 @@ metaY = Meta {unMeta = fromList
 --         ("keywords",MetaInlines [Str "A_KEYword"]),
 --         ("title",MetaInlines [Str "the",Space,Strong [Str "real"],Space,Str "title",Space,Str "of",Space,Str "A"])]}
 
-pandocA = Pandoc  -- the contentn of blogA (fnA)
-     (Meta{unMeta =
-             fromList
-               [("abstract",
-                 MetaInlines [Str "abstract02", Space, Str "missing"]),
-                ("date", MetaInlines [Str "2023-03-31"]),
-                ("keywords",
-                 MetaInlines [Str "one,", Space, Str "two,", Space, Str "three"]),
-                ("title", MetaInlines [Str "title02", Space, Str "missing"]),
-                ("version", MetaInlines [Str "publish"])]})
-     [Header 1 ("02-hl1title-for-02-but-missing", [], [])
-        [Str "02-hl1title", Space, Str "for", Space, Str "02", Space,
-         Str "but", Space, Str "missing"],
-      Para
-        [Str "02-text:", Space, Str "The", Space, Str "text", Space,
-         Str "for", Space, Str "02:"]]
-pandocY :: Pandoc 
-pandocY = Pandoc (Meta {unMeta = fromList [("abstract",MetaInlines [Str "long",Space,Str "abstract"]),("date",MetaInlines [Str "2020-06-16"]),("keywords",MetaInlines [Str "KEYword"]),("title",MetaInlines [Str "the",Space,Strong [Str "real"],Space,Str "title"])]}) [Header 1 ("hl1_text-for-title",[],[]) [Str "hl1_text",Space,Emph [Str "For"],Space,Strong [Str "Title"]],Para [Str "Nonsense",Space,Str "list."],BulletList [[Plain [Str "one"]],[Plain [Str "two"]]]] 
+-- pandocA = Pandoc  -- the contentn of blogA (fnA)
+--      (Meta{unMeta =
+--              fromList
+--                [("abstract",
+--                  MetaInlines [Str "abstract02", Space, Str "missing"]),
+--                 ("date", MetaInlines [Str "2023-03-31"]),
+--                 ("keywords",
+--                  MetaInlines [Str "one,", Space, Str "two,", Space, Str "three"]),
+--                 ("title", MetaInlines [Str "title02", Space, Str "missing"]),
+--                 ("version", MetaInlines [Str "publish"])]})
+--      [Header 1 ("02-hl1title-for-02-but-missing", [], [])
+--         [Str "02-hl1title", Space, Str "for", Space, Str "02", Space,
+--          Str "but", Space, Str "missing"],
+--       Para
+--         [Str "02-text:", Space, Str "The", Space, Str "text", Space,
+--          Str "for", Space, Str "02:"]]
+-- pandocY :: Pandoc 
+-- pandocY = Pandoc (Meta {unMeta = fromList [("abstract",MetaInlines [Str "long",Space,Str "abstract"]),("date",MetaInlines [Str "2020-06-16"]),("keywords",MetaInlines [Str "KEYword"]),("title",MetaInlines [Str "the",Space,Strong [Str "real"],Space,Str "title"])]}) [Header 1 ("hl1_text-for-title",[],[]) [Str "hl1_text",Space,Emph [Str "For"],Space,Strong [Str "Title"]],Para [Str "Nonsense",Space,Str "list."],BulletList [[Plain [Str "one"]],[Plain [Str "two"]]]] 
  

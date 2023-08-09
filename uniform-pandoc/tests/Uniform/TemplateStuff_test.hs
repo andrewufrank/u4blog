@@ -25,13 +25,8 @@ import Uniform.PandocImports ( Pandoc(Pandoc), unPandocM )
 import Uniform.Markdown () 
 import Uniform.TexWriter ( writeTexSnip2 )
 import Uniform.PandocHTMLwriter ( writeHtml5String2 )
-import Text.Pandoc
-    ( renderTemplate,
-      compileDefaultTemplate,
-      nullMeta,
-      def,
-      Block(Plain),
-      Inline(Str, Emph, Space, Strong) )
+import Text.Pandoc as Pandoc 
+ 
 import Text.Pandoc.Definition
     ( nullMeta, Block(Plain), Inline(Str, Emph, Space, Strong) )
 import Text.Pandoc.Writers ()
@@ -122,22 +117,27 @@ import Uniform.TexFileTypes
 ------------examples with a generic md file
 fnminilatex =  makeAbsFile "/home/frank/Workspace11/u4blog/uniform-pandoc/resources/minimalLatex.dtpl"
 fnminihtml = makeAbsFile "/home/frank/Workspace11/u4blog/uniform-pandoc/resources/minimalHTML.dtpl"
+metaOnlyText = makeAbsFile "/home/frank/Workspace11/u4blog/uniform-pandoc/resources/metaOnlyText.dtpl"
 fnminires =  makeAbsFile "/home/frank/tests/testmini"
+
+-- blogA =  meta2xx writeText resAWithBody  :: _
+writeToMarkdown  pan1= unPandocM $ writeMarkdown Pandoc.def pan1
 
 test_templ_comp_minihtml :: IO ()
 test_templ_comp_minihtml = do 
     res1 <- runErr $ do 
-        htpl2 <- compileTemplateFile2 fnminihtml -- fnminilatex
-        let tpl1 = renderTemplate htpl2 resAhtml  :: Doc Text
+        htpl2 <- compileTemplateFile2 metaOnlyText  
+        blogA <- meta2xx writeToMarkdown resAWithBody1
+        let tpl1 = renderTemplate htpl2 blogA  :: Doc Text
         -- putIOwords ["tpl1 \n", showT tpl1]
         let res1 = render (Just 50) tpl1  -- line length, can be Nothing
 
-        -- putIOwords ["res1 \n", showT res1]
-        write8   fnminires htmloutFileType (HTMLout res1)
+        putIOwords ["res1 \n",  res1]
+        -- write8   fnminires htmloutFileType res1
         return res1
-    assertEqual (Right resAhtmlout) res1
+    assertEqual (Right resAprint) res1
 
-resAhtmlout=  "\n    <!doctype html>\n    <html>\n    <head>\n    <title>title02 missing</title><br>\n    <meta name=\"description\" content=abstract02 missing><br>\n    <meta name=\"keywords\" content=one, two, three><br>\n    </head>\n    <body>\n   title: title02 missing <br>\n   version:  <br>\n   date: 2023-03-31 <br>\n   def1:  <br>\n   dainoVersion:   <br>\n   bakedDir:  <br>\n   body: <br>  <br>\n    </body>\n    </html>\n"
+resAprint=  "\n    \n-- from YAML header\n    title: title02 missing\n    abstract: abstract02 missing\n    keywords: one, two, three \n    version: publish\n    date: 2023-03-31 \n    body:  # 02-hl1title for 02 but missing\n\n02-text: The text for 02:  \n-- from Defaults   \n   def1: def1v  \n "
 
 
 

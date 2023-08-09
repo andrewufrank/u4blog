@@ -1,0 +1,12 @@
+
+    $-- a template to test if values are set from template
+-- from YAML header
+    title: $title$
+    abstract: $abstract$
+    keywords: $keywords$ 
+    version: $version$
+    date: $date$ 
+    body:  $body$  
+-- from Defaults   
+   def1: $def1$  
+ 

@@ -17,58 +17,29 @@
 module Uniform.MetaStuff_test where
 
 import Test.Framework
--- import qualified Data.Map as M 
----- using uniform:
-import Uniform.Json ()
 import Uniform.PandocImports ( Meta(..), Pandoc(..), unPandocM )
 import Uniform.Markdown ( markdownFileType, readMarkdown2 )
-import Uniform.TexWriter ()
-import Uniform.PandocHTMLwriter
 import Text.Pandoc as Pandoc
+    ( Block(Plain, Header, Para, BulletList),
+      Meta(..),
+      MetaValue(MetaInlines, MetaBlocks, MetaString),
+      Pandoc(..),
+      writeNative,
+      def,
+      Inline(Str, Emph, Strong, Space) )
 
-import Text.Pandoc.Definition ()
-import Text.Pandoc.Writers ()
-import Text.DocTemplates as DocTemplates ()
 import Text.DocLayout (render)
 import Data.Text.Lazy (unpack)
 import Text.Blaze.Html.Renderer.Text (renderHtml)
 import qualified Data.Map as M
 import Data.Map ( fromList, toList)
--- import Uniform.Filenames 
--- import Uniform2.Filetypes4sites should not be imported here
-
-import Uniform.Test.TestHarness ()
 import Uniform.MetaStuff
-
-
--- import Uniform.Markdown_test 
--- import Uniform.Error           hiding (  (<.>)  )  -- (</>)
+    ( Meta(..), Pandoc(..), addListOfDefaults, md2Meta_Process )
 import UniformBase
 
 
 writeText pan1= unPandocM $ Pandoc.writeNative Pandoc.def pan1
 
--- not  a good format, produce html later in template 
--- test_usemeta :: IO ()
--- -- test with fn1 to show the pandoc 
--- test_usemeta = do
---     res1 <- runErr $ do
---         -- m1 <- meta2xx  writeHtml5String2 resAWithBody
---         m1 <- meta2xx writeText resAWithBody
---         return m1
---     assertEqual (Right resAhtml) res1   -- set to False to produce output
-
--- resAhtml :: M.Map Text Text
--- resAhtml = fromList [("abstract",
---        "[ Plain [ Str \"abstract02\" , Space , Str \"missing\" ] ]"),
---       ("body",
---        "[ Header\n    1\n    ( \"02-hl1title-for-02-but-missing\" , [] , [] )\n    [ Str \"02-hl1title\"\n    , Space\n    , Str \"for\"\n    , Space\n    , Str \"02\"\n    , Space\n    , Str \"but\"\n    , Space\n    , Str \"missing\"\n    ]\n, Para\n    [ Str \"02-text:\"\n    , Space\n    , Str \"The\"\n    , Space\n    , Str \"text\"\n    , Space\n    , Str \"for\"\n    , Space\n    , Str \"02:\"\n    ]\n]"),
---       ("date", "[ Plain [ Str \"2023-03-31\" ] ]"),
---       ("keywords",
---        "[ Plain\n    [ Str \"one,\" , Space , Str \"two,\" , Space , Str \"three\" ]\n]"),
---       ("title",
---        "[ Plain [ Str \"title02\" , Space , Str \"missing\" ] ]"),
---       ("version", "[ Plain [ Str \"publish\" ] ]")]
 
 defs1 :: [(Text,Text)]
 defs1 = [("def1","def1v"),("date","dataFalse")] 
@@ -99,14 +70,14 @@ resA1 =  Pandoc
      [Str "02-text:", Space, Str "The", Space, Str "text", Space,
       Str "for", Space, Str "02:"]]
 
-      
+
 -- process cites and put body into meta 
 test_body = do
     res1 <- runErr $ md2Meta_Process resA1
-    assertEqual (Right resAWithBody) res1
+    assertEqual (Right resAWithBody1) res1
 
-resAWithBody :: Meta
-resAWithBody = Meta{unMeta =
+resAWithBody1 :: Meta
+resAWithBody1 = Meta{unMeta =
           fromList
            [("abstract",
               MetaInlines [Str "abstract02", Space, Str "missing"]),
