@@ -212,16 +212,21 @@ md2Meta_Process :: Pandoc -> ErrIO Meta
 -- the body is not required anymore!
 md2Meta_Process  pandoc1 = do
     (Pandoc m1 p1) <- unPandocM $ PC.processCitations pandoc1
-    let c1 = Meta (fromList [(("body"::Text), (MetaBlocks p1))])
-    -- todo missing the index, references, umlaut conversion
-        cn = mergeAll [m1, c1] :: Meta-- order may  be important
-    -- putIOwords ["md2Meta cn \n", showT cn, "\n--"]
-    return cn
+    let m2 = Meta $ M.insert "body" (MetaBlocks p1) (unMeta m1)
+
+    -- let c1 = Meta (fromList [(("body"::Text), (MetaBlocks p1))])
+    -- -- todo missing the index, references, umlaut conversion
+    --     cn = mergeAll [m1, c1] :: Meta-- order may  be important
+    -- -- putIOwords ["md2Meta cn \n", showT cn, "\n--"]
+    return m2
 
 mergeAll :: [Meta] -> Meta
 -- combines list, preference to the right (last key wins if duplicated!)
 mergeAll  = Meta . fromList . concat . map toList . map unMeta
+
 meta2pandoc :: Meta -> Pandoc
+-- create a pandoc from a meta with an empty block
+-- useful to apply writer to meta
 meta2pandoc m = Pandoc m []
 
 addMetaFieldT ::   Text -> Text -> Meta -> Meta

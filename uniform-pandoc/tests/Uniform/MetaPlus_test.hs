@@ -92,8 +92,9 @@ test_templ_comp_miniplus = do
         -- putIOwords ["res1 \n", showT res1]
         write8   fnminiPlusres htmloutFileType (HTMLout res1)
         return res1
-    assertEqual (Right zero) res1
+    assertEqual (Right resPlusRes) res1
 
+resPlusRes = "\n    \n    <!doctype html>\n    <html>\n    <head>\n    <title>title02 missing</title><br>\n    <meta name=\"description\" content=abstract02 missing><br>\n    <meta name=\"keywords\" content=one, two, three><br>\n    </head>\n    <body>\n   title: title02 missing <br>\n   version:  <br>\n   date: 2023-03-31 <br>\n   def1:  <br>\n   dainoVersion: 0.1.5.6.3  <br>\n   bakedDir: /home/frank/baked <br>\n   body: <br> <h1 id=\"02-hl1title-for-02-but-missing\">02-hl1title for 02 but\nmissing</h1>\n<p>02-text: The text for 02:</p> <br>\n    </body>\n    </html>\n"
                    
 --- tests from 0.1.6.2----------------
 
