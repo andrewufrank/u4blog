@@ -42,13 +42,13 @@ import Uniform.MetaStuff_test
 import Uniform.TemplateStuff
 import Uniform.TemplateStuff_test
 import Uniform.HttpFiles
-
 import UniformBase
 
 -- tests for 0.1.6.3
 
 data MetaPlus = MetaPlus 
                 { metap :: Meta    -- ^ the pandoc meta 
+                , sett :: Settings -- ^ the data from the settingsfile
                 , extra :: ExtraValues -- ^ other values to go into template
                 , mapHtml ::  M.Map Text Text
                 , metaMarkdown :: M.Map Text Text 
@@ -57,7 +57,7 @@ data MetaPlus = MetaPlus
 instance ToJSON MetaPlus
 instance FromJSON MetaPlus
 instance Zeros MetaPlus where zero :: MetaPlus
-                              zero = MetaPlus zero zero zero zero
+                              zero = MetaPlus zero zero zero zero zero
 
 instance Zeros (M.Map Text Text) where zero = fromList []
 
@@ -77,12 +77,23 @@ extra1 = ExtraValues {dainoVersion = "0.1.5.6.3"
                     , bakedDir = "/home/frank/baked"}
 
 metap1 = MetaPlus { metap = resAWithBody1
+                   , sett = settings1
                    , extra = extra1
                    , mapHtml = resAhtml
                    , metaMarkdown = resBody
                    } 
                    
 -- test_mp1 = assertEqual (zero) metap1
+
+-- read settings file -- simpler use a set (and simplified data set)
+
+-- settingsfn = makeAbsFile "/home/frank/Workspace11/daino/settings3.yaml"
+
+-- test_settings = do 
+--     res1 <- runErr $ do 
+--         readSettings NoticeLevel2 settingsfn 
+--     assertEqual (Right zero) res1
+
 
 -- produce a markdown body 
 test_markdownBody = do 
@@ -116,8 +127,54 @@ test_templ_comp_miniplus = do
         return res1
     assertEqual (Right resPlusRes) res1
 
-resPlusRes =  "\n    \n-- from YAML header from html \n    title: title02 missing\n    abstract: abstract02 missing\n    keywords: one, two, three \n    version: publish\n    date: 2023-03-31 \n    body:  <h1 id=\"02-hl1title-for-02-but-missing\">02-hl1title for 02 but\nmissing</h1>\n<p>02-text: The text for 02:</p>  \n-- from YAML header from Markdown\n    title: title02 missing\n    abstract: abstract02 missing\n    keywords: one, two, three \n    version: publish\n    date: 2023-03-31 \n    body:  # 02-hl1title for 02 but missing\n\n02-text: The text for 02:  -- from Defaults   \n   def1: def1v  \n-- from extra \n   dainoVersion: 0.1.5.6.3   \n   bakedDir: /home/frank/baked  "
-                   
+resPlusRes =  "\n    \n-- from YAML header from html \n    title: title02 missing\n    abstract: abstract02 missing\n    keywords: one, two, three \n    version: publish\n    date: 2023-03-31 \n    body:  <h1 id=\"02-hl1title-for-02-but-missing\">02-hl1title for 02 but\nmissing</h1>\n<p>02-text: The text for 02:</p>  \n-- from YAML header from Markdown\n    title: title02 missing\n    abstract: abstract02 missing\n    keywords: one, two, three \n    version: publish\n    date: 2023-03-31 \n    body:  # 02-hl1title for 02 but missing\n\n02-text: The text for 02:  -- from Defaults   \n   def1: def1v  \n-- from extra \n   dainoVersion: 0.1.5.6.3   \n   bakedDir: /home/frank/baked  \n\n-- from settings\n    siteHeader: siteNameExample\n    menu: \n                    link: /Blog/index.html\n            text: Blog\n                    link: /PublicationList/index.html\n            text: Publications\n                    link: /dainodesign/index.html\n            text: daino Documentation\n        "
+
+------------ settings (copied to avoid circular import)
+
+data Settings = Settings
+    { ---  siteLayout ::  
+      localhostPort :: Int 
+    , settingsAuthor :: Text 
+    , settingsDate :: Text -- should be UTC 
+    , siteHeader :: SiteHeader 
+    , menu :: [MenuItem]
+    -- , today :: Text
+    } deriving (Show, Read, Ord, Eq, Generic, Zeros)
+
+instance ToJSON Settings
+instance FromJSON Settings
+
+data SiteHeader = SiteHeader 
+    { sitename :: FilePath 
+    , byline :: Text 
+    , banner :: FilePath 
+    -- , bannerCaption :: Text 
+    } deriving (Show, Read, Ord, Eq, Generic, Zeros)
+instance ToJSON SiteHeader
+instance FromJSON SiteHeader
+
+-- newtype MenuItems = MenuItems {menuNav:: [MenuItem]
+--                             -- , menuB:: Text
+--                             } deriving (Show, Read, Ord, Eq, Generic, Zeros)
+-- instance ToJSON MenuItems 
+-- instance FromJSON MenuItems 
+
+data MenuItem = MenuItem  
+    { navlink :: FilePath 
+    , navtext :: Text
+    -- , navpdf :: Text  -- for the link to the pdf 
+    -- not a good idead to put here
+    } deriving (Show, Read, Ord, Eq, Generic, Zeros)
+instance ToJSON MenuItem
+instance FromJSON MenuItem
+
+settings1 :: Settings
+settings1 = -- zero :: Settings 
+    Settings {
+        -- siteLayout = SiteLayout {themeDir = Path Abs Dir /home/frank/Workspace11/daino/docs/theme/, doughDir = Path Abs Dir /home/frank/Workspace11/daino/docs/site/dough/, bakedDir = Path Abs Dir /home/frank/Workspace11/daino/docs/site/baked/, masterTemplateFile = Path Rel File master5.dtpl}, 
+        localhostPort = 3000, settingsAuthor = "Author of Settings", settingsDate = "2019-01-01", siteHeader = SiteHeader {sitename = "siteNameExample", byline = "siteByLineExample", banner = "/templates/img/symmetricGeras2.jpg"}, menu = [MenuItem {navlink = "/Blog/index.html", navtext = "Blog"},MenuItem {navlink = "/PublicationList/index.html", navtext = "Publications"},MenuItem {navlink = "/dainodesign/index.html", navtext = "daino Documentation"}]}
+
+
 --- tests from 0.1.6.2----------------
 
 -- -- test getFromYaml value on abstract

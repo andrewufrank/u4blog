@@ -18,3 +18,11 @@
 -- from extra 
    dainoVersion: $extra.dainoVersion$   
    bakedDir: $extra.bakedDir$  
+
+-- from settings
+    siteHeader: $sett.siteHeader.sitename$
+    menu: 
+        $for(sett.menu)$
+            link: $sett.menu.navlink$
+            text: $sett.menu.navtext$
+        $endfor$
