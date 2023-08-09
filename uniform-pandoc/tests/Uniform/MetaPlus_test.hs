@@ -116,9 +116,7 @@ test_templ_comp_miniplus = do
         return res1
     assertEqual (Right resPlusRes) res1
 
-resPlusRes = "\n    \n-- from YAML header\n    title: title02 missing\n    abstract: abstract02 missing\n    keywords: one, two, three \n    version: publish\n    date: 2023-03-31 \n    body:  <h1 id=\"02-hl1title-for-02-but-missing\">02-hl1title for 02 but\nmissing</h1>\n<p>02-text: The text for 02:</p>  \n-- from Defaults   \n   def1:   \n-- from extra \n   dainoVersion: 0.1.5.6.3   \n   bakedDir: /home/frank/baked  "
-
--- "\n    \n    <!doctype html>\n    <html>\n    <head>\n    <title>title02 missing</title><br>\n    <meta name=\"description\" content=abstract02 missing><br>\n    <meta name=\"keywords\" content=one, two, three><br>\n    </head>\n    <body>\n   title: title02 missing <br>\n   version:  <br>\n   date: 2023-03-31 <br>\n   def1:  <br>\n   dainoVersion: 0.1.5.6.3  <br>\n   bakedDir: /home/frank/baked <br>\n   body: <br> <h1 id=\"02-hl1title-for-02-but-missing\">02-hl1title for 02 but\nmissing</h1>\n<p>02-text: The text for 02:</p> <br>\n    </body>\n    </html>\n"
+resPlusRes =  "\n    \n-- from YAML header from html \n    title: title02 missing\n    abstract: abstract02 missing\n    keywords: one, two, three \n    version: publish\n    date: 2023-03-31 \n    body:  <h1 id=\"02-hl1title-for-02-but-missing\">02-hl1title for 02 but\nmissing</h1>\n<p>02-text: The text for 02:</p>  \n-- from YAML header from Markdown\n    title: title02 missing\n    abstract: abstract02 missing\n    keywords: one, two, three \n    version: publish\n    date: 2023-03-31 \n    body:  # 02-hl1title for 02 but missing\n\n02-text: The text for 02:  -- from Defaults   \n   def1: def1v  \n-- from extra \n   dainoVersion: 0.1.5.6.3   \n   bakedDir: /home/frank/baked  "
                    
 --- tests from 0.1.6.2----------------
 
