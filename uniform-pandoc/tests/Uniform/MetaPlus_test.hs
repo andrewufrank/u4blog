@@ -99,22 +99,6 @@ resBody = fromList
       ("keywords", "one, two, three\n"), ("title", "title02 missing\n"),
       ("version", "publish\n")]
 
-test_metastring1 = do 
-    res1 <- runErr $ do 
-        meta2xx writeToMarkdown  string44
-    assertEqual (Right resstring44) res1 
-
-string44:: Meta
-string44 = Meta{unMeta =
-          fromList
-           [("def1", MetaString "def1v") ]}
-resstring44 = (fromList [("def1", "def1v\n")])
-
--- resA1md :: Meta -> ErrIO Text
--- resA1md meta1 = do 
---     md1 :: _ <- writeToMarkdown  meta1 
---             -- includes defaults and body 
---     return  md1 
 
 metaplusText = makeAbsFile "/home/frank/Workspace11/u4blog/uniform-pandoc/resources/metaplusText.dtpl"   
 fnminiPlusres =  makeAbsFile "/home/frank/tests/testminiMetaPlus"
@@ -127,7 +111,7 @@ test_templ_comp_miniplus = do
         -- putIOwords ["tpl1 \n", showT tpl1]
         let res1 = render (Just 50) tpl1  -- line length, can be Nothing
 
-        -- putIOwords ["res1 \n", showT res1]
+        putIOwords ["res1 \n", res1]
         write8   fnminiPlusres htmloutFileType (HTMLout res1)
         return res1
     assertEqual (Right resPlusRes) res1

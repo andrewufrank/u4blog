@@ -1,14 +1,20 @@
 
     $-- a template to test if values are set from template
--- from YAML header
+-- from YAML header from html 
     title: $mapHtml.title$
     abstract: $mapHtml.abstract$
     keywords: $mapHtml.keywords$ 
     version: $mapHtml.version$
     date: $mapHtml.date$ 
     body:  $mapHtml.body$  
--- from Defaults   
-   def1: $mapHtml.def1$  
+-- from YAML header from Markdown
+    title: $metaMarkdown.title$
+    abstract: $metaMarkdown.abstract$
+    keywords: $metaMarkdown.keywords$ 
+    version: $metaMarkdown.version$
+    date: $metaMarkdown.date$ 
+    body:  $metaMarkdown.body$  -- from Defaults   
+   def1: $metaMarkdown.def1$  
 -- from extra 
    dainoVersion: $extra.dainoVersion$   
    bakedDir: $extra.bakedDir$  
