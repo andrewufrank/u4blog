@@ -59,8 +59,8 @@ fnminires =  makeAbsFile "/home/frank/tests/testmini"
 -- blogA =  meta2xx writeText resAWithBody  :: _
 writeToMarkdown  pan1= unPandocM $ writeMarkdown Pandoc.def pan1
 
-test_templ_comp_minihtml :: IO ()
-test_templ_comp_minihtml = do 
+test_templ_comp_miniText :: IO ()
+test_templ_comp_miniText = do 
     res1 <- runErr $ do 
         htpl2 <- compileTemplateFile2 metaOnlyText  
         blogA <- meta2xx writeToMarkdown resAWithBody1
@@ -72,9 +72,36 @@ test_templ_comp_minihtml = do
         -- write8   fnminires htmloutFileType res1
         return res1
     assertEqual (Right resAprint) res1
+test_templ_comp_miniHtml :: IO ()
+test_templ_comp_miniHtml = do 
+    res1 <- runErr $ do 
+        htpl2 <- compileTemplateFile2 metaOnlyText  
+        blogA <- meta2xx writeHtml5String2 resAWithBody1
+        let tpl1 = renderTemplate htpl2 blogA  :: Doc Text
+        -- putIOwords ["tpl1 \n", showT tpl1]
+        let res1 = render (Just 50) tpl1  -- line length, can be Nothing
+
+        putIOwords ["res1 \n",  res1]
+        -- write8   fnminires htmloutFileType res1
+        return res1
+    assertEqual (Right resAhtml) res1
+test_templ_comp_miniLatex :: IO ()
+test_templ_comp_miniLatex = do 
+    res1 <- runErr $ do 
+        htpl2 <- compileTemplateFile2 metaOnlyText  
+        blogA <- meta2xx writeTexSnip2 resAWithBody1
+        let tpl1 = renderTemplate htpl2 blogA  :: Doc Text
+        -- putIOwords ["tpl1 \n", showT tpl1]
+        let res1 = render (Just 50) tpl1  -- line length, can be Nothing
+
+        putIOwords ["res1 \n",  res1]
+        -- write8   fnminires htmloutFileType res1
+        return res1
+    assertEqual (Right resAlatex) res1
 
 resAprint=  "\n    \n-- from YAML header\n    title: title02 missing\n    abstract: abstract02 missing\n    keywords: one, two, three \n    version: publish\n    date: 2023-03-31 \n    body:  # 02-hl1title for 02 but missing\n\n02-text: The text for 02:  \n-- from Defaults   \n   def1: def1v  \n "
-
+resAhtml = "\n    \n-- from YAML header\n    title: title02 missing\n    abstract: abstract02 missing\n    keywords: one, two, three \n    version: publish\n    date: 2023-03-31 \n    body:  <h1 id=\"02-hl1title-for-02-but-missing\">02-hl1title for 02 but\nmissing</h1>\n<p>02-text: The text for 02:</p>  \n-- from Defaults   \n   def1: def1v  \n " 
+resAlatex = "\n    \n-- from YAML header\n    title: title02 missing\n    abstract: abstract02 missing\n    keywords: one, two, three \n    version: publish\n    date: 2023-03-31 \n    body:  \\hypertarget{02-hl1title-for-02-but-missing}{%\n\\section{02-hl1title for 02 but\nmissing}\\label{02-hl1title-for-02-but-missing}}\n\n02-text: The text for 02:  \n-- from Defaults   \n   def1: def1v  \n " 
 
 
 
