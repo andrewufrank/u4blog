@@ -88,33 +88,33 @@ resB1 =  Pandoc
              ("def1", MetaString "def1_B"),
              ("keywords", MetaInlines [Str "referenceTest"]),
              ("reference-section-title", MetaInlines [Str "References"]),
-             ("references",
-              MetaList
-                [MetaMap
-                   (fromList
-                      [("author",
-                        MetaList
-                          [MetaMap
-                             (fromList
-                                [("family", MetaInlines [Str "Fenner"]),
-                                 ("given", MetaInlines [Str "Martin", Space, Str "Beat"])])]),
-                       ("container-title",
-                        MetaInlines [Str "Nature", Space, Str "Materials"]),
-                       ("id", MetaInlines [Str "fenner2012a"]),
-                       ("issued",
-                        MetaMap
-                          (fromList
-                             [("month", MetaInlines [Str "3"]),
-                              ("year", MetaInlines [Str "2212"])])),
-                       ("page", MetaInlines [Str "261-263"]),
-                       ("publisher",
-                        MetaInlines
-                          [Str "Nature", Space, Str "Publishing", Space, Str "Group"]),
-                       ("title",
-                        MetaInlines
-                          [Str "One-click", Space, Str "science", Space, Str "marketing"]),
-                       ("type", MetaInlines [Str "article-journal"]),
-                       ("volume", MetaInlines [Str "11"])])]),
+            --  ("references",
+            --   MetaList
+            --     [MetaMap
+            --        (fromList
+            --           [("author",
+            --             MetaList
+            --               [MetaMap
+            --                  (fromList
+            --                     [("family", MetaInlines [Str "Fenner"]),
+            --                      ("given", MetaInlines [Str "Martin", Space, Str "Beat"])])]),
+            --            ("container-title",
+            --             MetaInlines [Str "Nature", Space, Str "Materials"]),
+            --            ("id", MetaInlines [Str "fenner2012a"]),
+            --            ("issued",
+            --             MetaMap
+            --               (fromList
+            --                  [("month", MetaInlines [Str "3"]),
+            --                   ("year", MetaInlines [Str "2212"])])),
+            --            ("page", MetaInlines [Str "261-263"]),
+            --            ("publisher",
+            --             MetaInlines
+            --               [Str "Nature", Space, Str "Publishing", Space, Str "Group"]),
+            --            ("title",
+            --             MetaInlines
+            --               [Str "One-click", Space, Str "science", Space, Str "marketing"]),
+            --            ("type", MetaInlines [Str "article-journal"]),
+            --            ("volume", MetaInlines [Str "11"])])]),
              ("style",
               MetaInlines
                 [Str "resources/chicago-fullnote-bibliography-bb.csl"]),
@@ -188,7 +188,7 @@ test_bodyB = do
 
 resBWithBody1 = Meta{unMeta =
           fromList
-            [("abstract",
+[("abstract",
               MetaBlocks
                 [Para
                    [Str "This", Space, Str "blog", Space, Str "uses", Space, Str "a",
@@ -225,23 +225,14 @@ resBWithBody1 = Meta{unMeta =
                       [Citation{citationId = "fenner2012a", citationPrefix = [],
                                 citationSuffix = [], citationMode = NormalCitation,
                                 citationNoteNum = 3, citationHash = 0}]
-                      [Str "(Fenner", Space, Str "2212)"],
+                      [Str "(", Strong [Str "fenner2012a?"], Str ")"],
                     Space, Str "is", Space, Str "given", Space, Str "in", Space,
                     Str "the", Space, Str "file", Space, Str "locally", Space,
                     Str "(note", Space, Str "the", Space, Str "format", Space,
                     Str "and", Space, Str "keywords!)."],
                  Header 1 ("bibliography", ["unnumbered"], []) [Str "References"],
                  Div ("refs", ["references", "csl-bib-body", "hanging-indent"], [])
-                   [Div ("ref-fenner2012a", ["csl-entry"], [])
-                      [Para
-                         [Str "Fenner,", Space, Str "Martin", Space, Str "Beat.", Space,
-                          Str "2212.", Space,
-                          Span ("", [], [])
-                            [Str "\8220", Str "One-Click", Space, Str "Science", Space,
-                             Str "Marketing", Str ".", Str "\8221"],
-                          Space, Emph [Str "Nature", Space, Str "Materials"], Space,
-                          Str "11", Space, Str "(March):", Space, Str "261\8211\&63."]],
-                    Div ("ref-frank09geo", ["csl-entry"], [])
+                   [Div ("ref-frank09geo", ["csl-entry"], [])
                       [Para
                          [Str "Frank,", Space, Str "Andrew", Space, Str "U.", Space,
                           Str "2009.", Space,
@@ -274,39 +265,133 @@ resBWithBody1 = Meta{unMeta =
              ("def1", MetaString "def1_B"),
              ("keywords", MetaInlines [Str "referenceTest"]),
              ("reference-section-title", MetaInlines [Str "References"]),
-             ("references",
-              MetaList
-                [MetaMap
-                   (fromList
-                      [("author",
-                        MetaList
-                          [MetaMap
-                             (fromList
-                                [("family", MetaInlines [Str "Fenner"]),
-                                 ("given", MetaInlines [Str "Martin", Space, Str "Beat"])])]),
-                       ("container-title",
-                        MetaInlines [Str "Nature", Space, Str "Materials"]),
-                       ("id", MetaInlines [Str "fenner2012a"]),
-                       ("issued",
-                        MetaMap
-                          (fromList
-                             [("month", MetaInlines [Str "3"]),
-                              ("year", MetaInlines [Str "2212"])])),
-                       ("page", MetaInlines [Str "261-263"]),
-                       ("publisher",
-                        MetaInlines
-                          [Str "Nature", Space, Str "Publishing", Space, Str "Group"]),
-                       ("title",
-                        MetaInlines
-                          [Str "One-click", Space, Str "science", Space, Str "marketing"]),
-                       ("type", MetaInlines [Str "article-journal"]),
-                       ("volume", MetaInlines [Str "11"])])]),
              ("style",
               MetaInlines
                 [Str "resources/chicago-fullnote-bibliography-bb.csl"]),
              ("title",
               MetaInlines [Str "B", Space, Str "title", Space, Str "missing"]),
              ("version", MetaInlines [Str "private"])]}
+
+          -- mit local refs 
+            -- [("abstract",
+            --   MetaBlocks
+            --     [Para
+            --        [Str "This", Space, Str "blog", Space, Str "uses", Space, Str "a",
+            --         Space, Str "reference", Space, Str "given", Space, Str "locally.",
+            --         SoftBreak, Str "second", Space, Str "line"]]),
+            --  ("bibliography", MetaInlines [Str "resources/BibTexLatex.bib"]),
+            --  ("body",
+            --   MetaBlocks
+            --     [Header 1 ("an-example-with-local-references-details", [], [])
+            --        [Str "An", Space, Str "example", Space, Str "with", Space,
+            --         Str "local", Space, Str "references", Space, Str "details"],
+            --      Para
+            --        [Str "The", Space,
+            --         Cite
+            --           [Citation{citationId = "frank-machbarkeit", citationPrefix = [],
+            --                     citationSuffix = [], citationMode = NormalCitation,
+            --                     citationNoteNum = 1, citationHash = 0}]
+            --           [Str "(Frank", Space, Str "2014)"],
+            --         Space, Str "and", Space, Str "the", Space, Str "next", Space,
+            --         Str "in", Space, Str "a", Space, Str "foonote",
+            --         Note
+            --           [Para
+            --              [Str "with", Space, Str "a", Space, Str "text",
+            --               Cite
+            --                 [Citation{citationId = "frank09geo", citationPrefix = [],
+            --                           citationSuffix = [], citationMode = NormalCitation,
+            --                           citationNoteNum = 2, citationHash = 0}]
+            --                 [Str "(Frank", Space, Str "2009)"],
+            --               Space, Str "before", Space, Str "and", Space, Str "after"]],
+            --         Space, Str "are", Space, Str "in", Space, Str "the", Space,
+            --         Str "biblio", Space, Str "file,", Space, Str "but", Space,
+            --         Str "the", Space, Str "reference", Space,
+            --         Cite
+            --           [Citation{citationId = "fenner2012a", citationPrefix = [],
+            --                     citationSuffix = [], citationMode = NormalCitation,
+            --                     citationNoteNum = 3, citationHash = 0}]
+            --           [Str "(Fenner", Space, Str "2212)"],
+            --         Space, Str "is", Space, Str "given", Space, Str "in", Space,
+            --         Str "the", Space, Str "file", Space, Str "locally", Space,
+            --         Str "(note", Space, Str "the", Space, Str "format", Space,
+            --         Str "and", Space, Str "keywords!)."],
+            --      Header 1 ("bibliography", ["unnumbered"], []) [Str "References"],
+            --      Div ("refs", ["references", "csl-bib-body", "hanging-indent"], [])
+            --        [Div ("ref-fenner2012a", ["csl-entry"], [])
+            --           [Para
+            --              [Str "Fenner,", Space, Str "Martin", Space, Str "Beat.", Space,
+            --               Str "2212.", Space,
+            --               Span ("", [], [])
+            --                 [Str "\8220", Str "One-Click", Space, Str "Science", Space,
+            --                  Str "Marketing", Str ".", Str "\8221"],
+            --               Space, Emph [Str "Nature", Space, Str "Materials"], Space,
+            --               Str "11", Space, Str "(March):", Space, Str "261\8211\&63."]],
+            --         Div ("ref-frank09geo", ["csl-entry"], [])
+            --           [Para
+            --              [Str "Frank,", Space, Str "Andrew", Space, Str "U.", Space,
+            --               Str "2009.", Space,
+            --               Span ("", [], [])
+            --                 [Str "\8220", Str "Geo-Ontologies", Space, Str "Are", Space,
+            --                  Str "Scale", Space, Str "Dependent", Space, Str "(Abstract", Space,
+            --                  Str "Only)", Str ".", Str "\8221"],
+            --               Space, Str "In", Space,
+            --               Emph
+            --                 [Str "European", Space, Str "Geosciences", Space, Str "Union,",
+            --                  Space, Str "General", Space, Str "Assembly", Space, Str "2009,",
+            --                  Space, Str "Session", Space, Str "Knowledge", Space, Str "and",
+            --                  Space, Str "Ontologies"],
+            --               Str ",", Space, Str "edited", Space, Str "by", Space, Str "Tuija",
+            --               Space, Str "Pulkkinen.", Space,
+            --               Link ("", [], [])
+            --                 [Str "http://publik.tuwien.ac.at/files/PubDat-175453.pdf"]
+            --                 ("http://publik.tuwien.ac.at/files/PubDat-175453.pdf", ""),
+            --               Str "."]],
+            --         Div ("ref-frank-machbarkeit", ["csl-entry"], [])
+            --           [Para
+            --              [Str "\8212\8212\8212.", Space, Str "2014.", Space,
+            --               Span ("", [], [])
+            --                 [Str "\8220", Str "Machbarkeit", Space, Str "eines", Space,
+            --                  Str "InformaInformations", Space, Str "f\252r", Space,
+            --                  Str "geographische", Space, Str "Daten", Str ".", Str "\8221"],
+            --               Space, Str "Geoinformation,", Space, Str "Technische", Space,
+            --               Str "Universitaet", Space, Str "Wien."]]]]),
+            --  ("date", MetaInlines [Str "2010-07-29"]),
+            --  ("def1", MetaString "def1_B"),
+            --  ("keywords", MetaInlines [Str "referenceTest"]),
+            --  ("reference-section-title", MetaInlines [Str "References"]),
+            --  ("references",
+            --   MetaList
+            --     [MetaMap
+            --        (fromList
+            --           [("author",
+            --             MetaList
+            --               [MetaMap
+            --                  (fromList
+            --                     [("family", MetaInlines [Str "Fenner"]),
+            --                      ("given", MetaInlines [Str "Martin", Space, Str "Beat"])])]),
+            --            ("container-title",
+            --             MetaInlines [Str "Nature", Space, Str "Materials"]),
+            --            ("id", MetaInlines [Str "fenner2012a"]),
+            --            ("issued",
+            --             MetaMap
+            --               (fromList
+            --                  [("month", MetaInlines [Str "3"]),
+            --                   ("year", MetaInlines [Str "2212"])])),
+            --            ("page", MetaInlines [Str "261-263"]),
+            --            ("publisher",
+            --             MetaInlines
+            --               [Str "Nature", Space, Str "Publishing", Space, Str "Group"]),
+            --            ("title",
+            --             MetaInlines
+            --               [Str "One-click", Space, Str "science", Space, Str "marketing"]),
+            --            ("type", MetaInlines [Str "article-journal"]),
+            --            ("volume", MetaInlines [Str "11"])])]),
+            --  ("style",
+            --   MetaInlines
+            --     [Str "resources/chicago-fullnote-bibliography-bb.csl"]),
+            --  ("title",
+            --   MetaInlines [Str "B", Space, Str "title", Space, Str "missing"]),
+            --  ("version", MetaInlines [Str "private"])]}
 -- --------------------------------------------------------------------------
 -- basics to get the data 
 fn1 :: Path Abs File
@@ -380,34 +465,34 @@ pandocB = Pandoc
                 ("date", MetaInlines [Str "2010-07-29"]),
                 ("keywords", MetaInlines [Str "referenceTest"]),
                 ("reference-section-title", MetaInlines [Str "References"]),
-                ("references",
-                 MetaList
-                   [MetaMap
-                      (fromList
-                         [("author",
-                           MetaList
-                             [MetaMap
-                                (fromList
-                                   [("family", MetaInlines [Str "Fenner"]),
-                                    ("given",
-                                     MetaInlines [Str "Martin", Space, Str "Beat"])])]),
-                          ("container-title",
-                           MetaInlines [Str "Nature", Space, Str "Materials"]),
-                          ("id", MetaInlines [Str "fenner2012a"]),
-                          ("issued",
-                           MetaMap
-                             (fromList
-                                [("month", MetaInlines [Str "3"]),
-                                 ("year", MetaInlines [Str "2212"])])),
-                          ("page", MetaInlines [Str "261-263"]),
-                          ("publisher",
-                           MetaInlines
-                             [Str "Nature", Space, Str "Publishing", Space, Str "Group"]),
-                          ("title",
-                           MetaInlines
-                             [Str "One-click", Space, Str "science", Space, Str "marketing"]),
-                          ("type", MetaInlines [Str "article-journal"]),
-                          ("volume", MetaInlines [Str "11"])])]),
+                -- ("references",
+                --  MetaList
+                --    [MetaMap
+                --       (fromList
+                --          [("author",
+                --            MetaList
+                --              [MetaMap
+                --                 (fromList
+                --                    [("family", MetaInlines [Str "Fenner"]),
+                --                     ("given",
+                --                      MetaInlines [Str "Martin", Space, Str "Beat"])])]),
+                --           ("container-title",
+                --            MetaInlines [Str "Nature", Space, Str "Materials"]),
+                --           ("id", MetaInlines [Str "fenner2012a"]),
+                --           ("issued",
+                --            MetaMap
+                --              (fromList
+                --                 [("month", MetaInlines [Str "3"]),
+                --                  ("year", MetaInlines [Str "2212"])])),
+                --           ("page", MetaInlines [Str "261-263"]),
+                --           ("publisher",
+                --            MetaInlines
+                --              [Str "Nature", Space, Str "Publishing", Space, Str "Group"]),
+                --           ("title",
+                --            MetaInlines
+                --              [Str "One-click", Space, Str "science", Space, Str "marketing"]),
+                --           ("type", MetaInlines [Str "article-journal"]),
+                --           ("volume", MetaInlines [Str "11"])])]),
                 ("style",
                  MetaInlines
                    [Str "resources/chicago-fullnote-bibliography-bb.csl"]),
