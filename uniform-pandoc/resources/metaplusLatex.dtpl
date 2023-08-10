@@ -2,7 +2,8 @@
     $-- a template to test if values are set from template for latex
 
 
-\documentclass[a4paper,openany,nobib] %openright to force parts and chapter to start right
+\documentclass[a4paper,] %openright to force parts and chapter to start right
+            % for tufte openany,nobib
 {article} 
     % {tufte-handout}  
     %testhandout  testzwei 
@@ -16,21 +17,16 @@
 \addbibresource{resources/BibTexLatex.bib}  
 
 \usepackage[colorlinks]{hyperref}
-
+% -------------------------------------
 \begin{document} 
 
-\maketitle
-
 \title{$metaLatex.title$}
+\date{$metaLatex.date$}
+\maketitle
 \begin{abstract}
    $metaLatex.abstract$ %abstract
 \end{abstract} 
-\date{$metaLatex.date$}
-
-
 keywords: $metaLatex.keywords$ 
-
-
 $metaLatex.body$  %body 
 
 \printbibliography
@@ -39,7 +35,8 @@ $metaLatex.body$  %body
 
 {\scriptsize Produced with `daino'  ($extra.dainoVersion$) 
 using template metaplusLatex.dtpl from file \url{Blog/b010withRef.md}
-}
+
 
 version: $metaLatex.version$
+}
 \end{document}
