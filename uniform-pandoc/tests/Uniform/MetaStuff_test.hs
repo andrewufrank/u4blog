@@ -19,7 +19,7 @@ module Uniform.MetaStuff_test where
 import Test.Framework
 import Uniform.PandocImports ( Meta(..), Pandoc(..), unPandocM )
 import Uniform.Markdown ( markdownFileType, readMarkdown2 )
-import Text.Pandoc as Pandoc
+import Text.Pandoc as Pandoc  
  
 import Text.DocLayout (render)
 import Data.Text.Lazy (unpack)

@@ -1,0 +1,31 @@
+
+    $-- a template to test if values are set from template 
+
+-- from YAML header from html 
+    title: $metaHtml.title$
+    abstract: $metaHtml.abstract$
+    keywords: $metaHtml.keywords$ 
+    version: $metaHtml.version$
+    date: $metaHtml.date$ 
+    ------------------------
+
+    body:  $metaHtml.body$  
+
+    --------------------------
+
+ 
+
+-- from Defaults   
+   def1: $metaHtml.def1$  
+
+-- from extra 
+   dainoVersion: $extra.dainoVersion$   
+   bakedDir: $extra.bakedDir$  
+
+-- from settings
+    siteHeader: $sett.siteHeader.sitename$
+    menu: 
+        $for(sett.menu)$
+            link: $sett.menu.navlink$
+            text: $sett.menu.navtext$
+        $endfor$

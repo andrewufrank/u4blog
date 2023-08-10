@@ -1,0 +1,45 @@
+
+    $-- a template to test if values are set from template for latex
+
+
+\documentclass[a4paper,openany,nobib] %openright to force parts and chapter to start right
+{article} 
+    % {tufte-handout}  
+    %testhandout  testzwei 
+
+\usepackage[backend=biber,
+    style=authoryear,
+    natbib=true,
+    hyperref=true,
+    ]{biblatex}
+
+\addbibresource{resources/BibTexLatex.bib}  
+
+\usepackage[colorlinks]{hyperref}
+
+\begin{document} 
+
+\maketitle
+
+\title{$metaLatex.title$}
+\begin{abstract}
+   $metaLatex.abstract$ %abstract
+\end{abstract} 
+\date{$metaLatex.date$}
+
+
+keywords: $metaLatex.keywords$ 
+
+
+$metaLatex.body$  %body 
+
+\printbibliography
+
+ 
+
+{\scriptsize Produced with `daino'  ($extra.dainoVersion$) 
+using template metaplusLatex.dtpl from file \url{Blog/b010withRef.md}
+}
+
+version: $metaLatex.version$
+\end{document}

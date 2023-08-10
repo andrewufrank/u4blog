@@ -27,6 +27,8 @@
 
 -- from Defaults   
    def1: $metaMarkdown.def1$  
+   def1: $metaHtml.def1$  
+   def1: $metaLatex.def1$  
 
 -- from extra 
    dainoVersion: $extra.dainoVersion$   
