@@ -1,0 +1,41 @@
+
+    $-- a template to test if values are set from template
+-- from YAML header from Markdown
+    title: $metaMarkdown.title$
+    abstract: $metaMarkdown.abstract$
+    keywords: $metaMarkdown.keywords$ 
+    version: $metaMarkdown.version$
+    date: $metaMarkdown.date$ 
+    body:  $metaMarkdown.body$  
+
+-- from YAML header from html 
+    title: $metaHtml.title$
+    abstract: $metaHtml.abstract$
+    keywords: $metaHtml.keywords$ 
+    version: $metaHtml.version$
+    date: $metaHtml.date$ 
+    body:  $metaHtml.body$  
+
+-- from YAML header from latex
+    title: $metaLatex.title$
+    abstract: $metaLatex.abstract$
+    keywords: $metaLatex.keywords$ 
+    version: $metaLatex.version$
+    date: $metaLatex.date$ 
+    body:  $metaLatex.body$  -- from Defaults   
+   def1: $metaLatex.def1$  
+
+-- from Defaults   
+   def1: $metaMarkdown.def1$  
+
+-- from extra 
+   dainoVersion: $extra.dainoVersion$   
+   bakedDir: $extra.bakedDir$  
+
+-- from settings
+    siteHeader: $sett.siteHeader.sitename$
+    menu: 
+        $for(sett.menu)$
+            link: $sett.menu.navlink$
+            text: $sett.menu.navtext$
+        $endfor$

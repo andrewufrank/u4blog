@@ -168,6 +168,37 @@ test_templ_comp_miniplus = do
 
 resPlusRes = "\n    \n-- from YAML header from Markdown\n    title: title02 missing\n    abstract: abstract02 missing\n    keywords: one, two, three \n    version: publish\n    date: 2023-03-31 \n    body:  # 02-hl1title for 02 but missing\n\n02-text: The text for 02:  \n\n-- from YAML header from html \n    title: title02 missing\n    abstract: abstract02 missing\n    keywords: one, two, three \n    version: publish\n    date: 2023-03-31 \n    body:  <h1 id=\"02-hl1title-for-02-but-missing\">02-hl1title for 02 but\nmissing</h1>\n<p>02-text: The text for 02:</p>  \n\n-- from YAML header from latex\n    title: title02 missing\n    abstract: abstract02 missing\n    keywords: one, two, three \n    version: publish\n    date: 2023-03-31 \n    body:  \\hypertarget{02-hl1title-for-02-but-missing}{%\n\\section{02-hl1title for 02 but\nmissing}\\label{02-hl1title-for-02-but-missing}}\n\n02-text: The text for 02:  -- from Defaults   \n   def1: def1v  \n\n-- from Defaults   \n   def1: def1v  \n\n-- from extra \n   dainoVersion: 0.1.5.6.3   \n   bakedDir: /home/frank/baked  \n\n-- from settings\n    siteHeader: siteNameExample\n    menu: \n                    link: /Blog/index.html\n            text: Blog\n                    link: /PublicationList/index.html\n            text: Publications\n                    link: /dainodesign/index.html\n            text: daino Documentation\n        "
 
+--------------------blogB  test with references
+
+metapB = MetaPlus { metap = resBWithBody1
+                   , sett = settings1
+                   , extra = extra1
+                   , metaMarkdown = zero
+                   , metaHtml = zero
+                   , metaLatex = zero
+                   } 
+
+
+
+metaplusText2 = makeAbsFile "/home/frank/Workspace11/u4blog/uniform-pandoc/resources/metaplusText2.dtpl"   
+fnminiPlusB =  makeAbsFile "/home/frank/tests/testminiMetaPlusB"
+
+test_templ_comp_miniplusB :: IO ()
+test_templ_comp_miniplusB = do 
+    res1 <- runErr $ do 
+        metap3 <- completeMetaPlus metapB
+        htpl2 <- compileTemplateFile2 metaplusText2 -- fnminilatex
+        let tpl1 = renderTemplate htpl2 (toJSON metap3)  :: Doc Text
+        -- putIOwords ["tpl1 \n", showT tpl1]
+        let res1 = render (Just 50) tpl1  -- line length, can be Nothing
+
+        putIOwords ["res1 \n", res1]
+        -- write8   fnminiPlusB htmloutFileType (HTMLout res1)
+        return res1
+    assertEqual (Right resPlusB) res1
+
+resPlusB = zero 
+
 ------------ settings (copied to avoid circular import)
 
 data Settings = Settings

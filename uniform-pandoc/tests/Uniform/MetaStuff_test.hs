@@ -95,6 +95,8 @@ resAWithBody1 = Meta{unMeta =
               MetaInlines [Str "one,", Space, Str "two,", Space, Str "three"]),
              ("title", MetaInlines [Str "title02", Space, Str "missing"]),
              ("version", MetaInlines [Str "publish"])]}
+
+resBWithBody1 = resAWithBody1
 -- --------------------------------------------------------------------------
 -- basics to get the data 
 fn1 :: Path Abs File
