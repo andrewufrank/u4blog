@@ -24,7 +24,7 @@ import Test.Framework
 import Uniform.Json (ToJSON, FromJSON, toJSON)
 import Uniform.PandocImports ( Meta(..), Pandoc(..) ) 
 import Uniform.Markdown ( markdownFileType, readMarkdown2 ) 
-import Uniform.TexWriter ()
+import Uniform.TexWriter 
 import Uniform.PandocHTMLwriter  
 import Text.Pandoc as Pandoc 
     
@@ -50,14 +50,15 @@ data MetaPlus = MetaPlus
                 { metap :: Meta    -- ^ the pandoc meta 
                 , sett :: Settings -- ^ the data from the settingsfile
                 , extra :: ExtraValues -- ^ other values to go into template
-                , mapHtml ::  M.Map Text Text
                 , metaMarkdown :: M.Map Text Text 
+                , metaHtml ::  M.Map Text Text
+                , metaLatex ::  M.Map Text Text
                 }
     deriving (Eq, Ord, Show, Read, Generic) -- Zeros, ToJSON, FromJSON)
 instance ToJSON MetaPlus
 instance FromJSON MetaPlus
 instance Zeros MetaPlus where zero :: MetaPlus
-                              zero = MetaPlus zero zero zero zero zero
+                              zero = MetaPlus zero zero zero zero zero zero
 
 instance Zeros (M.Map Text Text) where zero = fromList []
 
@@ -79,10 +80,12 @@ extra1 = ExtraValues {dainoVersion = "0.1.5.6.3"
 metap1 = MetaPlus { metap = resAWithBody1
                    , sett = settings1
                    , extra = extra1
-                   , mapHtml = resBodyhtml
                    , metaMarkdown = resBody
+                   , metaHtml = resBodyhtml
+                   , metaLatex = zero 
                    } 
-                   
+
+
 -- test_mp1 = assertEqual (zero) metap1
 
 -- read settings file -- simpler use a set (and simplified data set)
@@ -125,6 +128,26 @@ resBodyhtml = fromList
       ("keywords", "one, two, three"), ("title", "title02 missing"),
       ("version", "publish")]
 
+metap2 = MetaPlus { metap = resAWithBody1
+                   , sett = settings1
+                   , extra = extra1
+                   , metaMarkdown = zero
+                   , metaHtml = zero
+                   , metaLatex = zero
+                   } 
+
+-- fill the three meta fields for the output
+completeMetaPlus :: MetaPlus -> ErrIO MetaPlus 
+completeMetaPlus metapl1 = do 
+    md1 <- meta2xx writeToMarkdown  (metap metapl1)
+    htm1 <- meta2xx writeHtml5String2 (metap metapl1)
+    lat1 <- meta2xx writeTexSnip2 (metap metapl1)
+    let metap2 = metapl1  { metaMarkdown = md1
+                    , metaHtml = htm1
+                    , metaLatex = lat1}
+    putIOwords ["completeMetaPlus \n", showT metap2]
+    return metap2 
+     
 
 metaplusText = makeAbsFile "/home/frank/Workspace11/u4blog/uniform-pandoc/resources/metaplusText.dtpl"   
 fnminiPlusres =  makeAbsFile "/home/frank/tests/testminiMetaPlus"
@@ -132,8 +155,9 @@ fnminiPlusres =  makeAbsFile "/home/frank/tests/testminiMetaPlus"
 test_templ_comp_miniplus :: IO ()
 test_templ_comp_miniplus = do 
     res1 <- runErr $ do 
+        metap3 <- completeMetaPlus metap1 
         htpl2 <- compileTemplateFile2 metaplusText -- fnminilatex
-        let tpl1 = renderTemplate htpl2 (toJSON metap1)  :: Doc Text
+        let tpl1 = renderTemplate htpl2 (toJSON metap3)  :: Doc Text
         -- putIOwords ["tpl1 \n", showT tpl1]
         let res1 = render (Just 50) tpl1  -- line length, can be Nothing
 
@@ -142,7 +166,7 @@ test_templ_comp_miniplus = do
         return res1
     assertEqual (Right resPlusRes) res1
 
-resPlusRes = "\n    \n-- from YAML header from html \n    title: title02 missing\n    abstract: abstract02 missing\n    keywords: one, two, three \n    version: publish\n    date: 2023-03-31 \n    body:  <h1 id=\"02-hl1title-for-02-but-missing\">02-hl1title for 02 but\nmissing</h1>\n<p>02-text: The text for 02:</p>  \n-- from YAML header from Markdown\n    title: title02 missing\n    abstract: abstract02 missing\n    keywords: one, two, three \n    version: publish\n    date: 2023-03-31 \n    body:  # 02-hl1title for 02 but missing\n\n02-text: The text for 02:  \n-- from YAML header from html\n    title: title02 missing\n    abstract: abstract02 missing\n    keywords: one, two, three \n    version: publish\n    date: 2023-03-31 \n    body:  <h1 id=\"02-hl1title-for-02-but-missing\">02-hl1title for 02 but\nmissing</h1>\n<p>02-text: The text for 02:</p>  -- from Defaults   \n   def1: def1v  \n-- from Defaults   \n   def1: def1v  \n-- from extra \n   dainoVersion: 0.1.5.6.3   \n   bakedDir: /home/frank/baked  \n\n-- from settings\n    siteHeader: siteNameExample\n    menu: \n                    link: /Blog/index.html\n            text: Blog\n                    link: /PublicationList/index.html\n            text: Publications\n                    link: /dainodesign/index.html\n            text: daino Documentation\n        "
+resPlusRes = "\n    \n-- from YAML header from Markdown\n    title: title02 missing\n    abstract: abstract02 missing\n    keywords: one, two, three \n    version: publish\n    date: 2023-03-31 \n    body:  # 02-hl1title for 02 but missing\n\n02-text: The text for 02:  \n\n-- from YAML header from html \n    title: title02 missing\n    abstract: abstract02 missing\n    keywords: one, two, three \n    version: publish\n    date: 2023-03-31 \n    body:  <h1 id=\"02-hl1title-for-02-but-missing\">02-hl1title for 02 but\nmissing</h1>\n<p>02-text: The text for 02:</p>  \n\n-- from YAML header from latex\n    title: title02 missing\n    abstract: abstract02 missing\n    keywords: one, two, three \n    version: publish\n    date: 2023-03-31 \n    body:  \\hypertarget{02-hl1title-for-02-but-missing}{%\n\\section{02-hl1title for 02 but\nmissing}\\label{02-hl1title-for-02-but-missing}}\n\n02-text: The text for 02:  -- from Defaults   \n   def1: def1v  \n\n-- from Defaults   \n   def1: def1v  \n\n-- from extra \n   dainoVersion: 0.1.5.6.3   \n   bakedDir: /home/frank/baked  \n\n-- from settings\n    siteHeader: siteNameExample\n    menu: \n                    link: /Blog/index.html\n            text: Blog\n                    link: /PublicationList/index.html\n            text: Publications\n                    link: /dainodesign/index.html\n            text: daino Documentation\n        "
 
 ------------ settings (copied to avoid circular import)
 
