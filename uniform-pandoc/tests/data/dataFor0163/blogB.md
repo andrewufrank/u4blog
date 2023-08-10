@@ -9,20 +9,20 @@ bibliography: resources/BibTexLatex.bib
 date: 2010-07-29
 keywords: referenceTest
 
-references:
-- author:
-  - family: Fenner
-    given: Martin Beat
-  container-title: Nature Materials
-  id: fenner2012a
-  issued:
-    month: 3
-    year: 2212
-  page: 261-263
-  publisher: Nature Publishing Group
-  title: One-click science marketing
-  type: article-journal
-  volume: 11
+# references:
+# - author:
+#   - family: Fenner
+#     given: Martin Beat
+#   container-title: Nature Materials
+#   id: fenner2012a
+#   issued:
+#     month: 3
+#     year: 2212
+#   page: 261-263
+#   publisher: Nature Publishing Group
+#   title: One-click science marketing
+#   type: article-journal
+#   volume: 11
 style: resources/chicago-fullnote-bibliography-bb.csl
 # styleBiber: athorYear
 reference-section-title: References

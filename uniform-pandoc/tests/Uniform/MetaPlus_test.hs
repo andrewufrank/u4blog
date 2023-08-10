@@ -102,8 +102,8 @@ metap1 = MetaPlus { metap = resAWithBody1
 test_markdownBody = do 
     res1 <- runErr $ do 
         meta2xx writeToMarkdown  resAWithBody1 
-    putIOwords ["resAWithBody1", showT resAWithBody1]
-    putIOwords ["res1 from met2xx", showT res1]
+    -- putIOwords ["test_markdownBody resAWithBody1", showT resAWithBody1]
+    -- putIOwords ["test_markdownBody res1 from met2xx", showT res1]
     assertEqual (Right resBody) res1 
 resBody = fromList
      [("abstract", "abstract02 missing\n"),
@@ -117,8 +117,8 @@ resBody = fromList
 test_htmlBody = do 
     res1 <- runErr $ do 
         meta2xx writeHtml5String2  resAWithBody1 
-    putIOwords ["resAWithBody1", showT resAWithBody1]
-    putIOwords ["res1 from met2xx", showT res1]
+    -- putIOwords ["test_htmlBodyresAWithBody1", showT resAWithBody1]
+    -- putIOwords ["test_htmlBodyres1 from met2xx", showT res1]
     assertEqual (Right resBodyhtml) res1 
 resBodyhtml = fromList
      [("abstract", "abstract02 missing"),
@@ -145,7 +145,7 @@ completeMetaPlus metapl1 = do
     let metap2 = metapl1  { metaMarkdown = md1
                     , metaHtml = htm1
                     , metaLatex = lat1}
-    putIOwords ["completeMetaPlus \n", showT metap2]
+    -- putIOwords ["completeMetaPlus \n", showT metap2]
     return metap2 
      
 
@@ -161,7 +161,7 @@ test_templ_comp_miniplus = do
         -- putIOwords ["tpl1 \n", showT tpl1]
         let res1 = render (Just 50) tpl1  -- line length, can be Nothing
 
-        putIOwords ["res1 \n", res1]
+        -- putIOwords ["res1 \n", res1]
         write8   fnminiPlusres htmloutFileType (HTMLout res1)
         return res1
     assertEqual (Right resPlusRes) res1
