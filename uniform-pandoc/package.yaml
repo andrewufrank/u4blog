@@ -58,7 +58,7 @@ tests:
     dependencies:
     - HTF
     - uniform-pandoc
-    - uniform-convenience
+    # - uniform-convenience
   
  
 

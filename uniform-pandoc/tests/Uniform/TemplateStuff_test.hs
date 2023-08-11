@@ -40,7 +40,7 @@ import Data.Map
 -- import Uniform.Filenames 
 -- import Uniform2.Filetypes4sites should not be imported here
 
-import Uniform.Test.TestHarness
+-- import Uniform.Test.TestHarness
 import Uniform.MetaStuff_test 
 -- import Uniform.Markdown_test 
 import Uniform.MetaStuff

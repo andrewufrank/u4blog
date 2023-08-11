@@ -36,7 +36,7 @@ import Data.Text.Lazy (unpack)
 import Text.Blaze.Html.Renderer.Text (renderHtml)
 import qualified Data.Map as M
 import Data.Map ( fromList, toList) 
-import Uniform.Test.TestHarness ()
+-- import Uniform.Test.TestHarness ()
 import Uniform.MetaStuff
 import Uniform.MetaPlus
 import Uniform.MetaStuff_test
