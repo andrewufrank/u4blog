@@ -91,66 +91,8 @@ import Uniform.HttpFiles
 import Uniform.TemplateStuff
 import Text.DocTemplates as DocTemplates ( Doc )
 import Uniform.PandocHTMLwriter
+-- import Uniform.MetaPlus
 
------------- settings (copied to avoid circular import)
-
-data Settings = Settings
-    { ---  siteLayout ::  
-      localhostPort :: Int 
-    , settingsAuthor :: Text 
-    , settingsDate :: Text -- should be UTC 
-    , siteHeader :: SiteHeader 
-    , menu :: [MenuItem]
-    -- , today :: Text
-    } deriving (Show, Read, Ord, Eq, Generic, Zeros)
-
-instance ToJSON Settings
-instance FromJSON Settings
-
-data SiteHeader = SiteHeader 
-    { sitename :: FilePath 
-    , byline :: Text 
-    , banner :: FilePath 
-    -- , bannerCaption :: Text 
-    } deriving (Show, Read, Ord, Eq, Generic, Zeros)
-instance ToJSON SiteHeader
-instance FromJSON SiteHeader
-
-data MenuItem = MenuItem  
-    { navlink :: FilePath 
-    , navtext :: Text
-    -- , navpdf :: Text  -- for the link to the pdf 
-    -- not a good idead to put here
-    } deriving (Show, Read, Ord, Eq, Generic, Zeros)
-instance ToJSON MenuItem
-instance FromJSON MenuItem
-
-data MetaPlus = MetaPlus 
-                { metap :: Meta    -- ^ the pandoc meta 
-                , sett :: Settings -- ^ the data from the settingsfile
-                , extra :: ExtraValues -- ^ other values to go into template
-                , metaMarkdown :: M.Map Text Text 
-                , metaHtml ::  M.Map Text Text
-                , metaLatex ::  M.Map Text Text
-                }
-    deriving (Eq, Ord, Show, Read, Generic) -- Zeros, ToJSON, FromJSON)
-instance ToJSON MetaPlus
-instance FromJSON MetaPlus
-instance Zeros MetaPlus where 
-        zero = MetaPlus zero zero zero zero zero zero
-
-instance Zeros (M.Map Text Text) where zero = fromList []
-
-data ExtraValues = ExtraValues 
-                        { dainoVersion:: Text
-                        , bakedDir :: Text
-                        }
-    deriving (Eq, Ord, Show, Read, Generic)
-    
-instance ToJSON ExtraValues 
-instance FromJSON ExtraValues 
-
-instance Zeros ExtraValues where zero = ExtraValues zero zero 
 
 -- 3 functions for md2docrep : 
 
@@ -341,11 +283,7 @@ addMetaField2pandoc key val (Pandoc m b) = Pandoc m2 b
 -- -- gives a texsnip Text
 -- writeLaTeX2 pan = unPandocM $ writeLaTeX latexOptions pan 
 
-instance Zeros Pandoc where
-  zero =  Pandoc nullMeta zero
 
-instance Zeros Pandoc.Meta where
-  zero = mempty
 
 getMeta :: Pandoc -> Pandoc.Meta
 getMeta (Pandoc.Pandoc m _) = m

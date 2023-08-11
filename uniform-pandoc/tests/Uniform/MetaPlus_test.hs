@@ -38,6 +38,7 @@ import qualified Data.Map as M
 import Data.Map ( fromList, toList) 
 import Uniform.Test.TestHarness ()
 import Uniform.MetaStuff
+import Uniform.MetaPlus
 import Uniform.MetaStuff_test
 import Uniform.TemplateStuff
 import Uniform.TemplateStuff_test
