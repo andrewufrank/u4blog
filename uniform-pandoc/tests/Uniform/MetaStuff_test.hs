@@ -27,8 +27,50 @@ import Text.Blaze.Html.Renderer.Text (renderHtml)
 import qualified Data.Map as M
 import Data.Map ( fromList, toList)
 import Uniform.MetaStuff
-    ( Meta(..), Pandoc(..), addListOfDefaults, md2Meta_Process )
+    ( Meta(..), Pandoc(..), readMd2pandoc, addListOfDefaults, md2Meta_Process )
 import UniformBase
+
+-- all three steps 
+
+test_3steps = do 
+    res1 <- runErr $ do 
+        p1 <- readMd2pandoc fnA 
+        let p2 = addListOfDefaults defs1 p1
+        m1 <- md2Meta_Process p2
+        return m1
+    assertEqual (Right resAWithBody1) res1
+
+-- basics to get the data 
+fn1 :: Path Abs File
+fn1 =  makeAbsFile "/home/frank/Workspace11/u4blog/uniform-pandoc/tests/data/startValues/someTextWithYAML.md"
+fnA = makeAbsFile "/home/frank/Workspace11/u4blog/uniform-pandoc/tests/data/dataFor0163/blogA.md"
+fnB = makeAbsFile "/home/frank/Workspace11/u4blog/uniform-pandoc/tests/data/dataFor0163/blogB.md"
+
+test_readmd :: IO ()
+-- test with fn1 to show the pandoc 
+test_readmd = do
+    res1 <- runErr $ do
+        p1 <- readMd2pandoc fnA 
+        return p1
+        -- mdfile <- read8 fnA markdownFileType
+        -- pd <- readMarkdown2 mdfile
+        -- putIOwords ["pd \n", showT pd, "\n--"]
+        -- return pd
+    assertEqual (Right pandocA) res1   -- set to False to produce output
+
+test_readmdB :: IO ()
+-- test with fn1 to show the pandoc 
+test_readmdB = do
+    res1 <- runErr $ do
+        readMd2pandoc fnB 
+
+        -- mdfile <- read8 fnB markdownFileType
+        -- pd <- readMarkdown2 mdfile
+        -- -- putIOwords ["pd \n", showT pd, "\n--"]
+        -- return pd
+    assertEqual (Right pandocB) res1   -- set to False to produce output
+
+
 
 
 writeText pan1= unPandocM $ Pandoc.writeNative Pandoc.def pan1
@@ -39,10 +81,13 @@ defs1 = [("def1","def1v"),("date","dataFalse")]
 -- simulates the insert of defaults 
 -- the date nmust not be overwritten from yaml value 
 test_defs :: IO ()
-test_defs = assertEqual resA1 $ Pandoc m2 b1
-    where 
-            (Pandoc m1 b1) = pandocA
-            m2 = addListOfDefaults defs1  m1
+test_defs = assertEqual resA1 $  addListOfDefaults defs1  pandocA
+
+-- process cites and put body into meta 
+test_body = do
+    res1 <- runErr $ md2Meta_Process resA1
+    assertEqual (Right resAWithBody1) res1
+
 
 resA1 :: Pandoc
 resA1 =  Pandoc
@@ -68,10 +113,10 @@ defsB = [("def1","def1_B"),("date","dataFalse")]
 -- simulates the insert of defaults 
 -- the date nmust not be overwritten from yaml value 
 test_defsB:: IO ()
-test_defsB = assertEqual resB1 $ Pandoc m2 b1
-    where 
-            (Pandoc m1 b1) = pandocB
-            m2 = addListOfDefaults defsB  m1
+test_defsB = assertEqual resB1 $  addListOfDefaults defsB  pandocB
+    -- where 
+    --         (Pandoc m1 b1) = pandocB
+    --         m2 = addListOfDefaults defsB  m1
 
 resB1 :: Pandoc
 resB1 =  Pandoc
@@ -157,10 +202,6 @@ resB1 =  Pandoc
 
 
 
--- process cites and put body into meta 
-test_body = do
-    res1 <- runErr $ md2Meta_Process resA1
-    assertEqual (Right resAWithBody1) res1
 
 resAWithBody1 :: Meta
 resAWithBody1 = Meta{unMeta =
@@ -393,32 +434,6 @@ resBWithBody1 = Meta{unMeta =
             --   MetaInlines [Str "B", Space, Str "title", Space, Str "missing"]),
             --  ("version", MetaInlines [Str "private"])]}
 -- --------------------------------------------------------------------------
--- basics to get the data 
-fn1 :: Path Abs File
-fn1 =  makeAbsFile "/home/frank/Workspace11/u4blog/uniform-pandoc/tests/data/startValues/someTextWithYAML.md"
-fnA = makeAbsFile "/home/frank/Workspace11/u4blog/uniform-pandoc/tests/data/dataFor0163/blogA.md"
-fnB = makeAbsFile "/home/frank/Workspace11/u4blog/uniform-pandoc/tests/data/dataFor0163/blogB.md"
-
-test_readmd :: IO ()
--- test with fn1 to show the pandoc 
-test_readmd = do
-    res1 <- runErr $ do
-        mdfile <- read8 fnA markdownFileType
-        pd <- readMarkdown2 mdfile
-        -- putIOwords ["pd \n", showT pd, "\n--"]
-        return pd
-    assertEqual (Right pandocA) res1   -- set to False to produce output
-
-test_readmdB :: IO ()
--- test with fn1 to show the pandoc 
-test_readmdB = do
-    res1 <- runErr $ do
-        mdfile <- read8 fnB markdownFileType
-        pd <- readMarkdown2 mdfile
-        -- putIOwords ["pd \n", showT pd, "\n--"]
-        return pd
-    assertEqual (Right pandocB) res1   -- set to False to produce output
-
 
 
 -- metaY :: Meta

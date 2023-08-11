@@ -36,6 +36,7 @@
 # - ignore: {name: "Use let"}
 - ignore: {name: "Use empty"}
 - ignore: {name: "Multi Cradle: No prefixes matched"}
+- ignore: {name: "Defined but not used"}
 
 
 # Specify additional command line arguments

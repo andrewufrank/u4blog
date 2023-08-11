@@ -18,6 +18,9 @@
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE UndecidableInstances #-}
 {-# LANGUAGE LiberalTypeSynonyms #-}
+{-# LANGUAGE DeriveGeneric          #-}
+{-# LANGUAGE DeriveAnyClass          #-}
+
 {-# OPTIONS_GHC -Wall -fno-warn-orphans 
             -fno-warn-missing-signatures
             -fno-warn-missing-methods 
@@ -25,8 +28,11 @@
 
 module Uniform.MetaStuff
   ( module Uniform.MetaStuff,
-    Pandoc (..),
-    Meta(..)
+    addListOfDefaults
+    , readMd2pandoc
+    , md2Meta_Process    
+    , Pandoc (..)
+    , Meta(..)
     , setValue2meta
     , getValue4meta
   )
@@ -79,12 +85,107 @@ import Text.Pandoc.Definition as Pandoc
       nullMeta,
       Inline(Str) )
 import Text.Pandoc.Writers.Shared as Pandoc
-import Uniform.Markdown ( readMarkdown2, MarkdownText )
+import Uniform.Markdown  
 import qualified Text.Pandoc.Citeproc as PC
 import Uniform.HttpFiles
 import Uniform.TemplateStuff
 import Text.DocTemplates as DocTemplates ( Doc )
 import Uniform.PandocHTMLwriter
+
+------------ settings (copied to avoid circular import)
+
+data Settings = Settings
+    { ---  siteLayout ::  
+      localhostPort :: Int 
+    , settingsAuthor :: Text 
+    , settingsDate :: Text -- should be UTC 
+    , siteHeader :: SiteHeader 
+    , menu :: [MenuItem]
+    -- , today :: Text
+    } deriving (Show, Read, Ord, Eq, Generic, Zeros)
+
+instance ToJSON Settings
+instance FromJSON Settings
+
+data SiteHeader = SiteHeader 
+    { sitename :: FilePath 
+    , byline :: Text 
+    , banner :: FilePath 
+    -- , bannerCaption :: Text 
+    } deriving (Show, Read, Ord, Eq, Generic, Zeros)
+instance ToJSON SiteHeader
+instance FromJSON SiteHeader
+
+data MenuItem = MenuItem  
+    { navlink :: FilePath 
+    , navtext :: Text
+    -- , navpdf :: Text  -- for the link to the pdf 
+    -- not a good idead to put here
+    } deriving (Show, Read, Ord, Eq, Generic, Zeros)
+instance ToJSON MenuItem
+instance FromJSON MenuItem
+
+data MetaPlus = MetaPlus 
+                { metap :: Meta    -- ^ the pandoc meta 
+                , sett :: Settings -- ^ the data from the settingsfile
+                , extra :: ExtraValues -- ^ other values to go into template
+                , metaMarkdown :: M.Map Text Text 
+                , metaHtml ::  M.Map Text Text
+                , metaLatex ::  M.Map Text Text
+                }
+    deriving (Eq, Ord, Show, Read, Generic) -- Zeros, ToJSON, FromJSON)
+instance ToJSON MetaPlus
+instance FromJSON MetaPlus
+instance Zeros MetaPlus where 
+        zero = MetaPlus zero zero zero zero zero zero
+
+instance Zeros (M.Map Text Text) where zero = fromList []
+
+data ExtraValues = ExtraValues 
+                        { dainoVersion:: Text
+                        , bakedDir :: Text
+                        }
+    deriving (Eq, Ord, Show, Read, Generic)
+    
+instance ToJSON ExtraValues 
+instance FromJSON ExtraValues 
+
+instance Zeros ExtraValues where zero = ExtraValues zero zero 
+
+-- 3 functions for md2docrep : 
+
+readMd2pandoc :: Path Abs File -> ErrIO Pandoc 
+-- read an mdFile to Pandoc 
+readMd2pandoc fn = do 
+        mdfile <- read8 fn markdownFileType
+        pd <- readMarkdown2 mdfile
+        return pd 
+
+addListOfDefaults :: [(Text, Text)] -> Pandoc -> Pandoc 
+-- add a list of default key value pairs to a Meta
+-- if a key is present, its value is retainied 
+-- defaults are set only if key not present 
+addListOfDefaults list (Pandoc m1 p1 ) = Pandoc m2 p1 
+    where
+        m2 = Meta   $ M.union metavals (fromList defvals) 
+        metavals =  unMeta $ m1 
+        defvals = map (second MetaString) list
+
+md2Meta_Process :: Pandoc -> ErrIO Meta
+-- process the pandoc file with citeproc 
+-- stores the result as body in meta
+-- the body is not required anymore!
+md2Meta_Process  pandoc1 = do
+    (Pandoc m1 p1) <- unPandocM $ PC.processCitations pandoc1
+    let m2 = Meta $ M.insert "body" (MetaBlocks p1) (unMeta m1)
+
+    -- let c1 = Meta (fromList [(("body"::Text), (MetaBlocks p1))])
+    -- -- todo missing the index, references, umlaut conversion
+    --     cn = mergeAll [m1, c1] :: Meta-- order may  be important
+    -- -- putIOwords ["md2Meta cn \n", showT cn, "\n--"]
+    return m2
+
+-- 
 
 meta2hres :: Template Text -> Meta -> ErrIO HTMLout
 -- step2: the second part resulting in HTML result
@@ -206,19 +307,6 @@ md2Meta_Readmd  filep mdtext = do
     pandoc1<- readMarkdown2 mdtext
     return pandoc1
  
-md2Meta_Process :: Pandoc -> ErrIO Meta
--- process the pandoc file with citeproc 
--- stores the result as body in meta
--- the body is not required anymore!
-md2Meta_Process  pandoc1 = do
-    (Pandoc m1 p1) <- unPandocM $ PC.processCitations pandoc1
-    let m2 = Meta $ M.insert "body" (MetaBlocks p1) (unMeta m1)
-
-    -- let c1 = Meta (fromList [(("body"::Text), (MetaBlocks p1))])
-    -- -- todo missing the index, references, umlaut conversion
-    --     cn = mergeAll [m1, c1] :: Meta-- order may  be important
-    -- -- putIOwords ["md2Meta cn \n", showT cn, "\n--"]
-    return m2
 
 mergeAll :: [Meta] -> Meta
 -- combines list, preference to the right (last key wins if duplicated!)
@@ -248,14 +336,6 @@ addMetaField2pandoc :: ToMetaValue a => Text -> a -> Pandoc -> Pandoc
 addMetaField2pandoc key val (Pandoc m b) = Pandoc m2 b
     where   m2 = addMetaField key val m
 
-addListOfDefaults :: [(Text, Text)] -> Meta -> Meta 
--- add a list of default key value pairs to a Meta
--- if a key is present, its value is retainied 
--- defaults are set only if key not present 
-addListOfDefaults list meta = Meta   $ M.union metavals (fromList defvals) 
-    where
-        metavals =  unMeta $ meta 
-        defvals = map (second MetaString) list
 
 -- writeLaTeX2 ::    Pandoc -> ErrIO Text
 -- -- gives a texsnip Text

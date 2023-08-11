@@ -47,33 +47,7 @@ import Uniform.TexFileTypes (texFileType, Latex(Latex))
 
 -- tests for 0.1.6.3
 
-data MetaPlus = MetaPlus 
-                { metap :: Meta    -- ^ the pandoc meta 
-                , sett :: Settings -- ^ the data from the settingsfile
-                , extra :: ExtraValues -- ^ other values to go into template
-                , metaMarkdown :: M.Map Text Text 
-                , metaHtml ::  M.Map Text Text
-                , metaLatex ::  M.Map Text Text
-                }
-    deriving (Eq, Ord, Show, Read, Generic) -- Zeros, ToJSON, FromJSON)
-instance ToJSON MetaPlus
-instance FromJSON MetaPlus
-instance Zeros MetaPlus where zero :: MetaPlus
-                              zero = MetaPlus zero zero zero zero zero zero
 
-instance Zeros (M.Map Text Text) where zero = fromList []
-
-data ExtraValues = ExtraValues 
-                        { dainoVersion:: Text
-                        , bakedDir :: Text
-                        }
-    deriving (Eq, Ord, Show, Read, Generic)
-    
-instance ToJSON ExtraValues 
-instance FromJSON ExtraValues 
-
-instance Zeros ExtraValues where zero :: ExtraValues
-                                 zero = ExtraValues zero zero 
 
 extra1 = ExtraValues {dainoVersion = "0.1.5.6.3"
                     , bakedDir = "/home/frank/baked"}
@@ -231,38 +205,8 @@ resPlusB =
    "\n    \n-- from YAML header from Markdown\n    title: B title missing\n    abstract: This blog uses a reference given locally. second line\n    keywords: referenceTest \n    version: private\n    date: 2010-07-29 \n    body:  # An example with local references details\n\nThe (Frank 2014) and the next in a foonote[1] are in the biblio file,\nbut the reference (**fenner2012a?**) is given in the file locally (note\nthe format and keywords!).\n\n# References\n\nFrank, Andrew U. 2009. \8220Geo-Ontologies Are Scale Dependent (Abstract\nOnly).\8221 In *European Geosciences Union, General Assembly 2009, Session\nKnowledge and Ontologies*, edited by Tuija Pulkkinen.\n<http://publik.tuwien.ac.at/files/PubDat-175453.pdf>.\n\n\8212\8212\8212. 2014. \8220Machbarkeit eines InformaInformations f\252r geographische\nDaten.\8221 Geoinformation, Technische Universitaet Wien.\n\n[1] with a text(Frank 2009) before and after  \n\n-- from YAML header from html \n    title: B title missing\n    abstract: <p>This blog uses a reference given locally. second line</p>\n    keywords: referenceTest \n    version: private\n    date: 2010-07-29 \n    body:  <h1 id=\"an-example-with-local-references-details\">An example with local\nreferences details</h1>\n<p>The <span class=\"citation\" data-cites=\"frank-machbarkeit\">(Frank\n2014)</span> and the next in a foonote<a href=\"#fn1\"\nclass=\"footnote-ref\" id=\"fnref1\" role=\"doc-noteref\"><sup>1</sup></a> are\nin the biblio file, but the reference <span class=\"citation\"\ndata-cites=\"fenner2012a\">(<strong>fenner2012a?</strong>)</span> is given\nin the file locally (note the format and keywords!).</p>\n<h1 class=\"unnumbered\" id=\"bibliography\">References</h1>\n<div id=\"refs\" class=\"references csl-bib-body hanging-indent\"\nrole=\"list\">\n<div id=\"ref-frank09geo\" class=\"csl-entry\" role=\"listitem\">\nFrank, Andrew U. 2009. <span>\8220Geo-Ontologies Are Scale Dependent\n(Abstract Only).\8221</span> In <em>European Geosciences Union, General\nAssembly 2009, Session Knowledge and Ontologies</em>, edited by Tuija\nPulkkinen. <a\nhref=\"http://publik.tuwien.ac.at/files/PubDat-175453.pdf\">http://publik.tuwien.ac.at/files/PubDat-175453.pdf</a>.\n</div>\n<div id=\"ref-frank-machbarkeit\" class=\"csl-entry\" role=\"listitem\">\n\8212\8212\8212. 2014. <span>\8220Machbarkeit eines InformaInformations f\252r\ngeographische Daten.\8221</span> Geoinformation, Technische Universitaet\nWien.\n</div>\n</div>\n<aside id=\"footnotes\" class=\"footnotes footnotes-end-of-document\"\nrole=\"doc-endnotes\">\n<hr />\n<ol>\n<li id=\"fn1\"><p>with a text<span class=\"citation\"\ndata-cites=\"frank09geo\">(Frank 2009)</span> before and after<a\nhref=\"#fnref1\" class=\"footnote-back\" role=\"doc-backlink\">\8617\65038</a></p></li>\n</ol>\n</aside>  \n\n-- from YAML header from latex\n    title: B title missing\n    abstract: This blog uses a reference given locally. second line\n    keywords: referenceTest \n    version: private\n    date: 2010-07-29 \n    body:  \\hypertarget{an-example-with-local-references-details}{%\n\\section{An example with local references\ndetails}\\label{an-example-with-local-references-details}}\n\nThe \\autocite{frank-machbarkeit} and the next in a foonote\\footnote{with\n  a text\\autocite{frank09geo} before and after} are in the biblio file,\nbut the reference \\autocite{fenner2012a} is given in the file locally\n(note the format and keywords!).  -- from Defaults   \n   def1: def1\\_B  \n\n-- from Defaults   \n   def1: def1\\_B  \n\n-- from extra \n   dainoVersion: 0.1.5.6.3   \n   bakedDir: /home/frank/baked  \n\n-- from settings\n    siteHeader: siteNameExample\n    menu: \n                    link: /Blog/index.html\n            text: Blog\n                    link: /PublicationList/index.html\n            text: Publications\n                    link: /dainodesign/index.html\n            text: daino Documentation\n        "
 
 
------------- settings (copied to avoid circular import)
 
-data Settings = Settings
-    { ---  siteLayout ::  
-      localhostPort :: Int 
-    , settingsAuthor :: Text 
-    , settingsDate :: Text -- should be UTC 
-    , siteHeader :: SiteHeader 
-    , menu :: [MenuItem]
-    -- , today :: Text
-    } deriving (Show, Read, Ord, Eq, Generic, Zeros)
 
-instance ToJSON Settings
-instance FromJSON Settings
-
-data SiteHeader = SiteHeader 
-    { sitename :: FilePath 
-    , byline :: Text 
-    , banner :: FilePath 
-    -- , bannerCaption :: Text 
-    } deriving (Show, Read, Ord, Eq, Generic, Zeros)
-instance ToJSON SiteHeader
-instance FromJSON SiteHeader
-
-data MenuItem = MenuItem  
-    { navlink :: FilePath 
-    , navtext :: Text
-    -- , navpdf :: Text  -- for the link to the pdf 
-    -- not a good idead to put here
-    } deriving (Show, Read, Ord, Eq, Generic, Zeros)
-instance ToJSON MenuItem
-instance FromJSON MenuItem
 
 settings1 :: Settings
 settings1 = -- zero :: Settings 
