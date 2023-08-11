@@ -103,7 +103,7 @@ data SiteHeader = SiteHeader
     { sitename :: FilePath 
     , byline :: Text 
     , banner :: FilePath 
-    -- , bannerCaption :: Text 
+    , bannerCaption :: Text 
     } deriving (Show, Read, Ord, Eq, Generic, Zeros)
 instance ToJSON SiteHeader
 instance FromJSON SiteHeader

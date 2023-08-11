@@ -1,31 +1,46 @@
 
     $-- a template to test if values are set from template 
 
--- from YAML header from html 
-    title: $metaHtml.title$
-    abstract: $metaHtml.abstract$
-    keywords: $metaHtml.keywords$ 
-    version: $metaHtml.version$
-    date: $metaHtml.date$ 
-    ------------------------
+    These are all the values for htmlTufte81.dtpl
 
-    body:  $metaHtml.body$  
+lang            $metaHtml.lang$
+settingsAuthor  $settingsAuthor$
+date            $metaHtml.date$
+keywords        $for(keywords)$$metaHtml.keywords$$endfor$
+image           $metaHtml.image$
+imageCaption    $metaHtml.imageCaption$
+siteBanner      $sett.siteHeader.siteBanner$
+siteBannerCaption   $sett.siteHeader.siteBannerCaption$
+sitename        $sett.siteHeader.sitename$
+sitebyline      $sett.siteHeader.sitebyline$
+menuitems       $for(sett.menu.menuNav)$ 
+                    $sett.menu.menuNav.navlink$
+                    $sett.menu.menuNav.navtext$
+                    $endfor$
+title           $metaHtml.title$
+subtitle        $metaHtml.subtitle$ 
+author          $metaHtml.author$
+table of contents   $metaHtml.table-of-contents
+abstract        $metaHtml.abstract$
+linkpdf         $linkpdf3$
+date            $metaHtml.date$
+content         $metaHtml.content$
+menufiles       $for(menu2files)$
+                    $menu2files.link2$
+                    $menu2files.title$
+                    $menu2files.abstract$
+                    $menu2files.pdf2$
+                    $menu2files.author2$
+                    $menu2files.date2$
+                $endfor$
 
-    --------------------------
+menu2subdir     $for(menu2subdir)$ 
+                    $menu2subdir.link$
+                    $menu2subdir.title$ 
+                    $menu2subdir.abstract$ 
+                $endfor$
 
- 
+dainoversion    $extra.extraDainoversion$
+visibility      $metaHtml.visibility$
+version         $metaHtml.version$
 
--- from Defaults   
-   def1: $metaHtml.def1$  
-
--- from extra 
-   dainoVersion: $extra.dainoVersion$   
-   bakedDir: $extra.bakedDir$  
-
--- from settings
-    siteHeader: $sett.siteHeader.sitename$
-    menu: 
-        $for(sett.menu)$
-            link: $sett.menu.navlink$
-            text: $sett.menu.navtext$
-        $endfor$
