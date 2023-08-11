@@ -92,7 +92,7 @@ data Settings = Settings
     , settingsAuthor :: Text 
     , settingsDate :: Text -- should be UTC 
     , siteHeader :: SiteHeader 
-    , menu :: [MenuItem]
+    , menu :: MenuItems
     -- , today :: Text
     } deriving (Show, Read, Ord, Eq, Generic, Zeros)
 
@@ -107,6 +107,14 @@ data SiteHeader = SiteHeader
     } deriving (Show, Read, Ord, Eq, Generic, Zeros)
 instance ToJSON SiteHeader
 instance FromJSON SiteHeader
+
+
+newtype MenuItems = MenuItems {menuNav:: [MenuItem]
+                            -- , menuB:: Text
+                            } deriving (Show, Read, Ord, Eq, Generic, Zeros)
+instance ToJSON MenuItems 
+instance FromJSON MenuItems 
+
 
 data MenuItem = MenuItem  
     { navlink :: FilePath 
