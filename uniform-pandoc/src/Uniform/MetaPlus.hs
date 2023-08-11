@@ -133,9 +133,10 @@ instance Zeros MetaPlus where
 
 instance Zeros (M.Map Text Text) where zero = M.fromList []
 
+-- the extraValues will eventually go into settings
 data ExtraValues = ExtraValues 
-                        { dainoVersion:: Text
-                        , bakedDir :: Text
+                        { extraDainoVersion:: Text
+                        , extraBakedDir :: Text
                         }
     deriving (Eq, Ord, Show, Read, Generic)
     

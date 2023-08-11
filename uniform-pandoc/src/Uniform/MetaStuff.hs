@@ -91,7 +91,6 @@ import Uniform.HttpFiles
 import Uniform.TemplateStuff
 import Text.DocTemplates as DocTemplates ( Doc )
 import Uniform.PandocHTMLwriter
--- import Uniform.MetaPlus
 
 
 -- 3 functions for md2docrep : 

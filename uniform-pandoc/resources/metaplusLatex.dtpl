@@ -33,7 +33,7 @@ $metaLatex.body$  %body
 
  
 
-{\scriptsize Produced with `daino'  ($extra.dainoVersion$) 
+{\scriptsize Produced with `daino'  ($extra.extraDainoVersion$) 
 using template metaplusLatex.dtpl from file \url{Blog/b010withRef.md}
 
 

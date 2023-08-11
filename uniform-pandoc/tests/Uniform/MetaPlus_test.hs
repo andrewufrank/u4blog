@@ -50,8 +50,8 @@ import Uniform.TexFileTypes (texFileType, Latex(Latex))
 
 
 
-extra1 = ExtraValues {dainoVersion = "0.1.5.6.3"
-                    , bakedDir = "/home/frank/baked"}
+extra1 = ExtraValues {extraDainoVersion = "0.1.5.6.3"
+                    , extraBakedDir = "/home/frank/baked"}
 
 metap1 = MetaPlus { metap = resAWithBody1
                    , sett = settings1
