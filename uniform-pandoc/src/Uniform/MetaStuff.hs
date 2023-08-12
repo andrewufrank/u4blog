@@ -126,6 +126,13 @@ md2Meta_Process  pandoc1 = do
     -- -- putIOwords ["md2Meta cn \n", showT cn, "\n--"]
     return m2
 
+getTextFromYaml6 :: Text -> Text -> Meta ->  Text
+--get the Metavalue (with  default)
+getTextFromYaml6 def1 key meta =
+    fromJustNoteT ["getTextFromYaml5"::Text, key] .
+    metaValueToText . fromMaybe (MetaString def1)
+        $ M.lookup key (unMeta meta)
+
 -- 
 
 meta2hres :: Template Text -> Meta -> ErrIO HTMLout

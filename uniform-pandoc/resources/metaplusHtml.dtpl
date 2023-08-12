@@ -20,7 +20,7 @@ menuitems       $for(sett.menu.menuNav)$
 title           $metaHtml.title$
 subtitle        $metaHtml.subtitle$ 
 author          $metaHtml.author$
-table of contents   $metaHtml.table-of-contents
+table of contents   $metaHtml.table-of-contents$
 abstract        $metaHtml.abstract$
 linkpdf         $linkpdf3$
 date            $metaHtml.date$
