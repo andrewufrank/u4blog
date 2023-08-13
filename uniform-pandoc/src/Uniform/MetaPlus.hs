@@ -138,6 +138,10 @@ instance ToJSON MetaPlus
 instance FromJSON MetaPlus
 instance Zeros MetaPlus where 
         zero = MetaPlus zero zero zero zero zero zero
+instance PrettyStrings MetaPlus where 
+    showPretty = s2t . ppShow
+-- instance Show MetaPlus where
+--     show = ppShow 
 
 instance Zeros (M.Map Text Text) where zero = M.fromList []
 

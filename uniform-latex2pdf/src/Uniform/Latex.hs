@@ -49,10 +49,10 @@ data LatexParam = LatexParam
     -- selection by language
     -- , latBook :: Text  --  bookbig or booklet -- is   not used
     , latBookBig, latBooklet :: Text -- must be null for the non-used
-    , latIndex :: IndexEntry -- of current file, copied from set up before
+    , latIndex :: IndexEntryRenamed -- of current file, copied from set up before
     , latContent :: Text -- ^ the content to fill, put at end 
     -- , latThema :: Path Abs File 
-    -- , latSnips :: [IndexEntry] -- ^ the snips 
+    -- , latSnips :: [IndexEntryRenamed] -- ^ the snips 
     }
     deriving (Eq, Ord, Read, Show, Generic, ToJSON)
 
@@ -73,7 +73,7 @@ instance Zeros LatexParam where
 -- instance ToJSON LatexParam where
 --     toJSON = genericToJSON -- doclatexOptions - why dropping 2?
 
-data IndexEntry = IndexEntry 
+data IndexEntryRenamed = IndexEntryRenamed 
     { -- | the abs file path
       ixfn :: FilePath -- Path Abs File
     , -- | the link for this page (relative to web root)}
@@ -85,16 +85,16 @@ data IndexEntry = IndexEntry
     , content :: Text   -- in latex style, only filled bevore use
     -- , publish :: Maybe Text
     -- , indexPage :: Bool
-    , dirEntries :: [IndexEntry] -- def []
-    , fileEntries :: [IndexEntry] -- def []
+    , dirEntries :: [IndexEntryRenamed] -- def []
+    , fileEntries :: [IndexEntryRenamed] -- def []
     , headerShift :: Int   
     } deriving (Show, Read, Eq, Ord, Generic, Zeros)
     --  IndexTitleSubdirs | IndexTitleFiles 
 
--- instance Zeros IndexEntry where zero = IndexEntry zero zero zero zero zero zero zero zero zero
+-- instance Zeros IndexEntryRenamed where zero = IndexEntryRenamed zero zero zero zero zero zero zero zero zero
 
-instance ToJSON IndexEntry
-instance FromJSON IndexEntry
+instance ToJSON IndexEntryRenamed
+instance FromJSON IndexEntryRenamed
 
 tex2latex :: NoticeLevel ->   Path Abs Dir -> LatexParam -> Path Abs File ->   ErrIO Text
 -- ^ combine the latex template with the latexParam
@@ -124,9 +124,10 @@ tex2latex debug   webroot latpar templFn = do
 
 latexLangConversion :: Text -> Text 
 latexLangConversion inlang = 
-    case lang2 of 
+    case lang2 of   -- use the parser from hackage for language iso names
         "de" -> "ngerman"
         "en" -> "english"
+        "it" -> "italian"
         _ -> "english"
     where 
         lang2 = take' 2 inlang

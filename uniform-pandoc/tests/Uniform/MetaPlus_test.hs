@@ -138,6 +138,8 @@ test_templ_comp_miniplus :: IO ()
 test_templ_comp_miniplus = do 
     res1 <- runErr $ do 
         metap3 <- completeMetaPlus metap1 
+        putIOwords ["metap3 \n", showPretty metap3]
+
         ttpl2 <- compileTemplateFile2 metaplusText -- fnminilatex
         let tpl1 = renderTemplate ttpl2 (toJSON metap3)  :: Doc Text
         -- putIOwords ["tpl1 \n", showT tpl1]
@@ -159,7 +161,7 @@ test_templ_comp_miniplus = do
         write8   fnPlusres texFileType (Latex latex1)
 
         return text1
-    assertEqual (Right resPlusRes) res1
+    assertEqual (Right zero) res1
 
 resPlusRes = 
     "\n    \n-- from YAML header from Markdown\n    title: title02 missing\n    abstract: abstract02 missing\n    keywords: one, two, three \n    version: publish\n    date: 2023-03-31 \n    body:  # 02-hl1title for 02 but missing\n\n02-text: The text for 02:  \n\n-- from YAML header from html \n    title: title02 missing\n    abstract: abstract02 missing\n    keywords: one, two, three \n    version: publish\n    date: 2023-03-31 \n    body:  <h1 id=\"02-hl1title-for-02-but-missing\">02-hl1title for 02 but\nmissing</h1>\n<p>02-text: The text for 02:</p>  \n\n-- from YAML header from latex\n    title: title02 missing\n    abstract: abstract02 missing\n    keywords: one, two, three \n    version: publish\n    date: 2023-03-31 \n    body:  \\hypertarget{02-hl1title-for-02-but-missing}{%\n\\section{02-hl1title for 02 but\nmissing}\\label{02-hl1title-for-02-but-missing}}\n\n02-text: The text for 02:  -- from Defaults   \n   def1: def1v  \n\n-- from Defaults   \n   def1: def1v  \n\n-- from extra \n   dainoVersion:    \n   bakedDir:   \n\n-- from settings\n    siteHeader: \n    menu: \n                    link: \n            text: \n        "
