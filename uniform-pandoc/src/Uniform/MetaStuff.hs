@@ -133,6 +133,10 @@ getTextFromYaml6 def1 key meta =
     metaValueToText . fromMaybe (MetaString def1)
         $ M.lookup key (unMeta meta)
 
+-- getTextFromYaml7 :: Text -> Meta -> Text 
+-- getTextFromYaml7 k meta = 
+--     fromJustNote ["getTextFromYaml7", k] 
+--         $ M.lookup k (unMeta meta)
 -- 
 
 meta2hres :: Template Text -> Meta -> ErrIO HTMLout

@@ -96,6 +96,9 @@ data Settings = Settings
     -- , today :: Text
     } deriving (Show, Read, Ord, Eq, Generic, Zeros)
 
+instance PrettyStrings Settings where
+        showPretty = s2t . ppShow 
+
 instance ToJSON Settings
 instance FromJSON Settings
 
@@ -108,6 +111,8 @@ data SiteHeader = SiteHeader
 instance ToJSON SiteHeader
 instance FromJSON SiteHeader
 
+instance PrettyStrings SiteHeader where
+        showPretty = s2t . ppShow 
 
 newtype MenuItems = MenuItems {menuNav:: [MenuItem]
                             -- , menuB:: Text
@@ -142,7 +147,8 @@ instance PrettyStrings MetaPlus where
     showPretty = s2t . ppShow
 -- instance Show MetaPlus where
 --     show = ppShow 
-
+instance PrettyStrings Meta where
+        showPretty = s2t . ppShow 
 instance Zeros (M.Map Text Text) where zero = M.fromList []
 
 -- the extraValues will eventually go into settings
