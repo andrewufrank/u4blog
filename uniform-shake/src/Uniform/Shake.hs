@@ -93,6 +93,30 @@ instance Path2nd  a Dir where
     replaceDirectoryP pref newpref old = newpref </> rem1 
         where rem1 = stripProperPrefixP pref old
 
+-- instance Path2nd  Abs File where
+--     stripProperPrefixP a b = fromJustNote
+--         ( t2s
+--         . unwords'
+--         $ ["Path2nd Dir - not a prefix",  s2t . toFilePath $ a, "for",  s2t . toFilePath $ b]
+--         )
+--         (fmap makeRelFile ab)
+--         where ab = stripPrefix' (toFilePath a) (toFilePath b) :: Maybe FilePath
+
+--     replaceDirectoryP pref newpref old = newpref </> rem1 
+--         where rem1 = stripProperPrefixP pref old
+
+-- instance Path2nd  Rel File where
+--     stripProperPrefixP a b = fromJustNote
+--         ( t2s
+--         . unwords'
+--         $ ["Path2nd Dir - not a prefix",  s2t . toFilePath $ a, "for",  s2t . toFilePath $ b]
+--         )
+--         (fmap makeRelFile ab)
+--         where ab = stripPrefix' (toFilePath a) (toFilePath b) :: Maybe FilePath
+
+--     replaceDirectoryP pref newpref old = newpref </> rem1 
+--         where rem1 = stripProperPrefixP pref old
+
 runErr2action :: ErrIO a -> Action a
 runErr2action op = liftIO $ do
     res <- runErr  op
