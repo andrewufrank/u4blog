@@ -86,7 +86,7 @@ import Text.Pandoc.Definition as Pandoc
       Inline(Str) )
 import Text.Pandoc.Writers.Shared as Pandoc
 import Uniform.Markdown
-    ( MarkdownText, markdownFileType, readMarkdown2, readMarkdown3 )  
+    ( MarkdownText, markdownFileType, readMarkdown3 )  
 import qualified Text.Pandoc.Citeproc as PC
 import Uniform.HttpFiles
 import Uniform.TemplateStuff
@@ -258,7 +258,7 @@ md2Meta_Readmd :: Path Abs File -> MarkdownText -> ErrIO Pandoc
 -- step1:reads only the md file to pandoc 
 md2Meta_Readmd  filep mdtext = do
     putIOwords ["md2Meta filepath", showT  filep, "\n--"] 
-    pandoc1<- readMarkdown2 mdtext
+    pandoc1<- readMarkdown3  mdtext (s2t . toFilePath $ filep)
     return pandoc1
  
 

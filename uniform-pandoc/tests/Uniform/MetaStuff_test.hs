@@ -18,7 +18,7 @@ module Uniform.MetaStuff_test where
 
 import Test.Framework
 import Uniform.PandocImports ( Meta(..), Pandoc(..), unPandocM )
-import Uniform.Markdown ( markdownFileType, readMarkdown2 )
+import Uniform.Markdown ( markdownFileType, readMarkdown3 )
 import Text.Pandoc as Pandoc  
  
 import Text.DocLayout (render)

@@ -26,7 +26,7 @@
 module Uniform.Markdown
   (markdownFileType
   , MarkdownText, unMT, makeMT
-  , readMarkdown2
+--   , readMarkdown2
   , readMarkdown3
   , extMD
 --   , readMarkdownFile2docrep

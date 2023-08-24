@@ -23,7 +23,7 @@ import Test.Framework
 ---- using uniform:
 import Uniform.Json (ToJSON, FromJSON, toJSON)
 import Uniform.PandocImports ( Meta(..), Pandoc(..) ) 
-import Uniform.Markdown ( markdownFileType, readMarkdown2 ) 
+import Uniform.Markdown ( markdownFileType, readMarkdown3) 
 import Uniform.TexWriter 
 import Uniform.PandocHTMLwriter  
 import Text.Pandoc as Pandoc 
