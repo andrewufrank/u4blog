@@ -82,35 +82,29 @@ instance TypedFiles7 Text MarkdownText where
   wrap7 a = MarkdownText a
   unwrap7 (MarkdownText a) = a
 
-readMarkdown2 :: MarkdownText -> ErrIO Pandoc
--- | reads the markdown text and produces a pandoc structure
-readMarkdown2 text1 = callIO $ do 
-    -- callPandoc $
-    --  do 
-        res :: Either PandocError Pandoc <-  Pandoc.runIO 
-                    $ Pandoc.readMarkdown markdownOptions  (unwrap7 text1 :: Text)
-        case res of 
-            Left e -> do 
-                    let e2 = Pandoc.renderError e 
-                    let e3 = t2s . unwords' $ ["readMarkdown2 error e2", showT e2]
-                    -- throwT ["readMarkdown2 error e2", showT e2]
-                    fail e3
-            Right t -> return t 
+-- readMarkdown2 :: MarkdownText -> ErrIO Pandoc
+-- -- | reads the markdown text and produces a pandoc structure
+-- readMarkdown2 text1 = callIO $ do 
+--         res :: Either PandocError Pandoc <-  Pandoc.runIO 
+--                     $ Pandoc.readMarkdown markdownOptions  (unwrap7 text1 :: Text)
+--         case res of 
+--             Left e -> do 
+--                     let e2 = Pandoc.renderError e 
+--                     let e3 = t2s . unwords' $ ["readMarkdown2 error e2", showT e2]
+--                     fail e3
+--             Right t -> return t 
 
 
 readMarkdown3 :: MarkdownText -> Text -> ErrIO Pandoc
 -- | reads the markdown text and produces a pandoc structure
 -- the filename is only used for the error message
 readMarkdown3 text1 fnName = callIO $ do 
-    -- callPandoc $
-    --  do 
         res :: Either PandocError Pandoc <-  Pandoc.runIO 
                     $ Pandoc.readMarkdown markdownOptions  (unwrap7 text1 :: Text)
         case res of 
             Left e -> do 
                     let e2 = Pandoc.renderError e 
                     let e3 =   concat $ ["readMarkdown3 for file ", t2s fnName, "\nerror e2",  t2s e2]
-                    -- throwT ["readMarkdown2 error e2", showT e2]
                     fail e3
             Right t -> return t 
 

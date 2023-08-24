@@ -49,11 +49,11 @@ fortest_step1 fnA resA= do
     assertEqual (Right resA) res1 
 
 -- fortest_readMd3 :: (Read ((Path Abs File -> ErrIO Pandoc) -> Path Abs File -> ErrIO b), Eq b, Show b) => Path Abs File -> b -> IO ()
-fortest_readMd3 :: Path Abs File -> Pandoc -> IO ()
-fortest_readMd3 fnA resA= do 
+-- fortest_readMd3 :: Path Abs File -> Pandoc -> IO ()
+fortest_readMd3 fnA res= do 
     res1 <- runErr $ do 
         readMd2pandoc fnA   
-    assertEqual (Right resA3) res1 
+    assertEqual (res) res1 
 
 test_ok = fortest_readMd3 stFn resA3
 resA = Meta{unMeta =
@@ -61,7 +61,7 @@ resA = Meta{unMeta =
             [("abstract", MetaInlines [Str "AnAbstract"]),
              ("body", MetaBlocks [Header 1 ("atitle", [], []) [Str "aTitle"]]),
              ("title", MetaInlines [Str "theTitle"])]}
-resA3 = Pandoc
+resA3 = Right $ Pandoc
      (Meta{unMeta =
              fromList
                [("abstract", MetaInlines [Str "AnAbstract"]),
