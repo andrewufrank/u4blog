@@ -27,6 +27,7 @@ module Uniform.Markdown
   (markdownFileType
   , MarkdownText, unMT, makeMT
   , readMarkdown2
+  , readMarkdown3
   , extMD
 --   , readMarkdownFile2docrep
   )
@@ -36,9 +37,9 @@ where
 import qualified Text.Pandoc as Pandoc
 import   Text.Pandoc.Error  
 import UniformBase
-import Uniform.MetaPlus
+-- import Uniform.MetaPlus
 import Uniform.PandocImports ( Pandoc, callPandoc )
-import Control.Concurrent (throwTo)
+-- import Control.Concurrent (throwTo)
 
 -- readMarkdownFile2docrep  :: NoticeLevel -> Path Abs Dir -> Path Abs File -> ErrIO Docrep 
 -- -- read a markdown file and convert to docrep
@@ -53,7 +54,7 @@ import Control.Concurrent (throwTo)
 --     let doc1 = pandoc2docrep doughP fnin pd
 --     return doc1
 
-     
+default (Text)    
 ----------------------------- -------------------------Markdown
 
 extMD :: Extension
@@ -97,10 +98,10 @@ readMarkdown2 text1 = callIO $ do
             Right t -> return t 
 
 
-readMarkdown3 :: MarkdownText -> String -> ErrIO Pandoc
+readMarkdown3 :: MarkdownText -> Text -> ErrIO Pandoc
 -- | reads the markdown text and produces a pandoc structure
 -- the filename is only used for the error message
-readMarkdown3 text1 fn = callIO $ do 
+readMarkdown3 text1 fnName = callIO $ do 
     -- callPandoc $
     --  do 
         res :: Either PandocError Pandoc <-  Pandoc.runIO 
@@ -108,21 +109,12 @@ readMarkdown3 text1 fn = callIO $ do
         case res of 
             Left e -> do 
                     let e2 = Pandoc.renderError e 
-                    let e3 = t2s . unwords' $ ["readMarkdown3 for", fn, "error e2", showT e2]
+                    let e3 =   concat $ ["readMarkdown3 for file ", t2s fnName, "\nerror e2",  t2s e2]
                     -- throwT ["readMarkdown2 error e2", showT e2]
                     fail e3
             Right t -> return t 
 
 
-    
---   `catchError` (throwErrorT . showT)
-
-
--- readMarkdown3 :: Pandoc.ReaderOptions -> MarkdownText -> ErrIO Pandoc
--- readMarkdown3 options text1 =
---     unPandocM $ Pandoc.readMarkdown options (unwrap7 text1::Text)
-
--- | Reasonable options for reading a markdown file
 markdownOptions :: Pandoc.ReaderOptions
 markdownOptions = Pandoc.def { Pandoc.readerExtensions = exts }
   where

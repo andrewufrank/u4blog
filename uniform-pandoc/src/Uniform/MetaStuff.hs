@@ -85,7 +85,8 @@ import Text.Pandoc.Definition as Pandoc
       nullMeta,
       Inline(Str) )
 import Text.Pandoc.Writers.Shared as Pandoc
-import Uniform.Markdown  
+import Uniform.Markdown
+    ( MarkdownText, markdownFileType, readMarkdown2, readMarkdown3 )  
 import qualified Text.Pandoc.Citeproc as PC
 import Uniform.HttpFiles
 import Uniform.TemplateStuff
@@ -100,7 +101,7 @@ readMd2pandoc :: Path Abs File -> ErrIO Pandoc
 -- the filename is passed on only to produce an error message
 readMd2pandoc fn = do 
         mdfile <- read8 fn markdownFileType
-        pd <- readMarkdown3 (toFilePath fn) mdfile
+        pd <- readMarkdown3 mdfile (s2t $ toFilePath  fn) 
         return pd 
 
 addListOfDefaults :: [(Text, Text)] -> Pandoc -> Pandoc 

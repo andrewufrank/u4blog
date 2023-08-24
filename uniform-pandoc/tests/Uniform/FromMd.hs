@@ -36,8 +36,10 @@ import UniformBase
 import Uniform.HttpFiles
 import Uniform.TexFileTypes
 import Text.Pandoc.Shared (addMetaField)
+import Uniform.MetaStuff (readMd2pandoc)
 
 ----------- for experiment 0.1.6.3 
+stFn :: Path Abs File
 stFn = makeAbsFile "/home/frank/Workspace11/u4blog/uniform-pandoc/tests/data/startValues/A.md"
 
 fortest_step1 fnA resA= do 
@@ -46,15 +48,31 @@ fortest_step1 fnA resA= do
         md2Meta fnA md 
     assertEqual (Right resA) res1 
 
-test_ok = fortest_step1 stFn resA
+-- fortest_readMd3 :: (Read ((Path Abs File -> ErrIO Pandoc) -> Path Abs File -> ErrIO b), Eq b, Show b) => Path Abs File -> b -> IO ()
+fortest_readMd3 :: Path Abs File -> Pandoc -> IO ()
+fortest_readMd3 fnA resA= do 
+    res1 <- runErr $ do 
+        readMd2pandoc fnA   
+    assertEqual (Right resA3) res1 
+
+test_ok = fortest_readMd3 stFn resA3
 resA = Meta{unMeta =
           fromList
             [("abstract", MetaInlines [Str "AnAbstract"]),
              ("body", MetaBlocks [Header 1 ("atitle", [], []) [Str "aTitle"]]),
              ("title", MetaInlines [Str "theTitle"])]}
+resA3 = Pandoc
+     (Meta{unMeta =
+             fromList
+               [("abstract", MetaInlines [Str "AnAbstract"]),
+                ("title", MetaInlines [Str "theTitle"])]})
+     [Header 1 ("atitle", [], []) [Str "aTitle"]]
 
+stAfail :: Path Abs File
 stAfail = makeAbsFile "/home/frank/Workspace11/u4blog/uniform-pandoc/tests/data/startValues/Afail.md"
-test_fail = fortest_step1 stAfail resA
+test_fail = fortest_readMd3 stAfail resA3fail
+resA3fail = Left
+  "user error (readMarkdown3 for/home/frank/Workspace11/u4blog/uniform-pandoc/tests/data/startValues/Afail.mderror e2YAML parse exception at line 2, column 10:\nmapping values are not allowed in this context)"
 
 ----------- from 0.1.6.2
 
