@@ -97,9 +97,10 @@ import Uniform.PandocHTMLwriter
 
 readMd2pandoc :: Path Abs File -> ErrIO Pandoc 
 -- read an mdFile to Pandoc 
+-- the filename is passed on only to produce an error message
 readMd2pandoc fn = do 
         mdfile <- read8 fn markdownFileType
-        pd <- readMarkdown2 mdfile
+        pd <- readMarkdown3 (toFilePath fn) mdfile
         return pd 
 
 addListOfDefaults :: [(Text, Text)] -> Pandoc -> Pandoc 

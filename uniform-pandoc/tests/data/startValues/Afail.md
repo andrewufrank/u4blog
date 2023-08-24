@@ -1,6 +1,6 @@
 ---
 title:  theTitle
-abstract: AnAbstract
+  abstract: AnAbstract
 ---
 
 

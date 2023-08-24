@@ -34,9 +34,11 @@ where
 
   
 import qualified Text.Pandoc as Pandoc
+import   Text.Pandoc.Error  
 import UniformBase
-
+import Uniform.MetaPlus
 import Uniform.PandocImports ( Pandoc, callPandoc )
+import Control.Concurrent (throwTo)
 
 -- readMarkdownFile2docrep  :: NoticeLevel -> Path Abs Dir -> Path Abs File -> ErrIO Docrep 
 -- -- read a markdown file and convert to docrep
@@ -81,8 +83,40 @@ instance TypedFiles7 Text MarkdownText where
 
 readMarkdown2 :: MarkdownText -> ErrIO Pandoc
 -- | reads the markdown text and produces a pandoc structure
-readMarkdown2 text1 =
-    callPandoc $ Pandoc.readMarkdown markdownOptions (unwrap7 text1 :: Text)
+readMarkdown2 text1 = callIO $ do 
+    -- callPandoc $
+    --  do 
+        res :: Either PandocError Pandoc <-  Pandoc.runIO 
+                    $ Pandoc.readMarkdown markdownOptions  (unwrap7 text1 :: Text)
+        case res of 
+            Left e -> do 
+                    let e2 = Pandoc.renderError e 
+                    let e3 = t2s . unwords' $ ["readMarkdown2 error e2", showT e2]
+                    -- throwT ["readMarkdown2 error e2", showT e2]
+                    fail e3
+            Right t -> return t 
+
+
+readMarkdown3 :: MarkdownText -> String -> ErrIO Pandoc
+-- | reads the markdown text and produces a pandoc structure
+-- the filename is only used for the error message
+readMarkdown3 text1 fn = callIO $ do 
+    -- callPandoc $
+    --  do 
+        res :: Either PandocError Pandoc <-  Pandoc.runIO 
+                    $ Pandoc.readMarkdown markdownOptions  (unwrap7 text1 :: Text)
+        case res of 
+            Left e -> do 
+                    let e2 = Pandoc.renderError e 
+                    let e3 = t2s . unwords' $ ["readMarkdown3 for", fn, "error e2", showT e2]
+                    -- throwT ["readMarkdown2 error e2", showT e2]
+                    fail e3
+            Right t -> return t 
+
+
+    
+--   `catchError` (throwErrorT . showT)
+
 
 -- readMarkdown3 :: Pandoc.ReaderOptions -> MarkdownText -> ErrIO Pandoc
 -- readMarkdown3 options text1 =
