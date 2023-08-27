@@ -22,7 +22,7 @@ module Uniform.Shake (
 
 import Development.Shake hiding (Error )
         -- (Action, FilePattern, getDirectoryFiles, copyFileChanged)
-import Development.Shake.FilePath (takeBaseName, splitPath
+import Development.Shake.FilePath  (takeBaseName, splitPath
                         )
      
 import UniformBase
@@ -56,6 +56,23 @@ getDirectoryFilesP d p = do
     res :: [FilePath] <- getDirectoryFiles (toFilePath d) p
     return $ map makeRelFile res
 
+getDirectoryDirsP :: Path Abs Dir ->  Action [Path Rel Dir]
+getDirectoryDirsP d   = do
+    res :: [FilePath] <- getDirectoryDirs (toFilePath d)  
+    return $ map makeRelDir res
+
+getDirectoryFilesFullP :: Path Abs Dir ->  [FilePattern] -> Action [Path Abs File]
+-- the file path include the given path 
+getDirectoryFilesFullP d p  = do
+    res :: [FilePath] <- getDirectoryFiles (toFilePath d) p 
+    return $ map (addFileName d . makeRelFile) res
+
+getDirectoryDirsFullP :: Path Abs Dir ->  Action [Path Abs Dir]
+-- the file path include the given path 
+getDirectoryDirsFullP d   = do
+    res :: [FilePath] <- getDirectoryDirs (toFilePath d)  
+    return $ map (addDir d . makeRelDir) res
+
 copyFileChangedP :: Path Abs File -> Path Abs File -> Action ()
 copyFileChangedP infile outf = copyFileChanged (toFilePath infile) (toFilePath outf)
 
@@ -67,7 +84,8 @@ class Path2nd  a c where
     -- throws error when not prefix or not proper file path 
     replaceDirectoryP :: Path a Dir -> Path a Dir -> Path a c  -> Path a c
     -- ^ strip the first (the prefix) and add the second to the third 
-    
+    -- does not work if there is nothing beyond the prefix
+
 instance   Path2nd  a File where
     stripProperPrefixP a b = fromJustNote
         ( t2s
@@ -90,7 +108,7 @@ instance Path2nd  a Dir where
         (fmap makeRelDir ab)
         where ab = stripPrefix' (toFilePath a) (toFilePath b) :: Maybe FilePath
 
-    replaceDirectoryP pref newpref old = newpref </> rem1 
+    replaceDirectoryP pref newpref old = addDir newpref rem1 
         where rem1 = stripProperPrefixP pref old
 
 -- instance Path2nd  Abs File where

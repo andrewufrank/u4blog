@@ -29,63 +29,15 @@ module Uniform.MetaPlus
     , Meta(..)
   )
 where
-
--- import Text.Pandoc
---   (
---     Meta(..),
---     -- MetaValue, nullMeta,
---     -- Pandoc (..),
---     -- WriterOptions
---     --   ( writerCiteMethod,
---     --     writerExtensions,
---     --     writerHighlightStyle,
---     --     writerHTMLMathMethod
---     --   )
---     -- , def
---     -- , writeLaTeX,
---   )
--- import qualified Text.Pandoc as Pandoc
--- import Text.Pandoc.Shared (stringify, addMetaField)
--- import Text.Pandoc.Builder (ToMetaValue) -- do not import more!
+ 
 import Uniform.Json
---     (  FromJSON(parseJSON),
---       Value,
---       ToJSON(toJSON, toJSONList),
---       parseMaybe ) 
-import Uniform.PandocImports 
--- import Uniform.PandocImports as Pandoc
---     ( Meta(Meta))
-    
-    --   MetaValue(MetaBlocks, MetaMap, MetaList, MetaBool, MetaString,
-                -- MetaInlines),
-    --   Pandoc(Pandoc) ) 
-  
+import Uniform.PandocImports  
 import UniformBase
--- import Uniform.PandocImports
---     ( unPandocM,
---       Block(Plain),
---       Meta(..),
---       MetaValue(MetaList, MetaString, MetaBool, MetaInlines, MetaBlocks),
---       Pandoc(..) )  
 import qualified Data.Map as M 
 -- import Data.Map ( fromList, toList) 
 import Text.Pandoc.Definition as Pandoc
---     ( 
---       Pandoc(..),
---       lookupMeta,
---       MetaValue (..),
---       nullMeta,
---       Inline(Str) )
--- import Text.Pandoc.Writers.Shared as Pandoc
--- import Uniform.Markdown  
--- import qualified Text.Pandoc.Citeproc as PC
--- import Uniform.HttpFiles
--- import Uniform.TemplateStuff
--- import Text.DocTemplates as DocTemplates ( Doc )
--- import Uniform.PandocHTMLwriter
 
 ------------ settings (copied to avoid circular import)
-
 data Settings = Settings
     { ---  siteLayout ::  
       localhostPort :: Int 
@@ -119,7 +71,6 @@ newtype MenuItems = MenuItems {menuNav:: [MenuItem]
                             } deriving (Show, Read, Ord, Eq, Generic, Zeros)
 instance ToJSON MenuItems 
 instance FromJSON MenuItems 
-
 
 data MenuItem = MenuItem  
     { navlink :: FilePath 

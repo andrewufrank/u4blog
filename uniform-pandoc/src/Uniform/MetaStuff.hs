@@ -186,6 +186,14 @@ getTextFromYaml5 def1 key pan =
     metaValueToText . fromMaybe (MetaString def1)
         $ getFromYaml key pan
 
+getTextFromMeta5 :: Text -> Text -> Meta ->  Text
+--get the Metavalue (with  default)
+getTextFromMeta5 def1 key pan =
+    fromJustNoteT ["getTextFromYaml5"::Text, key] .
+    metaValueToText . fromMaybe (MetaString def1)
+        $ Pandoc.lookupMeta key pan
+
+
 metaValueToText :: MetaValue -> Maybe Text
 metaValueToText (MetaString t) = Just t
 metaValueToText (MetaInlines ils) = Just $ stringify ils

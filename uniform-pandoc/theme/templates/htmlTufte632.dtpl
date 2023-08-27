@@ -55,9 +55,9 @@
 
     $-- the favicon should be in img
     <link rel="icon" type="image/jpeg" href="/resources/img/squared16.jpg" sizes="16x16">
-    <link rel="icon" type="image/jpeg" href="/resources/img/squared32.jpg" sizes="32x32">
-    <link rel="icon" type="image/jpeg" href="/resources/img/squared64.jpg" sizes="64x64">
-    <link rel="icon" type="image/jpeg" href="/resources/img/squared152.jpg" sizes="152x152">
+    $-- <link rel="icon" type="image/jpeg" href="/resources/img/squared32.jpg" sizes="32x32">
+    $-- <link rel="icon" type="image/jpeg" href="/resources/img/squared64.jpg" sizes="64x64">
+    $-- <link rel="icon" type="image/jpeg" href="/resources/img/squared152.jpg" sizes="152x152">
 
     $for(metaHtml.author)$
     <meta name="author" content="$metaHtml.author$" />  
