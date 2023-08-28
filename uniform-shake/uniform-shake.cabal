@@ -1,6 +1,6 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.35.2.
+-- This file has been generated from package.yaml by hpack version 0.35.3.
 --
 -- see: https://github.com/sol/hpack
 
@@ -37,7 +37,30 @@ library
       src
   build-depends:
       base >=4.7 && <5
+    , filepath
+    , path
     , shake
     , uniform-json >=0.1.5
     , uniformBase >=0.1.5
+  default-language: Haskell2010
+
+test-suite testall
+  type: exitcode-stdio-1.0
+  main-is: testing.hs
+  other-modules:
+      Uniform.Shake_test
+      Paths_uniform_shake
+  hs-source-dirs:
+      tests
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      HTF
+    , base >=4.7 && <5
+    , filepath
+    , path
+    , quickcheck-text
+    , shake
+    , uniform-json >=0.1.5
+    , uniform-shake
+    , uniformBase
   default-language: Haskell2010

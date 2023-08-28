@@ -78,6 +78,8 @@ copyFileChangedP infile outf = copyFileChanged (toFilePath infile) (toFilePath o
 
 class Path2nd  a c where
     stripProperPrefixP :: Path a b -> Path a c -> Path Rel c
+    -- stripProperPrefixP2 :: Path a b -> Path a c -> Path Rel c
+    -- ^ strips for files only, even if the strips the fill path 
     makeRelativeP  :: Path a Dir -> Path a c -> Path Rel c
     makeRelativeP = stripProperPrefixP
     -- ^ strip the first (the prefix) from the second and returns remainder 
@@ -95,19 +97,49 @@ instance   Path2nd  a File where
         (fmap makeRelFile ab)
         where ab = stripPrefix' (toFilePath a) (toFilePath b) :: Maybe FilePath
 
+    -- stripProperPrefixP2 a b = stripProperPrefixP a b 
+    -- not an issue when file
+        -- fromJustNote
+        -- ( t2s
+        -- . unwords'
+        -- $ ["Path2nd Dir - not a prefix", s2t . toFilePath $  a, "for",  s2t . toFilePath $ b]
+        -- )
+        -- (fmap makeRelFile ab)
+        -- where ab = stripPrefix' (toFilePath a) (toFilePath b) :: Maybe FilePath
+
     replaceDirectoryP pref newpref old = newpref </> rem1 
         where rem1 = stripProperPrefixP pref old
 
+
+-- instance Path2nd  Abs Dir where
+--     stripProperPrefixP a b = fromJustNote
+--         ( t2s
+--         . unwords'
+--         $ ["Path2nd Dir - not a prefix",  s2t . toFilePath $ a, "for",  s2t . toFilePath $ b]
+--         )
+--         (fmap makeRelDir ab)
+--         where ab = stripPrefix' (toFilePath a) (toFilePath b) :: Maybe FilePath
+
+--     stripProperPrefixP2 a b = if a == b then (makeRelDir " ") 
+--                 else stripProperPrefixP a b 
+    
+--     replaceDirectoryP pref newpref old = addDir newpref rem1 
+--         where rem1 = stripProperPrefixP pref old
 
 instance Path2nd  a Dir where
     stripProperPrefixP a b = fromJustNote
         ( t2s
         . unwords'
-        $ ["Path2nd Dir - not a prefix",  s2t . toFilePath $ a, "for",  s2t . toFilePath $ b]
+        $ ["Path2nd Dir - not a prefix",  s2t . toFilePath $ a, "for",  s2t . toFilePath $ b, "\n make sure a filename is still present and process with it"]
         )
         (fmap makeRelDir ab)
         where ab = stripPrefix' (toFilePath a) (toFilePath b) :: Maybe FilePath
 
+    -- stripProperPrefixP2 a b = errorT ["not implemented for directories; make sure a filename is still present and process with it"]
+    
+            -- if a == b then (makeRelDir " ") 
+    --             else stripProperPrefixP a b 
+    
     replaceDirectoryP pref newpref old = addDir newpref rem1 
         where rem1 = stripProperPrefixP pref old
 
