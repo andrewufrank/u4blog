@@ -5,15 +5,15 @@ $-- template to produce a latex file with the tufte style fixed notes-in-notes
 % requires removed limiation on subsubpara in tufte-common.def 
  
 \documentclass[a4paper,openany,nobib] %openright to force parts and chapter to start right
-        $if(bookBig)$ {tufte-book}  %testbook $latBookBig$
-        $elseif(booklet)$ {tufte-book}  %testbooklet $latBooklet$
+        $if(extra.bookBig)$ {tufte-book}  %testbook $latBookBig$
+        $elseif(extra.booklet)$ {tufte-book}  %testbooklet $latBooklet$
         $else$ {tufte-handout}  
         $endif$
 % produced with latext8tufte v1
 
 $-- not used: 
-%testhandout $bookBig$ testzwei $booklet$
-% $book$  % should be true for bookbig and booklet
+%testhandout $extra.bookBig$ testzwei $extra.booklet$
+% $metaLatex.book$  % should be true for bookbig and booklet
 
 \titleclass{\subsubsection}{straight}
 \titleformat{\subsubsection}%
@@ -26,7 +26,7 @@ $-- not used:
   
 \usepackage{fontspec}
 \usepackage{csquotes}  $-- required for babel 
-\usepackage[$latLanguage$]{babel}
+\usepackage[$metaLatex.latLanguage$]{babel}
 $-- \renewcaptionname{ngerman}{\bibname}{Literatur}   %Bibliography
 $-- \renewcaptionname{$latLanguage$}{\bibname}{$latBiblioTitle$}   %Bibliography
 $-- automatical adaption
@@ -55,7 +55,7 @@ $-- \setcounter{secnumdepth}{\subsubsectionnumdepth} % numbering for subsubsecti
 \usepackage{graphicx}
 $--          \setkeys{Gin}{width=.75\linewidth,keepaspectratio}
     \setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
-\graphicspath{{$latBakedDir$}}
+\graphicspath{{$extra.webroot$}}
 
 \usepackage{longtable}
 \usepackage{booktabs}
@@ -108,7 +108,7 @@ $--     natbib=true,
 
 
 
-$if(bibliography)$\addbibresource{$bibliography$}$endif$
+$if(metap.Bibliography)$\addbibresource{$extra.webroot$$metap.Bibliography.c$}$endif$
 $if(references)$\addbibresource{local.bib}$endif$
 
 \makeindex
@@ -129,9 +129,9 @@ $-- \usepackage[colorlinks]{hyperref}
 \urlstyle{same}% uses the style from where it is used
 
 $-- content descriptionm
-\title{$title$}
-\author{$author$}
-\date{2023}  $-- no date??
+\title{$mateLatex.title$}
+\author{$metaLatex.author$}
+\date{$metaLatex.date$}  $-- no date??
 \publisher{Gerastree editions}
 \usepackage[]{mdframed}
 
@@ -202,22 +202,22 @@ $else$
     %\begin{titlepage}
         %\centering
         %\includegraphics[width=0.15\textwidth]{example-image-1x1}\par\vspace{1cm}
-        %{\textsc{$title$}  }
+        %{\textsc{$metaLatex.title$}  }
         %\vspace{1cm}
-        %\Large \textsc{$title$} 
+        %\Large \textsc{$metaLatex.title$} 
         \vspace{1.5cm}
-        {\huge\bfseries{$title$} \par}
+        {\huge\bfseries{$metaLatex.title$} \par}
         \vspace{1cm}
-        $if(latAuthor)${\Large\itshape $author$ \par}$endif$
+        $if(metaLatex.author)${\Large\itshape $metaLatex.author$ \par}$endif$
         %\vfill
         %supervised by\par
         %Dr.~Mark \textsc{Brown}
         %\vfill
 
-        $if(abstract)$  % lat abstract
+        $if(metaLatex.abstract)$  % lat abstract
             \begin{mdframed}\sloppy
             \medskip
-            $abstract$
+            $metaLatex.abstract$
             \medskip
             \end{mdframed}
         $endif$
@@ -228,10 +228,10 @@ $else$
 $endif$
 
 % testest -- begingroup
-$if(lbookBig)$
+$if(extra.bookBig)$
     \clearpage
     \tableofcontents
-$elseif(booklet)$
+$elseif(extra.booklet)$
     \begingroup
     \let\clearpage\relax
     \tableofcontents
@@ -248,20 +248,20 @@ $endif$
 
 $-- \tableofcontents  add page break if requred
 
-$if(bookBig)$
+$if(extra.bookBig)$
     \newpage         % -- testtest bookbig newpage -- 
-$elseif(booklet)$
+$elseif(extra.booklet)$
     %\newpage    % -- testtest booklet newpage 
     \vspace{2cm}
 $endif$
 
 % testtestContentanfang--------
 %\mainmatter
-$body$
+$metaLatex.body$
 
 %testtestContentende--------
 
-$for(latIndex.fileEntries)$   % booklet level of collections
+$for(extra.fileEntries)$   % booklet level of collections
     \chapter{$it.title$}
     \begin{mdframed}\sloppy\medskip
     $it.abstract$\end{mdframed}
@@ -269,18 +269,18 @@ $for(latIndex.fileEntries)$   % booklet level of collections
 $endfor$
 
 
-$for(latIndex.dirEntries)$   % bookbig level of collections
+$for(extra.dirEntries)$   % bookbig level of collections
     \part{$latIndex.dirEntries.title$}
     \begin{mdframed}\sloppy\medskip
-    $latIndex.dirEntries.abstract$\end{mdframed}
-    $latIndex.dirEntries.content$
+    $extra.dirEntries.abstract$\end{mdframed}
+    $extra.dirEntries.content$
 
 
-    $for(latIndex.dirEntries.fileEntries)$   % -- the files in the parts in bookbig
-        \chapter{$latIndex.dirEntries.fileEntries.title$}
+    $for(extra.dirEntries.fileEntries)$   % -- the files in the parts in bookbig
+        \chapter{$extra.dirEntries.fileEntries.title$}
         \begin{mdframed}\sloppy\medskip
-        $latIndex.dirEntries.fileEntries.abstract$\end{mdframed}
-        $latIndex.dirEntries.fileEntries.content$
+        $extra.dirEntries.fileEntries.abstract$\end{mdframed}
+        $extra.dirEntries.fileEntries.content$
     $endfor$
 
 $endfor$
@@ -289,17 +289,17 @@ $endfor$
 % ====================== endcontentTestTest
 
 $-- \printbibliography
-%\bibliography{$bibliography$} 
-$-- bracuht noch references case
+%\bibliography{$metap.bibliography$} 
+$-- braucht noch references case
 %\bibliographystyle{plainnat}
 
 \printbibliography
 \printindex
 
 \vspace*{\fill}
-\scriptsize Produced with `daino' ($dainoVersion$) from \url{$link$} with latexTufte81.dtpl 
+\scriptsize Produced with `daino' ($extra.dainoVersion$) from \url{$extra.mdFile$} with latexTufte81.dtpl 
 
-\scriptsize arguments bookBig: $bookBig$ booklet: $booklet$ 
+\scriptsize arguments bookBig: $extra.bookBig$ booklet: $extra.booklet$ 
 $-- book: $book$ 
 
 

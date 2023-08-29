@@ -30,7 +30,7 @@ import UniformBase
 
 
 writePDF2 :: NoticeLevel -> Path Abs File -> Path Abs File -> Path Abs Dir -> ErrIO ()
--- convert the text in the file given (a full latex, exetnsion "tex") into a pdf
+-- convert the text in the file given (a full latex, extension "tex") into a pdf
 -- in the second path
 -- refDir is the current working directory (which must be the directory
 -- where the intermediate files are produced
