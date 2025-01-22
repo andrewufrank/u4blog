@@ -6,7 +6,7 @@ github:       andrewufrank/u4blog.git/uniform-json
 maintainer:   Andrew U. Frank <frank@geoinfo.tuwien.ac.at>
 author:       Andrew Frank
 copyright:    2021 Andrew U. Frank
-category:     Data Text JSON YAML Pandoc
+category:     'Data, Text, JSON, YAML, Pandoc'
 synopsis: handling of JSON and YAML in an uniform way
 description: |
     remove particular aspects of abstraction in json and yaml - with an eye to use it with pandoc
