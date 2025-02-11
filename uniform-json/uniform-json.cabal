@@ -10,7 +10,7 @@ name:           uniform-json
 version:        0.1.5.2
 synopsis:       handling of JSON and YAML in an uniform way
 description:    remove particular aspects of abstraction in json and yaml - with an eye to use it with pandoc
-category:       Data Text JSON YAML Pandoc
+category:       Data, Text, JSON, YAML, Pandoc
 homepage:       https://github.com/andrewufrank/u4blog.git#readme
 bug-reports:    https://github.com/andrewufrank/u4blog.git/issues
 author:         Andrew Frank
